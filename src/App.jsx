@@ -37,30 +37,31 @@ function App() {
         <div className="App">
           <Header />
           <Routes>
-            <Route
+            {/* <Route
               path="/"
               element={
                 <PrivateRoute>
                   <Bookings />
                 </PrivateRoute>
               }
-            />
+            /> */}
             <Route
-              path="/tap"
-              element={
-                <PrivateRoute>
-                  <TAP />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/customer-bookings"
+              path="/"
               element={
                 <PrivateRoute>
                   <CustomerBookings />
                 </PrivateRoute>
               }
             />
+            {/* <Route
+              path="/tap"
+              element={
+                <PrivateRoute>
+                  <TAP />
+                </PrivateRoute>
+              }
+            /> */}
+
             <Route
               path=":bookingId/workers/:status"
               element={

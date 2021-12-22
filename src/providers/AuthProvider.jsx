@@ -18,35 +18,35 @@ export const AuthProvider = ({ children }) => {
     initialLoginStatus
   );
 
-  // const [user, setUser] = useState(storedLoginStatus); //uncomment
-  const [user, setUser] = useState({
-    isUserLoggedIn: true,
-    userId: "61a47f6990832d0016b4e209",
-    accessToken: null,
-    phoneNumber: "+918828453483",
-  }); //dummy for testing
+  const [user, setUser] = useState(storedLoginStatus);
+  // const [user, setUser] = useState({
+  //   isUserLoggedIn: true,
+  //   userId: "61a47f6990832d0016b4e209",
+  //   accessToken: null,
+  //   phoneNumber: "+918828453483",
+  // }); //dummy for testing
   const { isUserLoggedIn, userId } = user;
 
   const loginUser = (user) => {
-    const { accessToken, customerData } = user.data;
+    const { accessToken, _id, phoneNumber } = user;
     setUser((prevUser) => ({
       ...prevUser,
       isUserLoggedIn: true,
       accessToken,
-      userId: customerData._id,
-      phoneNumber: customerData.phoneNumber,
+      userId: _id,
+      phoneNumber: phoneNumber,
     }));
 
     setStoredLoginStatus({
       isUserLoggedIn: true,
       accessToken,
-      userId: customerData._id,
-      phoneNumber: customerData.phoneNumber,
+      userId: _id,
+      phoneNumber: phoneNumber,
     });
   };
 
-  // setupAuthHeaders(user.accessToken);
-  setupAuthHeaders(`cHJvamVjdEhlcm9CYXNlQWRtaW46VDNNR0FXM1NHRzgyWkREVQ===`);
+  setupAuthHeaders(user.accessToken);
+  // setupAuthHeaders(`cHJvamVjdEhlcm9CYXNlQWRtaW46VDNNR0FXM1NHRzgyWkREVQ===`);
 
   function logout() {
     localStorage.removeItem("projectHeroInternalLogin");
@@ -57,7 +57,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await validateOtp(phoneNumber, otp);
       if (res?.data?.success) {
-        loginUser(res.data);
+        console.log("LOGIN RESPONSE");
+        console.log(res?.data?.data);
+        loginUser(res?.data?.data);
       }
       return res;
     } catch (error) {
