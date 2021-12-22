@@ -1,6 +1,6 @@
 import { TextField, Typography, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import OtpInput from "react-otp-input";
 import { Layout } from "../../components/Layout";
 import { useLogin } from "./useLogin";
@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 export const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const classes = useStyles();
   const {
     phoneNumber,
@@ -68,8 +69,10 @@ export const Login = () => {
     btnText = "Submit OTP";
   }
 
-  const onButtonClicked = () => {
+  const onButtonClicked = (e) => {
+    e.preventDefault();
     if (mutation.isSuccess) {
+      setIsLoading(true);
       return onOtpSubmit();
     }
     return onPhoneNumberSubmit();
@@ -87,7 +90,7 @@ export const Login = () => {
 
   return (
     <Layout>
-      <div className={classes.container}>
+      <form className={classes.container}>
         <Typography variant="h5" component="h1" className={classes.title}>
           Log In
         </Typography>
@@ -141,16 +144,22 @@ export const Login = () => {
           />
         )}
         <Button
+          type="submit"
           className={classes.btn}
           fullWidth
+          disabled={mutation.isLoading || isLoading}
           variant="contained"
           color="primary"
           size="large"
           onClick={onButtonClicked}
         >
-          {btnText}
+          {isLoading ? (
+            <CircularProgress style={{ color: "#ffffff" }} size={30} />
+          ) : (
+            btnText
+          )}
         </Button>
-      </div>
+      </form>
     </Layout>
   );
 };
