@@ -5,7 +5,7 @@ import projectHeroLogo from "../../assets/projectHero_02.svg";
 import { ActionButtons } from "./ActionButtons";
 import { HOME_ROUTE, LOGIN_ROUTE, TAP_ROUTE } from "../../routes";
 import { useAuth } from "../../providers/AuthProvider";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { SearchBar } from "./SearchBar";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,13 +50,15 @@ export const Header = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="sticky" elevation={0} className={classes.appbar}>
         <Toolbar className={classes.toolbar} variant="dense">
-          <div className={classes.logoContainer}>
-            <img
-              className={classes.img}
-              src={projectHeroLogo}
-              alt="project hero"
-            />
-          </div>
+          <Link to={HOME_ROUTE}>
+            <div className={classes.logoContainer}>
+              <img
+                className={classes.img}
+                src={projectHeroLogo}
+                alt="project hero"
+              />
+            </div>
+          </Link>
 
           <div className={classes.btnContainer}>
             {pathname === TAP_ROUTE && <SearchBar />}
