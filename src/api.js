@@ -1,9 +1,10 @@
 // const SERVER_URL = "https://projecthero-backend.herokuapp.com";
-const SERVER_URL = "https://wfm-backend-2.herokuapp.com";
+const SERVER_URL = "https://projecthero-backend-staging.herokuapp.com";
+// const SERVER_URL = "https://wfm-backend-2.herokuapp.com";
 
 export const GET_JOB_TYPES_API = `${SERVER_URL}/job-type/formatted`;
 export const SEND_OTP_API = `${SERVER_URL}/send-otp`;
-export const VALIDATE_OTP_API = `${SERVER_URL}/loginByOtp`;
+export const VALIDATE_OTP_API = `${SERVER_URL}/login`;
 export const getCustomerBookingsAPI = (phoneNumber) =>
   `${SERVER_URL}/admin/bookings/phoneNumber/${phoneNumber}`;
 
