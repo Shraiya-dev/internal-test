@@ -5,7 +5,6 @@ export const validateOtp = async (phoneNumber, otp) => {
   const ult = "otp";
   const ut = "ops_admin";
   const payload = { ult, ut, phoneNumberRaw: phoneNumber, otp };
-  console.log(payload);
   try {
     const res = await axios.post(VALIDATE_OTP_API, { userData: payload });
     console.log(res);
