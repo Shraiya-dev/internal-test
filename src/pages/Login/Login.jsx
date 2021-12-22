@@ -36,9 +36,9 @@ const useStyles = makeStyles((theme) => {
       fontWeight: "bold",
     },
     countryCode: {
-      backgroundColor: "#F2F5F7",
+      backgroundColor: "#e2e8f0",
       fontSize: 18,
-      padding: theme.spacing(1.25),
+      padding: theme.spacing(1.5),
       borderRadius: "10px",
       marginRight: "0.5rem",
     },
