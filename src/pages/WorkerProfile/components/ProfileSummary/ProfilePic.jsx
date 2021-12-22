@@ -178,8 +178,6 @@ const EditPictureButtons = ({ url }) => {
 export const ProfilePic = ({ profilePic }) => {
   const { editProfilePic, previewImage, operationPerformed } = useProfilePic();
 
-  console.log(previewImage);
-
   let url = profilePic;
   if (editProfilePic) {
     url = previewImage;
