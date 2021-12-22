@@ -1,5 +1,5 @@
-// const SERVER_URL = "https://projecthero-backend.herokuapp.com";
-const SERVER_URL = "https://projecthero-backend-staging.herokuapp.com";
+const SERVER_URL = "https://projecthero-backend.herokuapp.com";
+// const SERVER_URL = "https://projecthero-backend-staging.herokuapp.com";
 // const SERVER_URL = "https://wfm-backend-2.herokuapp.com";
 
 export const GET_JOB_TYPES_API = `${SERVER_URL}/job-type/formatted`;
