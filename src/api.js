@@ -1,6 +1,6 @@
 // const SERVER_URL = "https://projecthero-backend.herokuapp.com";
 // const SERVER_URL = "https://projecthero-backend-staging.herokuapp.com";
-const SERVER_URL = "https://staging-api.projecthero.in";
+const SERVER_URL = "https://api.projecthero.in";
 
 export const GET_JOB_TYPES_API = `${SERVER_URL}/job-type/formatted`;
 export const SEND_OTP_API = `${SERVER_URL}/send-otp`;
