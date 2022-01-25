@@ -1,6 +1,11 @@
-// const SERVER_URL = "https://projecthero-backend.herokuapp.com";
-// const SERVER_URL = "https://projecthero-backend-staging.herokuapp.com";
-const SERVER_URL = "https://api.projecthero.in";
+const getBackendUrl = () => {
+  if (import.meta.env.MODE === "development" || !import.meta.env.MODE) {
+    return import.meta.env.VITE_SERVER_URL_STAGING;
+  }
+  return import.meta.env.VITE_SERVER_URL;
+};
+
+const SERVER_URL = getBackendUrl();
 
 export const GET_JOB_TYPES_API = `${SERVER_URL}/job-type/formatted`;
 export const SEND_OTP_API = `${SERVER_URL}/send-otp`;
