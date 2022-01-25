@@ -29,7 +29,6 @@ export const WorkProfileTab = () => {
   }
 
   const workDetails = res?.data;
-  console.log(workDetails);
 
   return (
     <Box

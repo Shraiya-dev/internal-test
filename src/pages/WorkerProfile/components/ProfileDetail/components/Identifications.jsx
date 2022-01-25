@@ -6,7 +6,6 @@ import { NotKnown } from "./NotKnown";
 import { Field } from "./Field";
 
 export const Identifications = ({ doc }) => {
-  console.log(doc);
   const { aadhar, pan, uanNo } = doc;
   return (
     <Box p={2} pl={0} pt={0} pb={2}>

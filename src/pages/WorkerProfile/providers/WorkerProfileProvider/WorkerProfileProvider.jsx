@@ -28,7 +28,6 @@ export const WorkerProfileProvider = ({ children }) => {
     null
   );
 
-  console.log(editWorkerState);
   const [workerProfileError, setWorkerProfileError] = useState(null);
 
   const onNameChange = (e) =>

@@ -52,7 +52,6 @@ export const useLogin = () => {
       }));
     }
     const res = await loginByOtp(`+91${phoneNumber}`, otp.otp);
-    console.log(res);
     return res;
   };
 

@@ -57,8 +57,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await validateOtp(phoneNumber, otp);
       if (res?.data?.success) {
-        console.log("LOGIN RESPONSE");
-        console.log(res?.data?.data);
         loginUser(res?.data?.data);
       }
       return res;
