@@ -32,10 +32,11 @@ export const StatusCard = ({ booking }) => {
     hiringInfo,
     bookingId,
     workerDetails,
+    shiftTime,
   } = booking;
 
   const bookingDetailsHeaderProps = { jobType, bookingId, status };
-  const requirementProps = { jobType, bookingDuration, state, city };
+  const requirementProps = { jobType, bookingDuration, state, city, shiftTime };
   const bookingDetailsFooterProps = { hiringInfo, createdOn };
   const statusTrackerProps = { hiringInfo, bookingId };
 

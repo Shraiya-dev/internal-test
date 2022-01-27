@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const Requirements = (props) => {
   const classes = useStyles();
-  const { bookingDuration, state, city } = props;
+  const { bookingDuration, state, city, shiftTime } = props;
   const location = `${city}, ${state}`;
 
   return (
@@ -63,10 +63,24 @@ export const Requirements = (props) => {
             component="p"
             color="textSecondary"
           >
+            {`Shift Timing: ${shiftTime}`}
+          </Typography>
+        </div>
+      </Grid>
+      <Grid item>
+        <div className={clsx(classes.flex, classes.spacing)}>
+          <ScheduleIcon className={classes.icons} />
+          <Typography
+            className={classes.mediumFont}
+            variant="body2"
+            component="p"
+            color="textSecondary"
+          >
             {bookingDuration}
           </Typography>
         </div>
       </Grid>
+
       <Grid item>
         <div className={classes.flex}>
           <LocationOnOutlinedIcon className={classes.icons} />
