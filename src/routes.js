@@ -1,3 +1,6 @@
-export const HOME_ROUTE = "/";
-export const LOGIN_ROUTE = "/login";
-export const TAP_ROUTE = "/tap";
+export const HOME_ROUTE = '/'
+export const LOGIN_ROUTE = '/login'
+export const TAP_ROUTE = '/tap'
+export const ATTENDANCE_ROUTE = '/attendance/:bookingId'
+export const REWARD_PENALTIES_ROUTE = '/rewards'
+export const ADD_PARTNER_ROUTE = '/partner'
