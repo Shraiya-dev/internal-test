@@ -91,11 +91,11 @@ const Bookings = () => {
 						<Grid container alignItems="stretch" spacing={1.5}>
 							{bookings.map((bookingData, index) => {
 								return bookingData.legacyBooking ? (
-									<Grid style={{ display: 'flex' }} key={bookingData._id} item lg={4} md={6}>
+									<Grid style={{ display: 'flex' }} key={index} item lg={4} md={6}>
 										<StatusCard booking={bookingData} />
 									</Grid>
 								) : (
-									<Grid style={{ display: 'flex' }} key={bookingData.bookingId} item lg={4} md={6}>
+									<Grid style={{ display: 'flex' }} key={index} item lg={4} md={6}>
 										<BookingCard bookingData={bookingData} />
 									</Grid>
 								)
