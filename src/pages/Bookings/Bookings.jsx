@@ -78,7 +78,7 @@ const Bookings = () => {
 					</Box>
 				) : (
 					<Box pt={2}>
-						{bookings.length === 0 && (
+						{bookings?.length === 0 && (
 							<Typography
 								variant="h5"
 								sx={{
@@ -89,13 +89,13 @@ const Bookings = () => {
 							</Typography>
 						)}
 						<Grid container alignItems="stretch" spacing={1.5}>
-							{bookings.map((bookingData, index) => {
-								return bookingData.legacyBooking ? (
-									<Grid style={{ display: 'flex' }} key={bookingData._id} item lg={4} md={6}>
+							{bookings?.map((bookingData, index) => {
+								return bookingData?.legacyBooking ? (
+									<Grid style={{ display: 'flex' }} key={bookingData?._id} item lg={4} md={6}>
 										<StatusCard booking={bookingData} />
 									</Grid>
 								) : (
-									<Grid style={{ display: 'flex' }} key={bookingData.bookingId} item lg={4} md={6}>
+									<Grid style={{ display: 'flex' }} key={bookingData?.bookingId} item lg={4} md={6}>
 										<BookingCard bookingData={bookingData} />
 									</Grid>
 								)
