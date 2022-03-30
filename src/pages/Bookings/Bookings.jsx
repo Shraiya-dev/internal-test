@@ -82,7 +82,8 @@ const Bookings = () => {
 							<Typography
 								variant="h5"
 								sx={{
-									margin: '30% auto',
+									margin: '10% auto',
+									width: 'fit-content',
 								}}
 								color="#616161">
 								No bookings found in this state

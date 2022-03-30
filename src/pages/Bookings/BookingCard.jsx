@@ -10,8 +10,8 @@ const BookingCard = ({ bookingData }) => {
 	const navigate = useNavigate()
 	const { confirmBooking, sncBar, startAllocation, closeAllocation, markAsRTD, markAsDeployed, startProject } =
 		useBookingAction(bookingData)
-	const allowedActions = useMemo(() => CTAMap[bookingData.status.enumValue]?.actions, [bookingData])
-	const allowedTabs = useMemo(() => CTAMap[bookingData.status.enumValue]?.tabs, [bookingData])
+	const allowedActions = useMemo(() => CTAMap[bookingData?.status?.enumValue]?.actions, [bookingData])
+	const allowedTabs = useMemo(() => CTAMap[bookingData?.status?.enumValue]?.tabs, [bookingData])
 	const [confirmDialogProps, setConfirmDialogProps] = useState({
 		content: '',
 		open: false,
@@ -22,7 +22,7 @@ const BookingCard = ({ bookingData }) => {
 		setConfirmDialogProps({})
 	}, [])
 	const totalPeopleRequired = useMemo(
-		() => Object.values(bookingData?.peopleRequired).reduce((prev, next) => Number(prev) + Number(next)),
+		() => Object.values(bookingData?.peopleRequired)?.reduce((prev, next) => Number(prev) + Number(next)),
 		[bookingData]
 	)
 
@@ -36,19 +36,19 @@ const BookingCard = ({ bookingData }) => {
 				<Box>
 					<Box display="flex" justifyContent="space-between">
 						<Typography variant="h6" fontWeight={600}>
-							{bookingData.jobType} ({totalPeopleRequired})
+							{bookingData?.jobType} ({totalPeopleRequired})
 						</Typography>
 						<Chip
 							sx={(theme) => ({ backgroundColor: theme.palette.grey[200], height: '24px' })}
-							label={bookingData.status.enumLabel}
+							label={bookingData?.status?.enumLabel}
 						/>
 					</Box>
 					<Box display="flex" justifyContent="space-between">
 						<Typography sx={(theme) => ({ color: theme.palette.grey[700] })} variant="caption">
-							ID : {bookingData.bookingId}
+							ID : {bookingData?.bookingId}
 						</Typography>
 						<Typography sx={(theme) => ({ color: theme.palette.grey[700] })} variant="caption">
-							Created on {bookingData.createdOn}
+							Created on {bookingData?.createdOn}
 						</Typography>
 					</Box>
 				</Box>
@@ -59,7 +59,7 @@ const BookingCard = ({ bookingData }) => {
 
 						<Box mt={2} mb={2} display="flex">
 							{Object.keys(allowedTabs).map((item) => {
-								const [state] = bookingData.jobCardsStateCount.filter((obj) => obj.enumValue === item)
+								const [state] = bookingData?.jobCardsStateCount?.filter((obj) => obj.enumValue === item)
 								return (
 									<Paper
 										key={item}
@@ -70,7 +70,7 @@ const BookingCard = ({ bookingData }) => {
 											cursor: 'pointer',
 										})}>
 										<Typography variant="h5" align="center">
-											{state.count}
+											{state?.count}
 											{item === 'DEPLOYMENT_COMPLETE' && <>/{totalPeopleRequired}</>}
 										</Typography>
 
@@ -79,7 +79,7 @@ const BookingCard = ({ bookingData }) => {
 												color: theme.palette.grey[700],
 											})}
 											align="center">
-											{state.enumLabel}
+											{state?.enumLabel}
 										</Typography>
 									</Paper>
 								)
@@ -90,10 +90,10 @@ const BookingCard = ({ bookingData }) => {
 				)}
 				<Box pt={1} display="flex" justifyContent="space-between">
 					<Box>
-						{Object.keys(bookingData.peopleRequired).map((item) => {
+						{Object.keys(bookingData?.peopleRequired).map((item) => {
 							return (
 								<Box pb={1} pt={1} display="flex" alignItems="center" key={item}>
-									{item.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}: {bookingData.peopleRequired[item]}
+									{item.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}: {bookingData?.peopleRequired[item]}
 								</Box>
 							)
 						})}
@@ -101,20 +101,20 @@ const BookingCard = ({ bookingData }) => {
 					<Box style={{ maxWidth: '50%', overflow: 'hidden' }}>
 						{/* <Box p={1} display="flex" alignItems="center">
 							<AccessTime />
-							&nbsp;&nbsp;Shift Timing {bookingData.shiftTime}
+							&nbsp;&nbsp;Shift Timing {bookingData?.shiftTime}
 						</Box> */}
 						{/* <Box p={1} display="flex" alignItems="center">
 							<AccessTime />
-							&nbsp;&nbsp;{bookingData.schedule.bookingDuration}
+							&nbsp;&nbsp;{bookingData?.schedule.bookingDuration}
 						</Box> */}
 						<Box pb={1} pt={1} display="flex" alignItems="center">
-							Company: {bookingData.cmpName}
+							Company: {bookingData?.cmpName}
 						</Box>
 						<Box pb={1} pt={1} display="flex" alignItems="center">
-							Site Address: {bookingData.siteAddress}
+							Site Address: {bookingData?.siteAddress}
 						</Box>
 						<Box pb={1} pt={1} display="flex" alignItems="center">
-							Location: {bookingData.city}, {bookingData.state}
+							Location: {bookingData?.city}, {bookingData?.state}
 						</Box>
 					</Box>
 				</Box>
@@ -126,7 +126,7 @@ const BookingCard = ({ bookingData }) => {
 								<Button
 									variant="outlined"
 									onClick={() => {
-										navigate(`/bookings/${bookingData.bookingId}`)
+										navigate(`/bookings/${bookingData?.bookingId}`)
 									}}>
 									View Booking
 								</Button>
@@ -142,7 +142,7 @@ const BookingCard = ({ bookingData }) => {
 									<Button
 										variant="contained"
 										onClick={() => {
-											navigate(`/bookings/${bookingData.bookingId}/detail?edit=true`)
+											navigate(`/bookings/${bookingData?.bookingId}/detail?edit=true`)
 										}}>
 										Edit Booking
 									</Button>
@@ -150,7 +150,7 @@ const BookingCard = ({ bookingData }) => {
 								{allowedActions.confirm && (
 									<Button
 										variant="contained"
-										disabled={!bookingData.isConfirmationReady}
+										disabled={!bookingData?.isConfirmationReady}
 										onClick={() =>
 											setConfirmDialogProps({
 												open: true,
@@ -174,7 +174,7 @@ const BookingCard = ({ bookingData }) => {
 									<Button
 										variant="contained"
 										onClick={() => {
-											navigate(`/bookings/${bookingData.bookingId}/job-cards/${Object.keys(allowedTabs)[0]}`)
+											navigate(`/bookings/${bookingData?.bookingId}/job-cards/${Object.keys(allowedTabs)[0]}`)
 										}}>
 										Manage Job cards
 									</Button>
@@ -286,7 +286,7 @@ const BookingCard = ({ bookingData }) => {
 									<Button
 										variant="contained"
 										onClick={() => {
-											// navigate(`/booking/${bookingData.bookingId}/job-cards/applied`)
+											// navigate(`/booking/${bookingData?.bookingId}/job-cards/applied`)
 										}}>
 										Manage Attendance
 									</Button>

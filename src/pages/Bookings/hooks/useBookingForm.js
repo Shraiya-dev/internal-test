@@ -265,7 +265,7 @@ export const useBookingForm = () => {
 				})
 			} else {
 				showSnackbar({
-					msg: 'Falied to upload Some or All images',
+					msg: 'Failed to upload Some or All images',
 					sev: 'error',
 				})
 			}

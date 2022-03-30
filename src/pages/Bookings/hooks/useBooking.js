@@ -70,7 +70,7 @@ export const useBooking = () => {
 				bookingStatus && serachP.set('status', bookingStatus)
 
 				const { data, status } = await axios.get(`${SERVER_URL}/admin/bookings?${serachP.toString()}`)
-				setBookings(data.payload.response.bookings)
+				setBookings(data?.payload?.response?.bookings)
 			} catch (error) {
 				setSnackBar({
 					msg: data.error,
