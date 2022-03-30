@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
 	card: {
+		flex: 1,
 		padding: theme.spacing(2),
 		paddingBottom: theme.spacing(0.5),
 		backgroundColor: '#FFFEFE',

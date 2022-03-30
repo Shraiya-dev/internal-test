@@ -1,8 +1,7 @@
-import DateFnsUtils from '@date-io/date-fns'
 import {
 	Button,
-	makeStyles,
 	Paper,
+	Stack,
 	Table,
 	TableBody,
 	TableCell,
@@ -10,11 +9,10 @@ import {
 	TableHead,
 	TableRow,
 	TextField,
-} from '@material-ui/core'
+} from '@mui/material'
 import { Backup } from '@material-ui/icons'
 import GetApp from '@material-ui/icons/GetApp'
 import Publish from '@material-ui/icons/Publish'
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import axios from 'axios'
 import { format, isAfter } from 'date-fns'
 import { useFormik } from 'formik'
@@ -22,9 +20,11 @@ import React, { useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getBackendUrl } from '../../api'
 import { FileInput } from '../../components/CustomInputs'
+import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert, setSnackbar } from '../../components/Snackbar'
 import { createCsvBlob, retriveDataFromExcel } from '../../utils/fileUtils'
 import { isError } from '../../utils/formErrorsChecker'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme) => ({
 	headingContainer: {
@@ -165,8 +165,8 @@ const Attendance = () => {
 
 	return (
 		<>
-			<div>
-				<div className={classes.headingContainer}>
+			<DashboardLayout>
+				<Paper className={classes.headingContainer} variant="outlined">
 					<p>
 						<strong>ID</strong>:{bookingId}
 					</p>
@@ -175,6 +175,9 @@ const Attendance = () => {
 						label="Start date"
 						type="date"
 						variant="standard"
+						sx={{
+							width: 300,
+						}}
 						value={format(form.values.date, 'yyyy-MM-dd')}
 						onChange={(e) => {
 							form.setFieldValue('date', new Date(e.target.value))
@@ -183,45 +186,58 @@ const Attendance = () => {
 							shrink: true,
 						}}
 					/>
-				</div>
 
-				<div className={classes.btnContainer}>
-					<Button
-						disabled={!!isError('date', form)}
-						onClick={downloadAttendance}
-						startIcon={<GetApp />}
-						className={classes.m10}
-						variant="contained">
-						Download Old Attendance
-					</Button>
-					<FileInput
-						disabled={!!isError('date', form)}
-						className={classes.m10}
-						id="uploadFile"
-						label="Upload New Attendance"
-						variant={'contained'}
-						icon={<Publish />}
-						onChange={uploadExcelFile}
-						type="file"
-						accept=".xls,.xlsx"
-					/>
-					<Button
-						disabled={!!isError('date', form) && data.length <= 2}
-						onClick={submitAttendance}
-						startIcon={<Backup />}
-						className={classes.m10}
-						variant="contained">
-						Submit Attendance
-					</Button>
-				</div>
+					<Stack direction="row">
+						<Button
+							sx={{
+								m: 1,
+								width: 300,
+							}}
+							disabled={!!isError('date', form)}
+							onClick={downloadAttendance}
+							startIcon={<GetApp />}
+							variant="contained">
+							Download Old Attendance
+						</Button>
+						<FileInput
+							sx={{
+								m: 1,
+								width: 300,
+							}}
+							disabled={!!isError('date', form)}
+							id="uploadFile"
+							label="Upload New Attendance"
+							variant={'contained'}
+							icon={<Publish />}
+							onChange={uploadExcelFile}
+							type="file"
+							accept=".xls,.xlsx"
+						/>
+						<Button
+							sx={{
+								m: 1,
+								width: 300,
+							}}
+							disabled={!!isError('date', form) && data.length <= 2}
+							onClick={submitAttendance}
+							startIcon={<Backup />}
+							variant="contained">
+							Submit Attendance
+						</Button>
+					</Stack>
+				</Paper>
 
 				{data.length >= 1 && (
-					<TableContainer style={{ maxWidth: '80%', margin: '0 auto' }} component={Paper}>
+					<TableContainer style={{ margin: '16px 0' }} component={Paper} variant="outlined">
 						<Table>
 							<TableHead>
-								<TableRow>
+								<TableRow
+									sx={{
+										'>*': {
+											fontWeight: '900 !important',
+										},
+									}}>
 									<TableCell>Name</TableCell>
-
 									<TableCell>Phone Number</TableCell>
 									<TableCell>Worker Type</TableCell>
 									<TableCell>Check In Time</TableCell>
@@ -253,7 +269,7 @@ const Attendance = () => {
 						</Table>
 					</TableContainer>
 				)}
-			</div>
+			</DashboardLayout>
 			<PopAlert {...sncBarProps} />
 		</>
 	)

@@ -1,0 +1,18 @@
+.customized_button.MuiButton-contained {
+  background-color: #6162f5;
+  min-width: 200px;
+  max-width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.customized_button.MuiButton-contained:hover {
+  background-color: #7070fa;
+}
+
+.customized_button .MuiLoadingButton-loadingIndicator {
+  color: white !important;
+}

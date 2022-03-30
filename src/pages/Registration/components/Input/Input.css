@@ -1,0 +1,24 @@
+.custom_input.MuiTextField-root {
+  margin-bottom: 2rem;
+  min-width: 200px;
+  max-width: 100%;
+  font-size: 1rem;
+}
+
+.custom_input.MuiTextField-root .MuiInputLabel-root {
+  font-weight: 600;
+}
+
+.custom_input.MuiTextField-root .MuiInputLabel-root.Mui-focused {
+  color: #6967c4;
+}
+
+.custom_input.MuiTextField-root .MuiOutlinedInput-root {
+  border-radius: 10px;
+}
+
+.custom_input.MuiTextField-root
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #6967c4;
+}

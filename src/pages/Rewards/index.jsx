@@ -1,10 +1,9 @@
-import DateFnsUtils from '@date-io/date-fns'
 import {
 	Button,
-	makeStyles,
 	MenuItem,
 	Paper,
 	Select,
+	Box,
 	Table,
 	TableBody,
 	TableCell,
@@ -12,19 +11,21 @@ import {
 	TableHead,
 	TableRow,
 	TextField,
-} from '@material-ui/core'
+	Stack,
+} from '@mui/material'
 import { Backup } from '@material-ui/icons'
 import Publish from '@material-ui/icons/Publish'
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import axios from 'axios'
 import { format, isAfter } from 'date-fns'
 import { useFormik } from 'formik'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { getBackendUrl } from '../../api'
 import { FileInput } from '../../components/CustomInputs'
+import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert, setSnackbar } from '../../components/Snackbar'
 import { createCsvBlob, retriveDataFromExcel } from '../../utils/fileUtils'
 import { isError } from '../../utils/formErrorsChecker'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles((theme) => ({
 	headingContainer: {
@@ -158,95 +159,113 @@ const RewardAndPenalty = () => {
 
 	return (
 		<>
-			<div>
-				<div className={classes.headingContainer}>
-					<Select
-						style={{
-							marginRight: '30px',
-						}}
-						value={form.values.type}
-						onChange={(e) => {
-							form.setFieldValue('type', Number(e.target.value))
-						}}>
-						{selectOption.map((opt) => {
-							return (
-								<MenuItem key={opt.value} value={opt.value}>
-									{opt.label}
-								</MenuItem>
-							)
-						})}
-					</Select>
-					<TextField
-						id="date"
-						label="Start date"
-						type="date"
-						variant="standard"
-						value={format(form.values.date, 'yyyy-MM-dd')}
-						onChange={(e) => {
-							form.setFieldValue('date', new Date(e.target.value))
-						}}
-						InputLabelProps={{
-							shrink: true,
-						}}
-					/>
-				</div>
-
-				{form.values.type !== 0 && (
-					<div className={classes.btnContainer}>
-						<FileInput
-							disabled={!!isError('date', form)}
-							className={classes.m10}
-							id="uploadFile"
-							label={`Upload ${form.values.type === 1 ? 'Reward' : 'Penalties'}`}
-							variant={'contained'}
-							onChange={uploadExcelFile}
-							icon={<Publish />}
-							type="file"
-							accept=".xls,.xlsx"
-						/>
-						<Button
-							disabled={!!isError('date', form) && data.length <= 2}
-							startIcon={<Backup />}
-							onClick={submitRewards}
-							className={classes.m10}
-							variant="contained">
-							Submit {form.values.type === 1 ? 'Reward' : 'Penalties'}
-						</Button>
-					</div>
-				)}
-
-				{data.length >= 1 && (
-					<TableContainer style={{ maxWidth: '80%', margin: '0 auto' }} component={Paper}>
-						<Table>
-							<TableHead>
-								<TableRow>
-									<TableCell>Reward Type</TableCell>
-									<TableCell>Amount</TableCell>
-									<TableCell>Description</TableCell>
-									<TableCell>Source</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{data.map((item, index) => {
-									if (index !== 0) {
-										return (
-											<TableRow key={index}>
-												{item.map((row, index) => {
-													if (index !== 0 && index !== 1) {
-														return <TableCell key={index}>{row}</TableCell>
-													}
-												})}
-											</TableRow>
-										)
-									} else {
-										return null
-									}
+			<DashboardLayout>
+				<div>
+					<Paper variant="outlined">
+						<Box p={2} display="flex" justifyContent="center">
+							<Select
+								sx={{
+									mr: 2,
+									width: 200,
+								}}
+								value={form.values.type}
+								onChange={(e) => {
+									form.setFieldValue('type', Number(e.target.value))
+								}}>
+								{selectOption.map((opt) => {
+									return (
+										<MenuItem key={opt.value} value={opt.value}>
+											{opt.label}
+										</MenuItem>
+									)
 								})}
-							</TableBody>
-						</Table>
-					</TableContainer>
-				)}
-			</div>
+							</Select>
+							<TextField
+								id="date"
+								sx={{
+									width: 200,
+								}}
+								label="Start date"
+								type="date"
+								variant="standard"
+								value={format(form.values.date, 'yyyy-MM-dd')}
+								onChange={(e) => {
+									form.setFieldValue('date', new Date(e.target.value))
+								}}
+								InputLabelProps={{
+									shrink: true,
+								}}
+							/>
+						</Box>
+						{form.values.type !== 0 && (
+							<Stack direction="row" justifyContent="center">
+								<FileInput
+									sx={{
+										m: 1,
+										with: 200,
+									}}
+									disabled={!!isError('date', form)}
+									id="uploadFile"
+									label={`Upload ${form.values.type === 1 ? 'Reward' : 'Penalties'}`}
+									variant={'contained'}
+									onChange={uploadExcelFile}
+									icon={<Publish />}
+									type="file"
+									accept=".xls,.xlsx"
+								/>
+								<Button
+									sx={{
+										m: 1,
+										width: 200,
+									}}
+									disabled={!!isError('date', form) && data.length <= 2}
+									startIcon={<Backup />}
+									onClick={submitRewards}
+									variant="contained">
+									Submit {form.values.type === 1 ? 'Reward' : 'Penalties'}
+								</Button>
+							</Stack>
+						)}
+					</Paper>
+
+					{data.length >= 1 && (
+						<TableContainer style={{ margin: '16px auto' }} component={Paper} variant="outlined">
+							<Table>
+								<TableHead>
+									<TableRow
+										sx={{
+											'*': {
+												fontWeight: 600,
+											},
+										}}>
+										<TableCell>Reward Type</TableCell>
+										<TableCell>Amount</TableCell>
+										<TableCell>Description</TableCell>
+										<TableCell>Source</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{data.map((item, index) => {
+										if (index !== 0) {
+											return (
+												<TableRow key={index}>
+													{item.map((row, index) => {
+														if (index !== 0 && index !== 1) {
+															return <TableCell key={index}>{row}</TableCell>
+														}
+													})}
+												</TableRow>
+											)
+										} else {
+											return null
+										}
+									})}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					)}
+				</div>
+			</DashboardLayout>
 			<PopAlert {...sncBarProps} />
 		</>
 	)

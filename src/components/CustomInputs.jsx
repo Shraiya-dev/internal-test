@@ -1,4 +1,5 @@
-import { Button, makeStyles } from '@material-ui/core'
+import { Button } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import { useRef } from 'react'
 
 const useStyles = makeStyles((theme) => ({
@@ -17,11 +18,12 @@ const useStyles = makeStyles((theme) => ({
 	},
 }))
 
-export const FileInput = ({ id, icon, label, disabled, variant, color, className, ...props }) => {
+export const FileInput = ({ id, icon, label, disabled, variant, color, className, sx, ...props }) => {
 	const classes = useStyles()
 	const labelRef = useRef()
 	return (
 		<Button
+			sx={sx}
 			disabled={disabled}
 			onClick={() => {
 				labelRef.current.click()

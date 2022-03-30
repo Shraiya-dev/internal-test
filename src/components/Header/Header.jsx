@@ -1,4 +1,5 @@
-import { AppBar, Box, Button, makeStyles, Toolbar } from '@material-ui/core'
+import { AppBar, Box, Button, Toolbar } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import React, { useCallback } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import projectHeroLogo from '../../assets/projectHero_02.svg'
@@ -8,7 +9,7 @@ import { SearchBar } from './SearchBar'
 
 const useStyles = makeStyles((theme) => ({
 	appbar: {
-		backgroundColor: '#C2CFD9',
+		// backgroundColor: '#C2CFD9',
 	},
 	toolbar: {
 		paddingTop: theme.spacing(1),
@@ -63,7 +64,7 @@ export const Header = () => {
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
-			<AppBar position="sticky" elevation={0} className={classes.appbar}>
+			<AppBar color="primary" position="sticky" elevation={0} className={classes.appbar}>
 				<Toolbar className={classes.toolbar} variant="dense">
 					<Link to={HOME_ROUTE}>
 						<div className={classes.logoContainer}>

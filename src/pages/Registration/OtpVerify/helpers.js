@@ -1,0 +1,8 @@
+export const formatMobileNumber = (str) => {
+  let cleaned = ("" + str).replace(/\D/g, "");
+  let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+  if (match) {
+    return "+91 " + match[1] + "-" + match[2] + "-" + match[3];
+  }
+  return "";
+};

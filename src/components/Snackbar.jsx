@@ -1,5 +1,4 @@
-import { Snackbar } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+import { Alert, Snackbar } from '@mui/material'
 import { useEffect, useState, useCallback } from 'react'
 
 export const setSnackbar = (props, setData) => {
@@ -8,7 +7,7 @@ export const setSnackbar = (props, setData) => {
 	})
 	setData(props)
 }
-export const PopAlert = ({ msg, sev }) => {
+export const PopAlert = ({ msg, sev = 'info' }) => {
 	const [snckBar, setSnckBar] = useState('')
 	useEffect(() => {
 		setSnckBar(msg)
@@ -23,7 +22,7 @@ export const PopAlert = ({ msg, sev }) => {
 			anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
 			open={!!snckBar}
 			onClose={handelClose}>
-			<Alert onClose={handelClose} severity={sev ?? 'info'}>
+			<Alert variant="filled" onClose={handelClose} severity={sev}>
 				{snckBar}
 			</Alert>
 		</Snackbar>

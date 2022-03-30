@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core'
 import { Layout } from '../../components'
 import { SearchCustomer } from './components/SearchCustomer'
 import { CustomerBookingsProvider } from './providers/CustomerBookingsProvider'
 import { Bookings } from './components/Bookings'
-
+import { useNavigate } from 'react-router-dom'
 const useStyles = makeStyles((theme) => ({
 	header: {
 		borderBottom: 'solid 1px #E5E7EB',
@@ -28,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const CustomerBookings = () => {
+	const navigate = useNavigate()
+	useEffect(() => {
+		navigate('/bookings')
+	}, [navigate])
+
 	const classes = useStyles()
 	return (
 		<CustomerBookingsProvider>
