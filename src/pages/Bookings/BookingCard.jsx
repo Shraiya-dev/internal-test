@@ -59,30 +59,32 @@ const BookingCard = ({ bookingData }) => {
 
 						<Box mt={2} mb={2} display="flex">
 							{Object.keys(allowedTabs).map((item) => {
-								const [state] = bookingData?.jobCardsStateCount?.filter((obj) => obj.enumValue === item)
-								return (
-									<Paper
-										key={item}
-										sx={(theme) => ({
-											backgroundColor: theme.palette.grey[100],
-											mr: 2,
-											p: 2,
-											cursor: 'pointer',
-										})}>
-										<Typography variant="h5" align="center">
-											{state?.count}
-											{item === 'DEPLOYMENT_COMPLETE' && <>/{totalPeopleRequired}</>}
-										</Typography>
-
-										<Typography
+								if (bookingData?.status !== 'COMPLETED') {
+									const [state] = bookingData?.jobCardsStateCount?.filter((obj) => obj.enumValue === item)
+									return (
+										<Paper
+											key={item}
 											sx={(theme) => ({
-												color: theme.palette.grey[700],
-											})}
-											align="center">
-											{state?.enumLabel}
-										</Typography>
-									</Paper>
-								)
+												backgroundColor: theme.palette.grey[100],
+												mr: 2,
+												p: 2,
+												cursor: 'pointer',
+											})}>
+											<Typography variant="h5" align="center">
+												{state?.count}
+												{item === 'DEPLOYMENT_COMPLETE' && <>/{totalPeopleRequired}</>}
+											</Typography>
+
+											<Typography
+												sx={(theme) => ({
+													color: theme.palette.grey[700],
+												})}
+												align="center">
+												{state?.enumLabel}
+											</Typography>
+										</Paper>
+									)
+								}
 							})}
 						</Box>
 						{/* <Divider style={{ margin: '16px 0' }} /> */}
