@@ -2,7 +2,7 @@ import { QuestionMark } from '@mui/icons-material'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material'
 import React from 'react'
 
-const ConfirmationDialog = ({ content, open, cancel, confirm }) => {
+const ConfirmationDialog = ({ content, open = false, cancel, confirm }) => {
 	return (
 		<Dialog open={open}>
 			<DialogContent sx={{ p: 4 }}>

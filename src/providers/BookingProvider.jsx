@@ -1,7 +1,18 @@
 import axios from 'axios'
+import {
+	add,
+	differenceInDays,
+	differenceInHours,
+	differenceInMinutes,
+	differenceInSeconds,
+	getUnixTime,
+	sub,
+} from 'date-fns'
+import { differenceInYears } from 'date-fns/esm'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getBackendUrl } from '../api'
+import { useSnackbar } from './SnackbarProvider'
 const SERVER_URL = getBackendUrl()
 const BookingContext = createContext()
 const { Provider, Consumer } = BookingContext
@@ -15,23 +26,14 @@ const bookingStates = [
 const BookingProvider = ({ children }) => {
 	const { bookingId } = useParams()
 	const navigate = useNavigate()
-
-	const [sncBar, setSncBar] = useState({})
-
-	const setSnackBar = useCallback(
-		(props) => {
-			setSncBar({
-				msg: '',
-			})
-			setSncBar(props)
-		},
-		[setSncBar]
-	)
+	const { showSnackbar } = useSnackbar()
+	const [timer, setTimer] = useState({})
 	const [booking, setBooking] = useState()
 	const [selectedTab, setSelectedTab] = useState()
 	const handelTabChange = (e, value) => {
 		setSelectedTab(value)
 	}
+
 	const getBooking = useCallback(async () => {
 		try {
 			const { data, status } = await axios.get(`${SERVER_URL}/admin/bookings/${bookingId}`)
@@ -39,25 +41,74 @@ const BookingProvider = ({ children }) => {
 				setBooking(data.payload)
 			}
 		} catch (error) {
-			setSnckBar({
+			showSnackbar({
 				msg: 'Invalid booking Id',
 				sev: 'error',
 			})
 		}
 	}, [bookingId])
+	useEffect(() => {
+		//? note to myself Use react query to make request multiple times in future
+		let interval
+		let x
+		setTimer({
+			hours: 0,
+			minutes: 0,
+		})
+		const lastTime = booking?.statusHistory?.filter((item) => item?.status === booking?.status)[0]?.timestamp
+		const intervalFunc = (interval) => {
+			const maxTime = add(new Date(lastTime), {
+				hours: interval,
+			})
+			setTimer({
+				hours: Math.floor(differenceInHours(maxTime, new Date())) ?? 0,
+				minutes: Math.floor(differenceInMinutes(maxTime, new Date()) % 60) ?? 0,
+			})
+		}
+		if (booking?.status === 'ALLOCATION_PENDING') {
+			interval = setInterval(getBooking, 5000)
+		} else if (booking?.status === 'ALLOCATION_IN_PROGRESS' && lastTime) {
+			const interval = 72
+			const maxTime = add(new Date(lastTime), {
+				hours: interval,
+			})
+			setTimer({
+				hours: Math.floor(differenceInHours(maxTime, new Date()) ?? 0),
+				minutes: Math.floor(differenceInMinutes(maxTime, new Date()) % 60 ?? 0),
+			})
+			x = setInterval(() => {
+				intervalFunc(interval)
+			}, 60000)
+		} else if (booking?.status === 'ALLOCATION_CLOSED' && lastTime) {
+			const interval = 48
+			const maxTime = add(new Date(lastTime), {
+				hours: interval,
+			})
+			setTimer({
+				hours: Math.floor(differenceInHours(maxTime, new Date()) ?? 0),
+				minutes: Math.floor(differenceInMinutes(maxTime, new Date()) % 60 ?? 0),
+			})
+			x = setInterval(() => {
+				intervalFunc(interval)
+			}, 60000)
+		}
+		return () => {
+			clearInterval(interval)
+			clearInterval(x)
+		}
+	}, [booking])
 	const confirmBooking = useCallback(async () => {
 		try {
 			const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/confirm`)
-			console.log('confirmbooking', status, data)
 
 			if (status === 200) {
-				setSnackBar({
+				showSnackbar({
 					msg: 'Successfully confirmed booking',
 					sev: 'success',
 				})
 			}
 		} catch (error) {
-			setSnackBar({
+			showSnackbar({
 				msg: error.response.data.developerInfo,
 				sev: 'error',
 			})
@@ -68,15 +119,14 @@ const BookingProvider = ({ children }) => {
 	const startAllocation = useCallback(async () => {
 		try {
 			const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/allocation-pending`)
-			console.log('startAllocation', status, data)
 			if (status === 200) {
-				setSnackBar({
+				showSnackbar({
 					msg: 'Starting Allocation For Booking',
 					sev: 'success',
 				})
 			}
 		} catch (error) {
-			setSnackBar({
+			showSnackbar({
 				msg: error.response.data.developerInfo,
 				sev: 'error',
 			})
@@ -87,13 +137,13 @@ const BookingProvider = ({ children }) => {
 		try {
 			const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/allocation-closed`)
 			if (status === 200) {
-				setSnackBar({
+				showSnackbar({
 					msg: 'Closing Allocation for Booking',
 					sev: 'success',
 				})
 			}
 		} catch (error) {
-			setSnackBar({
+			showSnackbar({
 				msg: error.response.data.developerInfo,
 				sev: 'error',
 			})
@@ -104,13 +154,13 @@ const BookingProvider = ({ children }) => {
 		try {
 			const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/mark-rtd`)
 			if (status === 200) {
-				setSnackBar({
+				showSnackbar({
 					msg: 'Marked Booking As Ready to Deploy',
 					sev: 'success',
 				})
 			}
 		} catch (error) {
-			setSnackBar({
+			showSnackbar({
 				msg: error.response.data.developerInfo,
 				sev: 'error',
 			})
@@ -121,13 +171,13 @@ const BookingProvider = ({ children }) => {
 		try {
 			const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/deployed`)
 			if (status === 200) {
-				setSnackBar({
+				showSnackbar({
 					msg: 'Marked Booking As Deployed',
 					sev: 'success',
 				})
 			}
 		} catch (error) {
-			setSnackBar({
+			showSnackbar({
 				msg: error.response.data.developerInfo,
 				sev: 'error',
 			})
@@ -136,7 +186,7 @@ const BookingProvider = ({ children }) => {
 	}, [bookingId, getBooking])
 	const startProject = useCallback(async () => {
 		if (!booking?.projectId || !bookingId) {
-			return setSnackBar({
+			return showSnackbar({
 				msg: 'No Project Found for This booking',
 			})
 		}
@@ -146,13 +196,13 @@ const BookingProvider = ({ children }) => {
 				bookingId: bookingId,
 			})
 			if (status === 200) {
-				setSnackBar({
-					msg: 'Started Project Successfulyy',
+				showSnackbar({
+					msg: 'Started Project Successfully',
 					sev: 'success',
 				})
 			}
 		} catch (error) {
-			setSnackBar({
+			showSnackbar({
 				msg: error.response.data.developerInfo,
 				sev: 'error',
 			})
@@ -168,6 +218,21 @@ const BookingProvider = ({ children }) => {
 			handelTabChange(undefined, 'info')
 		}
 	}, [booking])
+
+	// const timer = useMemo(() => {
+	// 	const lastTime = booking?.statusHistory?.filter((item) => item?.status === booking?.status)[0].timestamp
+	// 	const t = add(new Date(lastTime), {
+	// 		hours: 72,
+	// 	})
+
+	// 	return {
+	// 		days: 0,
+	// 		hours: t.getHours(),
+	// 		minutes: 0,
+	// 		seconds: t.getSeconds(),
+	// 	}
+	// }, [booking])
+
 	const providerValue = useMemo(
 		() => ({
 			booking: booking,
@@ -176,11 +241,11 @@ const BookingProvider = ({ children }) => {
 			getBooking: getBooking,
 			confirmBooking: confirmBooking,
 			startAllocation: startAllocation,
-			sncBar: sncBar,
 			closeAllocation: closeAllocation,
 			markAsRTD: markAsRTD,
 			markAsDeployed: markAsDeployed,
 			startProject: startProject,
+			timer: timer,
 		}),
 		[
 			booking,
@@ -189,11 +254,11 @@ const BookingProvider = ({ children }) => {
 			getBooking,
 			confirmBooking,
 			startAllocation,
-			sncBar,
 			closeAllocation,
 			markAsRTD,
 			markAsDeployed,
 			startProject,
+			timer,
 		]
 	)
 	return <Provider value={providerValue}>{children}</Provider>

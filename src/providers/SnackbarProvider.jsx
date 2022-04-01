@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { useNavigate, useParams } from 'react-router-dom'
 import { getBackendUrl } from '../api'
 
-//creating sncakbar context
+//creating snackbar context
 const SnackbarContext = createContext()
 const { Provider, Consumer } = SnackbarContext
 const SnackbarProvider = ({ children }) => {

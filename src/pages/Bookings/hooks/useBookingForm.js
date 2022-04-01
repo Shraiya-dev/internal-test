@@ -106,7 +106,6 @@ export const useBookingForm = () => {
 			if (values.overTimeRate === '') {
 				errors.overTimeRate = true
 			}
-			console.log(errors)
 			return errors
 		},
 		onSubmit: async (values) => {

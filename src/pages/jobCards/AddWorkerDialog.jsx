@@ -139,7 +139,7 @@ const AddWorkerDialog = ({ open, setOpen, jobIdForSkillType, setReload }) => {
 						disabled={!workerDetail || workerDetail.skillType !== form.values.skillType}
 						onClick={async () => {
 							await addWorkerJobCardAsRTD()
-							setReload()
+							setReload(true)
 							handleClose()
 						}}
 						variant="contained">

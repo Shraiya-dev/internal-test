@@ -1,11 +1,12 @@
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { KeyboardBackspace } from '@mui/icons-material'
-import { Box, Button, Chip, IconButton, Paper, Stack, Tab, Tabs, Typography } from '@mui/material'
+import { Button, Chip, IconButton, Paper, Stack, Tab, Tabs, Typography } from '@mui/material'
+import { add, getUnixTime } from 'date-fns'
 import { useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTimer } from 'react-timer-hook'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
-import { PopAlert } from '../../components/Snackbar'
 import { useBooking } from '../../providers/BookingProvider'
 import { capitalize } from '../../utils'
 import { CTAMap } from '../../utils/ctaHelpers'
@@ -18,13 +19,13 @@ const BookingById = () => {
 		handelTabChange,
 		selectedTab,
 		booking,
-		sncBar,
 		confirmBooking,
 		startAllocation,
 		closeAllocation,
 		markAsRTD,
 		markAsDeployed,
 		startProject,
+		timer,
 	} = useBooking()
 	const [confirmDialogProps, setConfirmDialogProps] = useState({
 		content: '',
@@ -34,7 +35,6 @@ const BookingById = () => {
 	})
 
 	const allowedActions = useMemo(() => CTAMap[booking?.status]?.actions, [booking])
-	const allowedTabs = useMemo(() => CTAMap[booking?.status]?.tabs, [booking])
 	const closeDialog = useCallback(() => {
 		setConfirmDialogProps({})
 	}, [])
@@ -242,7 +242,7 @@ const BookingById = () => {
 									color="red"
 									fontStyle="italic"
 									align="right">
-									Close allocation within 72 hours
+									Time remaining to close Allocation: {`${timer.hours} Hrs ${timer.minutes} Mins`}
 								</Typography>
 							)}
 							{booking?.status === 'ALLOCATION_CLOSED' && (
@@ -254,7 +254,7 @@ const BookingById = () => {
 									color="red"
 									fontStyle="italic"
 									align="right">
-									Mark booking as RTD within 48 hours
+									Time remaining to mark booking RTD: {`${timer.hours} Hrs ${timer.minutes} Mins`}
 								</Typography>
 							)}
 						</Stack>
@@ -299,13 +299,12 @@ const BookingById = () => {
 								overflowY: 'auto',
 								position: 'relative',
 							}}>
-							{booking && <JobCards />}
+							<JobCards booking={booking} />
 						</TabPanel>
 					</TabContext>
 				</Paper>
 			</DashboardLayout>
 			<ConfirmationDialog {...confirmDialogProps} />
-			<PopAlert {...sncBar} />
 		</>
 	)
 }

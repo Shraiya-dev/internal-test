@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getBackendUrl } from '../../../api'
 import { useBooking } from '../../../providers/BookingProvider'
+import { useSnackbar } from '../../../providers/SnackbarProvider'
 import { CTAMap } from '../../../utils/ctaHelpers'
 const SERVER_URL = getBackendUrl()
 export const useJobCards = () => {
@@ -10,18 +11,9 @@ export const useJobCards = () => {
 	const [bookingSummary, setBookingSummary] = useState()
 	const { booking } = useBooking()
 	const [selectedTab, setSelectedTab] = useState()
-	const [sncBar, setSncBar] = useState({})
-	const allowedTabs = useMemo(() => CTAMap[booking?.status]?.tabs, [booking])
+	const allowedTabs = CTAMap[booking?.status]?.tabs
 
-	const setSnackBar = useCallback(
-		(props) => {
-			setSncBar({
-				msg: '',
-			})
-			setSncBar(props)
-		},
-		[setSncBar]
-	)
+	const { showSnackbar } = useSnackbar()
 
 	useEffect(() => {
 		if (allowedTabs) {
@@ -38,15 +30,16 @@ export const useJobCards = () => {
 			)
 			setSkillTypeSummary(data.payload.skillTypeSummary)
 			setBookingSummary(data.payload.overallSummary.bookingSummary)
+			setReload(false)
 		} catch (error) {
 			const res = error.response
 			if (res?.status === 400) {
-				setSnackBar({
+				showSnackbar({
 					msg: res?.data.messageToUser,
 					sev: 'error',
 				})
 			} else {
-				setSnackBar({
+				showSnackbar({
 					msg: 'Invalid BookingId or status',
 					sev: 'error',
 				})
@@ -60,81 +53,92 @@ export const useJobCards = () => {
 		fetchJobCardsBasedOnStatus()
 	}, [reload])
 
-	const markJobCardAsAccepted = useCallback(
-		async (workerCard) => {
-			try {
-				const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/accept`)
-				fetchJobCardsBasedOnStatus()
-				setSnackBar({
-					msg: 'Worker marked as RTD',
-					sev: 'success',
-				})
-			} catch (error) {
-				setSnackBar({
-					msg: error.response.data.developerInfo,
-					sev: 'error',
-				})
-			}
-		},
-		[fetchJobCardsBasedOnStatus]
-	)
-	const markWorkerJobCardAsRTD = useCallback(
-		async (workerCard) => {
-			try {
-				const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/rtd`)
-				fetchJobCardsBasedOnStatus()
-				setSnackBar({
-					msg: 'Worker marked as RTD',
-					sev: 'success',
-				})
-			} catch (error) {
-				setSnackBar({
-					msg: error.response.data.developerInfo,
-					sev: 'error',
-				})
-			}
-		},
-		[fetchJobCardsBasedOnStatus]
-	)
+	const markJobCardAsAccepted = useCallback(async (workerCard) => {
+		try {
+			const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/accept`)
+			setReload(true)
+			showSnackbar({
+				msg: 'Worker marked as RTD',
+				sev: 'success',
+			})
+		} catch (error) {
+			showSnackbar({
+				msg: error.response.data.developerInfo,
+				sev: 'error',
+			})
+		}
+	}, [])
+	const markWorkerJobCardAsRTD = useCallback(async (workerCard) => {
+		try {
+			const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/rtd`)
+			setReload(true)
+			showSnackbar({
+				msg: 'Worker marked as RTD',
+				sev: 'success',
+			})
+		} catch (error) {
+			showSnackbar({
+				msg: error.response.data.developerInfo,
+				sev: 'error',
+			})
+		}
+	}, [])
 
-	const cancelWorkerJobCard = useCallback(
-		async (workerCard) => {
+	const cancelWorkerJobCard = useCallback(async (workerCard) => {
+		try {
+			const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/cancel`, {
+				//todo remove harcoded reasons
+				reason: 'OTHERS',
+			})
+			setReload(true)
+			showSnackbar({
+				msg: 'Worker Cancelled ',
+				sev: 'success',
+			})
+		} catch (error) {
+			showSnackbar({
+				msg: error.response.data.developerInfo,
+				sev: 'error',
+			})
+		}
+	}, [])
+	const deployWorkerJobCard = useCallback(async (workerCard) => {
+		try {
+			const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/deployed`)
+			setReload(true)
+			showSnackbar({
+				msg: 'Worker Marked as deployed',
+				sev: 'success',
+			})
+		} catch (error) {
+			showSnackbar({
+				msg: error.response.data.developerInfo,
+				sev: 'error',
+			})
+		}
+	}, [])
+	const employmentCompleteForWorker = useCallback(
+		async (workerCard, values) => {
 			try {
-				const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/cancel`, {
-					//todo remove harcoded reasons
-					reason: 'OTHERS',
+				const { status, data } = await axios.post(`${SERVER_URL}/admin/project/remove-employee`, {
+					projectId: bookingSummary?.projectId,
+					employeeId: workerCard?.employeeId,
+					status: values.status,
+					description: values.reason,
 				})
-				fetchJobCardsBasedOnStatus()
-				setSnackBar({
-					msg: 'Worker Cancelled ',
+				showSnackbar({
+					msg: 'Employment marked as complete',
 					sev: 'success',
 				})
+				setReload(true)
 			} catch (error) {
-				setSnackBar({
+				showSnackbar({
 					msg: error.response.data.developerInfo,
 					sev: 'error',
 				})
 			}
 		},
-		[fetchJobCardsBasedOnStatus]
-	)
-	const deployWorkerJobCard = useCallback(
-		async (workerCard) => {
-			try {
-				const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/deployed`)
-				fetchJobCardsBasedOnStatus()
-				setSnackBar({
-					msg: 'Worker Marked as deployed',
-					sev: 'success',
-				})
-			} catch (error) {
-				setSnackBar({
-					msg: error.response.data.developerInfo,
-					sev: 'error',
-				})
-			}
-		},
-		[fetchJobCardsBasedOnStatus]
+		[bookingSummary]
 	)
 
 	const handelTabChange = useCallback((e, state) => {
@@ -148,25 +152,25 @@ export const useJobCards = () => {
 	return useMemo(() => {
 		return {
 			skillTypeSummary: skillTypeSummary,
-			sncBar: sncBar,
 			selectedTab: selectedTab,
-			setSnackBar: setSnackBar,
+			showSnackbar: showSnackbar,
 			bookingSummary: bookingSummary,
 			handelTabChange: handelTabChange,
 			markWorkerJobCardAsRTD: markWorkerJobCardAsRTD,
 			cancelWorkerJobCard: cancelWorkerJobCard,
 			deployWorkerJobCard: deployWorkerJobCard,
 			setReload: setReload,
+			employmentCompleteForWorker: employmentCompleteForWorker,
 			markJobCardAsAccepted: markJobCardAsAccepted,
 		}
 	}, [
 		skillTypeSummary,
-		sncBar,
-		setSnackBar,
+		showSnackbar,
 		bookingSummary,
 		markWorkerJobCardAsRTD,
 		cancelWorkerJobCard,
 		deployWorkerJobCard,
+		employmentCompleteForWorker,
 		markJobCardAsAccepted,
 	])
 }

@@ -364,7 +364,7 @@ const BookingForm = () => {
 					<Grid item xs={4}>
 						<TextField
 							fullWidth
-							disabled={formDisabled}
+							disabled={formDisabled || Number(form.values.qtyHelper) === 0}
 							type="number"
 							variant="outlined"
 							label="Helper*"
@@ -379,7 +379,7 @@ const BookingForm = () => {
 					<Grid item xs={4}>
 						<TextField
 							fullWidth
-							disabled={formDisabled}
+							disabled={formDisabled || Number(form.values.qtyTechnician) === 0}
 							type="number"
 							variant="outlined"
 							label="Technician*"
@@ -394,7 +394,7 @@ const BookingForm = () => {
 					<Grid item xs={4}>
 						<TextField
 							fullWidth
-							disabled={formDisabled}
+							disabled={formDisabled || Number(form.values.qtySupervisor) === 0}
 							type="number"
 							variant="outlined"
 							label="Supervisor*"
@@ -468,7 +468,7 @@ const BookingForm = () => {
 						/>
 					</Grid> */}
 					<Grid item xs={12}>
-						<FormControlLabel
+						{/* <FormControlLabel
 							disabled={formDisabled}
 							control={<Checkbox color="primary" />}
 							label="Paid Holidays"
@@ -476,11 +476,11 @@ const BookingForm = () => {
 							checked={form.values.isHolidayPaid}
 							onChange={form.handleChange}
 							onBlur={form.handleBlur}
-						/>
+						/> */}
 						<FormControlLabel
 							disabled={formDisabled}
 							control={<Checkbox color="primary" />}
-							label="Getting Accomodation"
+							label="Getting Accommodation"
 							name="accomodation"
 							checked={form.values.accomodation}
 							onChange={form.handleChange}
@@ -489,7 +489,7 @@ const BookingForm = () => {
 						<FormControlLabel
 							disabled={formDisabled}
 							control={<Checkbox color="primary" />}
-							label="Paid Travell "
+							label="Paid Travels "
 							name="travelAllowance"
 							checked={form.values.travelAllowance}
 							onChange={form.handleChange}

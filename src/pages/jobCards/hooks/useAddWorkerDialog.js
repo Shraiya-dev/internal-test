@@ -24,7 +24,6 @@ const useAddWorkerDialog = (jobIdForSkillType) => {
 		},
 		validate: (values) => {
 			const errors = {}
-			console.log(values)
 			// if (values.phoneNumber.length < 10) {
 			// 	errors.phoneNumber = 'Enter Valid phoneNumber'
 			// }

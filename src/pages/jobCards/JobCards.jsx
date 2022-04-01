@@ -14,33 +14,38 @@ import {
 	Tabs,
 	Typography,
 } from '@mui/material'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { PopAlert } from '../../components/Snackbar'
 import { CTAMap } from '../../utils/ctaHelpers'
 import AddWorkerDialog from '../jobCards/AddWorkerDialog'
+import EmploymentCompleteDialog from './EmploymentCompleteDialog'
 import { useJobCards } from './hooks/useJobCards'
 
-const JobCards = () => {
+const JobCards = (booking) => {
 	const {
 		bookingSummary,
 		skillTypeSummary,
-		sncBar,
 		selectedTab,
 		handelTabChange,
 		cancelWorkerJobCard,
 		markWorkerJobCardAsRTD,
 		deployWorkerJobCard,
-		setSnackBar,
 		markJobCardAsAccepted,
+		employmentCompleteForWorker,
 		setReload,
 	} = useJobCards()
+	useEffect(() => {
+		setReload(true)
+	}, [booking])
 
 	const [open, setOpen] = useState(false)
+	const [employmentCompleteDialogProps, setEmploymentCompleteDialog] = useState()
 	// const allowedActions = useMemo(() => CTAMap[bookingSummary.status.enumValue]?.actions, [bookingSummary])
-	const allowedTabs = useMemo(() => CTAMap[bookingSummary?.status.enumValue]?.tabs, [bookingSummary])
+	const allowedTabs = CTAMap[bookingSummary?.status?.enumValue]?.tabs
 	return (
 		<>
-			{bookingSummary && (
+			<EmploymentCompleteDialog {...employmentCompleteDialogProps} />
+			{bookingSummary && setReload && (
 				<AddWorkerDialog
 					open={open}
 					setOpen={setOpen}
@@ -54,13 +59,18 @@ const JobCards = () => {
 					<TabContext value={selectedTab}>
 						<Tabs value={selectedTab} indicatorColor="primary" textColor="primary" onChange={handelTabChange}>
 							{Object.keys(allowedTabs).map((tab) => {
-								const [state] = bookingSummary.jobCardsStateCount.filter((obj) => obj.enumValue === tab)
-								return (
-									<Tab
-										key={state.enumValue}
-										label={`${state.enumLabel} (${state.count})`}
-										value={state.enumValue}></Tab>
-								)
+								if (tab !== 'COMPLETED') {
+									const [state] = bookingSummary.jobCardsStateCount.filter((obj) => obj.enumValue === tab)
+									return (
+										<Tab
+											key={state?.enumValue}
+											label={`${state?.enumLabel} (${state?.count})`}
+											value={state?.enumValue}
+										/>
+									)
+								} else {
+									return <Tab label={`Employment Completed`} value={'COMPLETED'}></Tab>
+								}
 							})}
 						</Tabs>
 						{CTAMap[bookingSummary?.status.enumValue]?.tabs[selectedTab].addWorker && (
@@ -151,6 +161,24 @@ const JobCards = () => {
 																				Move to Deployed
 																			</Button>
 																		)}
+																		{allowedTabs[selectedTab]?.jobCardActions?.employmentComplete &&
+																			bookingSummary?.generateEarnings && (
+																				<Button
+																					sx={{
+																						m: 1,
+																					}}
+																					onClick={() => {
+																						setEmploymentCompleteDialog({
+																							open: true,
+																							setOpen: setEmploymentCompleteDialog,
+																							workerCard: workerCard,
+																							confirm: employmentCompleteForWorker,
+																						})
+																					}}
+																					variant="outlined">
+																					Employment Complete
+																				</Button>
+																			)}
 																	</Box>
 																)}
 															</TableCell>
@@ -169,7 +197,6 @@ const JobCards = () => {
 					</Typography>
 				)}
 			</Paper>
-			<PopAlert {...sncBar} />
 		</>
 	)
 }

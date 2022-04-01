@@ -95,8 +95,11 @@ export const CTAMap = {
 		tabs: {
 			DEPLOYMENT_COMPLETE: {
 				jobCardActions: {
-					cancel: true,
+					employmentComplete: true,
 				},
+			},
+			COMPLETED: {
+				jobCardActions: {},
 			},
 		},
 		actions: {
