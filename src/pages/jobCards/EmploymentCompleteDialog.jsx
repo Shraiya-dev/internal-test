@@ -8,6 +8,7 @@ const reasonOption = [
 	{ label: 'Tenure Complete', value: 'TENURE_COMPLETE' },
 	{ label: 'Worker Churned', value: 'WORKER_CHURNED' },
 	{ label: 'Employer Termination', value: 'EMPLOYER_TERMINATION' },
+	{ label: 'Other', value: 'OTHER' },
 ]
 const EmploymentCompleteDialog = ({ open = false, workerCard, setOpen, confirm }) => {
 	const handelClose = useCallback(() => {
@@ -54,7 +55,7 @@ const EmploymentCompleteDialog = ({ open = false, workerCard, setOpen, confirm }
 				}}>
 				<form onSubmit={form.handleSubmit}>
 					<Stack spacing={2}>
-						<Typography variant="h5">Employment Complete</Typography>
+						<Typography variant="h5">Complete Employment</Typography>
 						<Select
 							value={form.values.reason}
 							name="reason"
@@ -63,16 +64,18 @@ const EmploymentCompleteDialog = ({ open = false, workerCard, setOpen, confirm }
 							error={!!isError('reason')}>
 							{getSelectOptions(reasonOption)}
 						</Select>
-						<TextField
-							name="other"
-							value={form.values.other}
-							error={!!isError('other')}
-							onChange={form.handleChange}
-							onBlur={form.handleBlur}
-							multiline
-							minRows={1}
-							placeholder="Other reasons..."
-						/>
+						{form.values.reason === 'OTHER' && (
+							<TextField
+								name="other"
+								value={form.values.other}
+								error={!!isError('other')}
+								onChange={form.handleChange}
+								onBlur={form.handleBlur}
+								multiline
+								minRows={4}
+								placeholder="Description"
+							/>
+						)}
 					</Stack>
 					<Stack pt={2} direction="row" justifyContent="flex-end" spacing={2}>
 						<Button onClick={handelClose} variant="outlined">

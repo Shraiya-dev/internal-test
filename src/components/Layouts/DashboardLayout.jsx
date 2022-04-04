@@ -1,18 +1,5 @@
-import { Face, KeyboardBackspace, LibraryBooks, Person, Redeem } from '@mui/icons-material'
-import {
-	AppBar,
-	Box,
-	Button,
-	Drawer,
-	IconButton,
-	List,
-	ListItem,
-	ListItemText,
-	Menu,
-	MenuItem,
-	Toolbar,
-} from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { Face, LibraryBooks, Person, Redeem } from '@mui/icons-material'
+import { AppBar, Box, Drawer, IconButton, List, ListItem, Menu, MenuItem, Toolbar } from '@mui/material'
 import React, { useCallback, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import projectHeroLogo from '../../assets/brand-logo.svg'
@@ -20,36 +7,6 @@ import { useAuth } from '../../providers/AuthProvider'
 import { ADD_PARTNER_ROUTE, BOOKING_ROUTE, REWARD_PENALTIES_ROUTE, WORKER_INFO_ROUTE } from '../../routes'
 
 const drawerWidth = 250
-
-const useStyles = makeStyles((theme) => ({
-	root: {
-		display: 'flex',
-	},
-	appBar: {
-		zIndex: `${theme.zIndex.drawer + 1} !important`,
-		backgroundColor: '#fff !important',
-	},
-	drawer: {
-		width: drawerWidth,
-		flexShrink: 0,
-		border: 'none',
-	},
-	drawerPaper: {
-		width: drawerWidth,
-	},
-	drawerContainer: {
-		overflow: 'auto',
-		paddingTop: '90px',
-		flex: 1,
-		display: 'flex',
-		flexDirection: 'column',
-	},
-	content: {
-		flexGrow: 1,
-		paddingTop: '72px',
-		paddingLeft: drawerWidth,
-	},
-}))
 
 const DrawerList = [
 	{
@@ -75,7 +32,6 @@ const DrawerList = [
 ]
 
 const DashboardLayout = ({ children }) => {
-	const classes = useStyles()
 	const navigate = useNavigate()
 	const { pathname } = useLocation()
 	const { isUserLoggedIn, logout } = useAuth()
@@ -113,13 +69,23 @@ const DashboardLayout = ({ children }) => {
 
 	return (
 		<>
-			<AppBar position="fixed" color="primary" variant="outlined" className={classes.appBar}>
+			<AppBar
+				position="fixed"
+				color="primary"
+				variant="outlined"
+				elevation={0}
+				sx={(theme) => ({
+					p: 1,
+					zIndex: theme.zIndex.drawer + 1,
+					backgroundColor: '#fff !important',
+				})}>
 				<Toolbar
 					sx={{
-						p: 2,
+						p: 0,
+
 						justifyContent: 'space-between',
 					}}>
-					<img style={{ height: '40px' }} className={classes.img} src={projectHeroLogo} alt="project hero" />
+					<img style={{ height: '40px' }} src={projectHeroLogo} alt="project hero" />
 					<IconButton color="primary" ref={menuBtnRef} onClick={handelOpen}>
 						<Person />
 					</IconButton>
@@ -130,34 +96,35 @@ const DashboardLayout = ({ children }) => {
 				</Toolbar>
 			</AppBar>
 			<Drawer
-				className={classes.drawer}
 				variant="permanent"
-				classes={{
-					paper: classes.drawerPaper,
+				PaperProps={{
+					sx: {
+						width: drawerWidth,
+						paddingTop: 12,
+					},
 				}}>
-				<div className={classes.drawerContainer}>
-					<List>
-						{DrawerList.map((item, index) => (
-							<ListItem
-								sx={(theme) => ({
-									backgroundColor: pathname.includes(item.link) ? theme.palette.primary.main : null,
-									color: pathname.includes(item.link) ? theme.palette.primary.contrastText : '#000',
-									p: 2,
-									'&:hover': {
-										backgroundColor: pathname.includes(item.link) ? theme.palette.primary.light : null,
-									},
-								})}
-								button
-								key={index}
-								onClick={() => {
-									redirectTo(item.link)
-								}}>
-								{/* <ListItemIcon>{item.icon}</ListItemIcon> */}
-								{item.label}
-							</ListItem>
-						))}
-					</List>
-					{/* <List style={{ margin: 'auto 0 0' }}>
+				<List>
+					{DrawerList.map((item, index) => (
+						<ListItem
+							sx={(theme) => ({
+								backgroundColor: pathname.includes(item.link) ? theme.palette.primary.main : null,
+								color: pathname.includes(item.link) ? theme.palette.primary.contrastText : '#000',
+								p: 2,
+								'&:hover': {
+									backgroundColor: pathname.includes(item.link) ? theme.palette.primary.light : null,
+								},
+							})}
+							button
+							key={index}
+							onClick={() => {
+								redirectTo(item.link)
+							}}>
+							{/* <ListItemIcon>{item.icon}</ListItemIcon> */}
+							{item.label}
+						</ListItem>
+					))}
+				</List>
+				{/* <List style={{ margin: 'auto 0 0' }}>
 						<ListItem
 							button
 							sx={(theme) => ({
@@ -193,9 +160,13 @@ const DashboardLayout = ({ children }) => {
 							)
 						})}
 					</Tabs> */}
-				</div>
 			</Drawer>
-			<main className={classes.content}>
+			<main
+				style={{
+					flexGrow: 1,
+					paddingTop: '82px',
+					paddingLeft: drawerWidth,
+				}}>
 				<Box
 					sx={{
 						p: 3,

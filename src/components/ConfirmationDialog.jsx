@@ -6,11 +6,9 @@ const ConfirmationDialog = ({ content, open = false, cancel, confirm }) => {
 	return (
 		<Dialog open={open}>
 			<DialogContent sx={{ p: 4 }}>
-				<DialogContentText>
-					<Typography align="center" variant="h5">
-						{content}
-					</Typography>
-				</DialogContentText>
+				<Typography align="center" variant="h5">
+					{content}
+				</Typography>
 			</DialogContent>
 			<DialogActions
 				sx={{

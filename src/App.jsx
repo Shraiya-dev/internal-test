@@ -70,12 +70,16 @@ const lightTheme = createTheme({
 				input: {
 					padding: '14px',
 				},
+				root: {
+					padding: 0,
+				},
 			},
 		},
 		MuiButton: {
 			styleOverrides: {
 				root: {
 					fontSize: '14',
+					alignItems: 'center',
 				},
 			},
 		},

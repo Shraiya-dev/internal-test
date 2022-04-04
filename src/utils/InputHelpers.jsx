@@ -1,4 +1,4 @@
-import { MenuItem } from '@material-ui/core'
+import { MenuItem } from '@mui/material'
 
 export const getSelectOptions = (opt, index) => {
 	return opt.map((item) => (

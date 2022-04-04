@@ -13,17 +13,17 @@ import { useNavigate } from 'react-router-dom'
 const useStyles = makeStyles((theme) => ({
 	card: {
 		flex: 1,
-		padding: theme.spacing(2),
-		paddingBottom: theme.spacing(0.5),
-		backgroundColor: '#FFFEFE',
-		borderRadius: theme.spacing(1),
-		margin: 'auto',
-		marginTop: theme.spacing(2),
+		padding: theme.spacing(2) + ' !important',
+		paddingBottom: theme.spacing(0.5) + ' !important',
+		backgroundColor: '#FFFEFE' + ' !important',
+		borderRadius: theme.spacing(1) + ' !important',
+		margin: 'auto' + ' !important',
+		marginTop: theme.spacing(2) + ' !important',
 	},
 	showMoreContainer: {
-		display: 'flex',
-		justifyContent: 'space-between',
-		alignItems: 'center',
+		display: 'flex' + ' !important',
+		justifyContent: 'space-between' + ' !important',
+		alignItems: 'center' + ' !important',
 	},
 }))
 
