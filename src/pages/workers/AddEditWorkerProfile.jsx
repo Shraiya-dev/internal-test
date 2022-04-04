@@ -1,6 +1,7 @@
 import {
 	Box,
 	Button,
+	Chip,
 	Container,
 	FormControl,
 	FormControlLabel,
@@ -64,7 +65,10 @@ const AddEditWorkerProfile = () => {
 					<Paper sx={{ p: 2, m: 2 }}>
 						<Container
 							sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
-							<h1>Worker Information</h1>
+							<Stack direction="row" spacing={2} alignItems="center">
+								<h1>Worker Information</h1>
+								<Chip label={worker?.status} />
+							</Stack>
 							<Box
 								display="flex"
 								justifyItems="flex-end"
@@ -83,11 +87,11 @@ const AddEditWorkerProfile = () => {
 											}}>
 											Edit
 										</Button>
-										{worker?.isAvailableReady && (
-											<Button variant="outlined" onClick={markWorkerAsAvailable}>
+										{
+											<Button disabled={!worker?.isAvailableReady} variant="outlined" onClick={markWorkerAsAvailable}>
 												Mark as Available
 											</Button>
-										)}
+										}
 									</>
 								) : (
 									<>
