@@ -69,7 +69,19 @@ const JobCards = (booking) => {
 								)
 							})}
 						</Tabs>
-
+						{CTAMap[bookingSummary?.status.enumValue]?.tabs[selectedTab].addWorker && (
+							<Stack direction="row" justifyContent="flex-end">
+								<Button
+									sx={{ m: 1 }}
+									size="large"
+									variant="outlined"
+									onClick={() => {
+										setOpen(!open)
+									}}>
+									Add Hero
+								</Button>
+							</Stack>
+						)}
 						{skillTypeSummary &&
 							Object.keys(skillTypeSummary)?.map((skillType) => {
 								const workerCards = skillTypeSummary[skillType].workerCards
