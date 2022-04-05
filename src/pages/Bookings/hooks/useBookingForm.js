@@ -175,7 +175,10 @@ export const useBookingForm = () => {
 			}
 
 			try {
-				const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${booking.bookingId}`, updateBookingData)
+				const { status, data } = await axios.put(
+					`${SERVER_URL}/admin/bookings/${booking?.bookingId}`,
+					updateBookingData
+				)
 				if (status === 200) {
 					showSnackbar({
 						msg: 'Booking Updated Successfully',
@@ -197,35 +200,35 @@ export const useBookingForm = () => {
 	useEffect(() => {
 		if (booking) {
 			form.setValues({
-				jobType: booking.jobType ?? '',
-				tags: [...booking.tags] ?? '',
-				otherJobType: booking.otherJobType ?? '',
-				startDate: new Date(booking.schedule.startDate) ?? '',
-				shiftTime: booking.schedule.shiftTime ?? 'none',
-				durationType: booking.schedule.bookingDuration ?? [],
-				state: booking.state ?? '',
-				city: booking.city ?? '',
-				siteAddress: booking.siteAddress ?? 0,
-				qtyHelper: booking.peopleRequired.HELPER ?? 0,
-				qtyTechnician: booking.peopleRequired.TECHNICIAN ?? 0,
-				qtySupervisor: booking.peopleRequired.SUPERVISOR ?? new Date(),
-				cmpName: booking.cmpName ?? bookingDurations[0],
-				name: booking.userName ?? 'none',
-				email: booking.email ?? 'none',
-				phoneNumber: booking.phoneNumber ?? 'none',
+				jobType: booking?.jobType ?? '',
+				tags: [...booking?.tags] ?? '',
+				otherJobType: booking?.otherJobType ?? '',
+				startDate: new Date(booking?.schedule.startDate) ?? '',
+				shiftTime: booking?.schedule.shiftTime ?? 'none',
+				durationType: booking?.schedule.bookingDuration ?? [],
+				state: booking?.state ?? '',
+				city: booking?.city ?? '',
+				siteAddress: booking?.siteAddress ?? 0,
+				qtyHelper: booking?.peopleRequired.HELPER ?? 0,
+				qtyTechnician: booking?.peopleRequired.TECHNICIAN ?? 0,
+				qtySupervisor: booking?.peopleRequired.SUPERVISOR ?? new Date(),
+				cmpName: booking?.cmpName ?? bookingDurations[0],
+				name: booking?.userName ?? 'none',
+				email: booking?.email ?? 'none',
+				phoneNumber: booking?.phoneNumber ?? 'none',
 				wageHelper: booking?.rateCard?.HELPER ?? '',
 				wageSupervisor: booking?.rateCard?.SUPERVISOR ?? '',
 				wageTechnition: booking?.rateCard?.TECHNICIAN ?? '',
-				overTimeRate: booking.overTime?.rate ?? '',
-				overTimeBuffer: booking.overTime?.buffer ?? '',
-				overTimeBufferType: booking.overTime?.bufferType ?? 'minutes',
-				holidayDays: booking.holidayDays ?? [],
-				siteImages: booking.images?.site ?? false,
-				accomodationImages: booking.images?.accomodations ?? false,
-				isHolidayPaid: booking.isHolidayPaid ?? false,
-				accomodation: booking.benefits?.includes('ACCOMODATION') ?? false,
-				travelAllowance: booking.benefits?.includes('TRAVEL_ALLOWANCE') ?? false,
-				food: booking.benefits?.includes('FOOD') ?? false,
+				overTimeRate: booking?.overTime?.rate ?? '',
+				overTimeBuffer: booking?.overTime?.buffer ?? '',
+				overTimeBufferType: booking?.overTime?.bufferType ?? 'minutes',
+				holidayDays: booking?.holidayDays ?? [],
+				siteImages: booking?.images?.site ?? false,
+				accomodationImages: booking?.images?.accomodations ?? false,
+				isHolidayPaid: booking?.isHolidayPaid ?? false,
+				accomodation: booking?.benefits?.includes('ACCOMODATION') ?? false,
+				travelAllowance: booking?.benefits?.includes('TRAVEL_ALLOWANCE') ?? false,
+				food: booking?.benefits?.includes('FOOD') ?? false,
 			})
 		}
 	}, [booking])
@@ -251,7 +254,7 @@ export const useBookingForm = () => {
 					//uploading file
 					const formData = new FormData()
 					formData.set('file', img)
-					return axios.post(`${SERVER_URL}/admin/bookings/${booking.bookingId}/images`, formData)
+					return axios.post(`${SERVER_URL}/admin/bookings/${booking?.bookingId}/images`, formData)
 				})
 			)
 
