@@ -161,7 +161,7 @@ const AddEditWorkerProfile = () => {
 								sx={(t) => ({
 									border: '2px solid transparent',
 									borderRadius: 1,
-									borderColor: isError('gender') ? t.palette.error : 'transparent',
+									borderColor: isError('gender') ? t.palette.error.light : 'transparent',
 								})}>
 								<RadioGroup {...formikProps('gender')}>
 									<Grid container spacing={2}>
