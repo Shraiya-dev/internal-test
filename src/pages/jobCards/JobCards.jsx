@@ -69,7 +69,7 @@ const JobCards = (booking) => {
 								)
 							})}
 						</Tabs>
-						{CTAMap[bookingSummary?.status.enumValue]?.tabs[selectedTab].addWorker && (
+						{CTAMap[bookingSummary?.status.enumValue]?.tabs[selectedTab]?.addWorker && (
 							<Stack direction="row" justifyContent="flex-end">
 								<Button
 									sx={{ m: 1 }}
