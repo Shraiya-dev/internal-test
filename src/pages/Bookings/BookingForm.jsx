@@ -130,6 +130,7 @@ const BookingForm = () => {
 									<Box p={2}>
 										{tags[form.values.jobType]?.map((tag) => (
 											<Chip
+												key={tag}
 												disabled={true}
 												clickable
 												onClick={() => {
@@ -147,7 +148,6 @@ const BookingForm = () => {
 														  }
 														: undefined
 												}
-												key={tag}
 												label={tag}></Chip>
 										))}
 									</Box>

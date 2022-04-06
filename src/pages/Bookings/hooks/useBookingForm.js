@@ -164,12 +164,12 @@ export const useBookingForm = () => {
 				holidayDays: values.holidayDays,
 				isHolidayPaid: values.isHolidayPaid,
 				images: {
-					accomodations: values.accomodationImages,
+					accommodations: values.accomodationImages,
 					site: values.siteImages,
 				},
 				benefits: {
 					ACCOMODATION: values.accomodation,
-					TRAVEL_ALLOWANCE: values.travelAllowance,
+					PAID_TRAVEL: values.travelAllowance,
 					FOOD: values.food,
 				},
 			}
@@ -224,10 +224,10 @@ export const useBookingForm = () => {
 				overTimeBufferType: booking?.overTime?.bufferType ?? 'minutes',
 				holidayDays: booking?.holidayDays ?? [],
 				siteImages: booking?.images?.site ?? [],
-				accomodationImages: booking?.images?.accomodations ?? [],
+				accomodationImages: booking?.images?.accommodations ?? [],
 				isHolidayPaid: booking?.isHolidayPaid ?? false,
 				accomodation: booking?.benefits?.includes('ACCOMODATION') ?? false,
-				travelAllowance: booking?.benefits?.includes('TRAVEL_ALLOWANCE') ?? false,
+				travelAllowance: booking?.benefits?.includes('PAID_TRAVEL') ?? false,
 				food: booking?.benefits?.includes('FOOD') ?? false,
 			})
 		}
@@ -240,12 +240,15 @@ export const useBookingForm = () => {
 				[type]: true,
 			}))
 			let fieldName = ''
+			let imgType = ''
 			switch (type) {
 				case 'site':
 					fieldName = 'siteImages'
+					imgType = 'site'
 					break
 				case 'accomodation':
 					fieldName = 'accomodationImages'
+					imgType = 'accommodations'
 					break
 			}
 
@@ -253,6 +256,7 @@ export const useBookingForm = () => {
 				files.map((img) => {
 					//uploading file
 					const formData = new FormData()
+					formData.set('type', imgType)
 					formData.set('file', img)
 					return axios.post(`${SERVER_URL}/admin/bookings/${booking?.bookingId}/images`, formData)
 				})

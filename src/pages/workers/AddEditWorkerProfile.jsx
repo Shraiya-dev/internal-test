@@ -16,7 +16,7 @@ import {
 	Typography,
 } from '@mui/material'
 import React, { useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert } from '../../components/Snackbar'
 import { getSelectOptions } from '../../utils/InputHelpers'
@@ -64,10 +64,25 @@ const AddEditWorkerProfile = () => {
 				<Stack alignItems="stretch" margin="0 auto" maxWidth={1000}>
 					<Paper sx={{ p: 2, m: 2 }}>
 						<Container
-							sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
-							<Stack direction="row" spacing={2} alignItems="center">
-								<h1>Worker Information</h1>
-								<Chip label={worker?.status} />
+							sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', mb: 4 }}>
+							<Stack justifyContent="flex-start" alignItems="flex-start">
+								<Typography variant="h3">Worker Information</Typography>
+								<Stack direction="row" spacing={2} alignItems="center">
+									<Chip label={worker?.status} />
+									{['EMPLOYED', 'CONFIRMED'].includes(worker?.status) && (
+										<Typography>
+											Booking Id:&nbsp;
+											<Link
+												style={{
+													textDecoration: 'underline',
+													color: '#244CB3',
+												}}
+												to={`/bookings/${worker?.bookingId}`}>
+												{worker?.bookingId}
+											</Link>
+										</Typography>
+									)}
+								</Stack>
 							</Stack>
 							<Box
 								display="flex"

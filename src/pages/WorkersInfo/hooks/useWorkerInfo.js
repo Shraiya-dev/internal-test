@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { useMemo, useCallback, useState, useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
-import { setupAuthHeaders } from '../../../providers/utils/setupAuthHeaders'
 import { isError } from '../../../utils/formErrorsChecker'
 
 const SERVER_URL = getBackendUrl()
@@ -95,13 +94,10 @@ export const useWorkerInfo = () => {
 	const fetchWorkerData = useCallback(
 		async (searchParams) => {
 			try {
+				searchParams.append('pageSize', '20')
 				//todo add pagination here ask server to send total count of worker in response and calculate the number of pages using page size
-				const { data, status } = await axios.get(
-					`${SERVER_URL}/admin/workers?${searchParams}`
+				const { data, status } = await axios.get(`${SERVER_URL}/admin/workers?${searchParams}`)
 
-					// {params:{
-					// 	jobType:searchParams.get('jobType') }}
-				)
 				setWorkerData(data.payload.response)
 			} catch (error) {
 				setSnackBar({

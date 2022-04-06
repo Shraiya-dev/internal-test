@@ -26,88 +26,126 @@ const selectOption = [
 const Bookings = () => {
 	const { form, checkError, bookings, setSncBar, sncBar, isLoading } = useBooking()
 	return (
-		<>
-			<DashboardLayout>
-				<Paper variant="outlined">
-					<form onSubmit={form.handleSubmit}>
-						<Box p={2} display="flex" justifyContent="flex-start" alignItems="stretch">
-							<Select
-								variant="outlined"
-								sx={{
-									width: '200px',
-									marginRight: 2,
-								}}
-								value={form.values.bookingStatus}
-								onChange={(e) => {
-									form.setFieldValue('bookingStatus', e.target.value)
-								}}>
-								{selectOption.map((opt) => {
-									return (
-										<MenuItem key={opt.value} value={opt.value}>
-											{opt.label}
-										</MenuItem>
-									)
-								})}
-							</Select>
-							<TextField
-								name="customerNumber"
-								error={!!checkError('customerNumber')}
-								onChange={form.handleChange}
-								onBlur={form.handleBlur}
-								value={form.values.customerNumber}
-								sx={{
-									width: '300px',
-									marginRight: 2,
-								}}
-								variant="outlined"
-								label="Customer's phone number"
-							/>
-							<Button type="submit" color="primary" startIcon={<Search />} variant="contained">
-								search
-							</Button>
-						</Box>
-					</form>
-				</Paper>
-				{isLoading ? (
-					<Box
-						sx={{
-							margin: '35vh auto',
-							width: '50%',
-						}}>
-						<LinearProgress />
-					</Box>
-				) : (
-					<Box pt={2}>
-						{bookings?.length === 0 && (
-							<Typography
-								variant="h5"
-								sx={{
-									margin: '10% auto',
-									width: 'fit-content',
-								}}
-								color="#616161">
-								No bookings found in this state
-							</Typography>
-						)}
-						<Grid container alignItems="stretch" spacing={1.5}>
-							{bookings?.map((bookingData, index) => {
-								return bookingData?.legacyBooking ? (
-									<Grid style={{ display: 'flex' }} key={bookingData?._id} item lg={4} md={6}>
-										<StatusCard booking={bookingData} />
-									</Grid>
-								) : (
-									<Grid style={{ display: 'flex' }} key={bookingData?.bookingId} item lg={4} md={6}>
-										<BookingCard bookingData={bookingData} />
-									</Grid>
-								)
-							})}
-						</Grid>
-					</Box>
-				)}
-			</DashboardLayout>
-			<PopAlert {...sncBar} />
-		</>
-	)
+    <>
+      <DashboardLayout>
+        <Paper variant="outlined">
+          <form onSubmit={form.handleSubmit}>
+            <Box
+              p={2}
+              display="flex"
+              justifyContent="flex-start"
+              alignItems="stretch"
+            >
+              <Select
+                variant="outlined"
+                sx={{
+                  width: "200px",
+                  marginRight: 2,
+                }}
+                value={form.values.bookingStatus}
+                onChange={(e) => {
+                  form.setFieldValue("bookingStatus", e.target.value);
+                }}
+              >
+                {selectOption.map((opt) => {
+                  return (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              <TextField
+                name="customerNumber"
+                error={!!checkError("customerNumber")}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                value={form.values.customerNumber}
+                sx={{
+                  width: "300px",
+                  marginRight: 2,
+                }}
+                variant="outlined"
+                label="Customer's phone number"
+              />
+              <TextField
+                name="bookingId"
+                error={!!checkError("customerNumber")}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+                value={form.values.bookingId}
+                sx={{
+                  width: "300px",
+                  marginRight: 2,
+                }}
+                variant="outlined"
+                label="Booking Id"
+              />
+              <Button
+                type="submit"
+                color="primary"
+                startIcon={<Search />}
+                variant="contained"
+              >
+                search
+              </Button>
+            </Box>
+          </form>
+        </Paper>
+        {isLoading ? (
+          <Box
+            sx={{
+              margin: "35vh auto",
+              width: "50%",
+            }}
+          >
+            <LinearProgress />
+          </Box>
+        ) : (
+          <Box pt={2}>
+            {bookings?.length === 0 && (
+              <Typography
+                variant="h5"
+                sx={{
+                  margin: "10% auto",
+                  width: "fit-content",
+                }}
+                color="#616161"
+              >
+                No bookings found in this state
+              </Typography>
+            )}
+            <Grid container alignItems="stretch" spacing={1.5}>
+              {bookings?.map((bookingData, index) => {
+                return bookingData?.legacyBooking ? (
+                  <Grid
+                    style={{ display: "flex" }}
+                    key={bookingData?._id}
+                    item
+                    lg={4}
+                    md={6}
+                  >
+                    <StatusCard booking={bookingData} />
+                  </Grid>
+                ) : (
+                  <Grid
+                    style={{ display: "flex" }}
+                    key={bookingData?.bookingId}
+                    item
+                    lg={4}
+                    md={6}
+                  >
+                    <BookingCard bookingData={bookingData} />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Box>
+        )}
+      </DashboardLayout>
+      <PopAlert {...sncBar} />
+    </>
+  );
 }
 
 export default Bookings

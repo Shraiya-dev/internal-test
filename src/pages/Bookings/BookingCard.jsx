@@ -101,14 +101,6 @@ const BookingCard = ({ bookingData }) => {
 						})}
 					</Box>
 					<Box style={{ maxWidth: '50%', overflow: 'hidden' }}>
-						{/* <Box p={1} display="flex" alignItems="center">
-							<AccessTime />
-							&nbsp;&nbsp;Shift Timing {bookingData?.shiftTime}
-						</Box> */}
-						{/* <Box p={1} display="flex" alignItems="center">
-							<AccessTime />
-							&nbsp;&nbsp;{bookingData?.schedule.bookingDuration}
-						</Box> */}
 						<Box pb={1} pt={1} display="flex" alignItems="center">
 							Company: {bookingData?.cmpName}
 						</Box>

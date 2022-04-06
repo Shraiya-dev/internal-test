@@ -281,7 +281,7 @@ export const useAddEditWorkerProfile = (workerId) => {
 				phoneType: worker?.phoneType ?? '',
 				jobType: worker?.workDetails?.jobType ?? 'none',
 				workerType: worker?.workDetails?.workerType ?? '',
-				optOutOfCity: worker?.workDetails?.optOutOfCity,
+				optOutOfCity: worker?.workDetails?.optOutOfCity ?? false,
 				experience: worker?.workDetails?.experience ?? 'none',
 				vaccination: worker?.vaccination?.status?.split(' ')?.join('_')?.toUpperCase() ?? '',
 				aadhaarNumber: worker?.kycDetails?.aadhar?.docNo ?? '',

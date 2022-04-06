@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import { Box, TextField, Button, Paper, Select, MenuItem, Typography, Stack } from '@mui/material'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useWorkerInfo } from './hooks/useWorkerInfo'
 import { getSelectOptions } from '../../utils/InputHelpers'
@@ -36,12 +36,17 @@ export default function DataTable() {
 	)
 
 	const columns = [
-		{ field: 'id', headerName: <h4>ID</h4>, width: 220 },
+		// { field: 'id', headerName: <h4>ID</h4>, width: 220 },
+
 		{ field: 'name', headerName: <h4>Name</h4>, width: 150 },
-		{ field: 'state', headerName: <h4>State</h4>, width: 150 },
 		{
-			field: 'city',
-			headerName: <h4>City</h4>,
+			field: 'phoneNumber',
+			headerName: <h4>Phone Number</h4>,
+			width: 150,
+		},
+		{
+			field: 'jobType',
+			headerName: <h4>JobType</h4>,
 			width: 150,
 		},
 		{
@@ -49,16 +54,26 @@ export default function DataTable() {
 			headerName: <h4>Skill type</h4>,
 			width: 150,
 		},
-
+		{ field: 'status', headerName: <h4>Status</h4>, width: 220 },
 		{
-			field: 'phoneNumber',
-			headerName: <h4>Phone Number</h4>,
+			field: 'bookingId',
+			headerName: <h4>Booking ID</h4>,
 			width: 150,
+			renderCell: (params) => (
+				<Link
+					style={{
+						textDecoration: 'underline',
+						color: '#244CB3',
+					}}
+					to={`/bookings/${params?.row.bookingId}`}>
+					{params?.row?.bookingId}
+				</Link>
+			),
 		},
-
+		{ field: 'state', headerName: <h4>State</h4>, width: 150 },
 		{
-			field: 'jobType',
-			headerName: <h4>JobType</h4>,
+			field: 'city',
+			headerName: <h4>City</h4>,
 			width: 150,
 		},
 
@@ -77,7 +92,7 @@ export default function DataTable() {
 	]
 
 	const { checkError, form, workerData } = useWorkerInfo()
-
+	// console.log(workerData)
 	return (
 		<DashboardLayout>
 			<Box display="flex" justifyContent="space-between" alignItems={'center'}>
@@ -160,8 +175,8 @@ export default function DataTable() {
 				</form>
 			</Paper>
 
-			<Paper sx={{ mt: 2, height: 700, width: '100%', p: 2 }}>
-				<DataGrid rows={workerData} columns={columns} pageSize={10} rowsPerPageOptions={[5]} />
+			<Paper sx={{ mt: 2, height: '74vh', width: '100%', p: 2 }}>
+				<DataGrid rows={workerData} columns={columns} pageSize={20} />
 			</Paper>
 		</DashboardLayout>
 	)
