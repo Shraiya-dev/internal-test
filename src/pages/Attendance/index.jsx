@@ -168,7 +168,7 @@ const Attendance = () => {
 			<DashboardLayout>
 				<Paper className={classes.headingContainer} variant="outlined">
 					<p>
-						<strong>ID</strong>:{bookingId}
+						<strong>Project ID</strong>:{bookingId}
 					</p>
 					<TextField
 						id="date"

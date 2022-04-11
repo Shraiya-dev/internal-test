@@ -68,10 +68,10 @@ const lightTheme = createTheme({
 		MuiOutlinedInput: {
 			styleOverrides: {
 				input: {
-					padding: '14px',
+					padding: '0px',
 				},
 				root: {
-					padding: 0,
+					padding: '14px',
 				},
 			},
 		},

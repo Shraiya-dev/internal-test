@@ -353,6 +353,19 @@ const BookingForm = () => {
 							onBlur={form.handleBlur}
 						/>
 					</Grid>
+					{/* <Grid item xs={12}>
+						<TextField
+							fullWidth
+							disabled={formDisabled}
+							variant="outlined"
+							label="Phone Number *"
+							name="phoneNumber"
+							error={checkError('phoneNumber')}
+							value={form.values.phoneNumber}
+							onChange={form.handleChange}
+							onBlur={form.handleBlur}
+						/>
+					</Grid> */}
 					<Grid item xs={12}>
 						<Typography variant="h6" mb={2}>
 							Additional Details
@@ -506,19 +519,6 @@ const BookingForm = () => {
 						/>
 					</Grid>
 
-					<Grid item xs={12}>
-						<TextField
-							fullWidth
-							disabled={formDisabled}
-							variant="outlined"
-							label="Phone Number *"
-							name="phoneNumber"
-							error={checkError('phoneNumber')}
-							value={form.values.phoneNumber}
-							onChange={form.handleChange}
-							onBlur={form.handleBlur}
-						/>
-					</Grid>
 					<Grid container spacing={2} item xs={12}>
 						<Grid display="flex" justifyContent="space-between" alignItems="center" item md={12}>
 							<InputLabel>Site Images</InputLabel>

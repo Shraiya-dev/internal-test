@@ -227,7 +227,7 @@ const BookingById = () => {
 											height: 48,
 										}}
 										onClick={() => {
-											navigate(`/bookings/${booking?.bookingId}/attendance`)
+											navigate(`/bookings/${booking?.projectId}/attendance`)
 										}}>
 										Manage Attendance
 									</Button>

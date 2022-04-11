@@ -67,22 +67,24 @@ const AddEditWorkerProfile = () => {
 							sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', mb: 4 }}>
 							<Stack justifyContent="flex-start" alignItems="flex-start">
 								<Typography variant="h3">Worker Information</Typography>
-								<Stack direction="row" spacing={2} alignItems="center">
-									<Chip label={worker?.status} />
-									{['EMPLOYED', 'CONFIRMED'].includes(worker?.status) && (
-										<Typography>
-											Booking Id:&nbsp;
-											<Link
-												style={{
-													textDecoration: 'underline',
-													color: '#244CB3',
-												}}
-												to={`/bookings/${worker?.bookingId}`}>
-												{worker?.bookingId}
-											</Link>
-										</Typography>
-									)}
-								</Stack>
+								{worker && (
+									<Stack direction="row" spacing={2} alignItems="center">
+										{worker?.status && <Chip label={worker?.status} />}
+										{worker?.bookingId && worker?.status && ['EMPLOYED', 'CONFIRMED'].includes(worker?.status) && (
+											<Typography>
+												Booking Id:&nbsp;
+												<Link
+													style={{
+														textDecoration: 'underline',
+														color: '#244CB3',
+													}}
+													to={`/bookings/${worker?.bookingId}`}>
+													{worker?.bookingId}
+												</Link>
+											</Typography>
+										)}
+									</Stack>
+								)}
 							</Stack>
 							<Box
 								display="flex"

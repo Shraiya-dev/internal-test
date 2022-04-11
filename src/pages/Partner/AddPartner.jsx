@@ -1,16 +1,29 @@
-import { Box, Button, Paper, TextField, Typography } from '@mui/material'
+import {
+	Box,
+	Button,
+	Chip,
+	Grid,
+	InputAdornment,
+	List,
+	ListItem,
+	ListItemText,
+	Paper,
+	TextField,
+	Typography,
+} from '@mui/material'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import React, { useState } from 'react'
 import { getBackendUrl } from '../../api'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert, setSnackbar } from '../../components/Snackbar'
+import { useSnackbar } from '../../providers/SnackbarProvider'
 import { checkError } from '../../utils/formikValidate'
 
 const AddPartner = () => {
-	const [sncBarProps, setSncBarProps] = useState({
-		msg: '',
-	})
+	const [data, setData] = useState([])
+	const [flag, setFlag] = useState(false)
+	const { showSnackbar } = useSnackbar()
 	const form = useFormik({
 		initialValues: {
 			userName: '',
@@ -22,37 +35,36 @@ const AddPartner = () => {
 				errors.userName = 'Enter Valid Name'
 			}
 
-			if (values.phoneNumber === '' || Number.isNaN(Number(values.phoneNumber))) {
+			if (
+				values.phoneNumber === '' ||
+				Number.isNaN(Number(values.phoneNumber)) ||
+				`${values.phoneNumber}`.length !== 10
+			) {
 				errors.phoneNumber = 'Enter Valid phone Number'
 			}
 			return errors
 		},
 		onSubmit: async (values, formHelpers) => {
+			setFlag(false)
 			try {
 				const res = await axios.post(`${getBackendUrl()}/admin/partner`, {
 					userName: values.userName,
 					phoneNumber: '+91' + values.phoneNumber,
 				})
-				if (res.data.success) {
-					setSnackbar(
-						{
-							msg: 'Partner Added Successfully',
-							sev: 'success',
-						},
-						setSncBarProps
-					)
-					formHelpers.resetForm()
-				} else {
-					setSnackbar(
-						{
-							msg: res.data.error,
-							sev: 'error',
-						},
-						setSncBarProps
-					)
-				}
+
+				setData([...data, res.data.payload.response])
+				setFlag(true)
+
+				showSnackbar({
+					msg: 'Partner Added Successfully',
+					sev: 'success',
+				})
+				formHelpers.resetForm()
 			} catch (error) {
-				console.log(error)
+				showSnackbar({
+					msg: error.response.data.developerInfo,
+					sev: 'error',
+				})
 			}
 		},
 	})
@@ -70,6 +82,7 @@ const AddPartner = () => {
 								<TextField
 									error={!!checkError('userName', form)}
 									name="userName"
+									fullWidth
 									value={form.values.userName}
 									onChange={form.handleChange}
 									onBlur={form.handleBlur}
@@ -80,12 +93,20 @@ const AddPartner = () => {
 								<TextField
 									error={!!checkError('phoneNumber', form)}
 									name="phoneNumber"
+									fullWidth
 									value={form.values.phoneNumber}
-									onChange={form.handleChange}
+									onChange={(e) => {
+										if (e.target.value.length <= 10) {
+											form.handleChange(e)
+										}
+									}}
 									onBlur={form.handleBlur}
 									style={{ marginBottom: '20px' }}
 									variant="outlined"
 									label="Phone Number"
+									InputProps={{
+										startAdornment: <InputAdornment position="start">+91</InputAdornment>,
+									}}
 								/>
 								<Button type="submit" variant="contained" fullWidth>
 									Add Partner
@@ -94,8 +115,25 @@ const AddPartner = () => {
 						</form>
 					</Box>
 				</Paper>
+				{flag ? (
+					<Paper style={{ margin: '20px auto', width: '700px' }} variant="outlined">
+						<Typography variant="h6" p={4} fontSize={20}>
+							Ref Code: &nbsp;
+							<Chip size="medium" label={`${data[0]?.referralCode}`} sx={{ fontSize: '20px' }} color="primary" />
+						</Typography>
+						<Grid container spacing={4} px={4} pb={4}>
+							<Grid item xs={6} fontSize={20}>
+								Name : {data[0]?.userName}
+							</Grid>
+							<Grid item xs={6} fontSize={20}>
+								Phone Number : {data[0]?.phoneNumber}
+							</Grid>
+						</Grid>
+					</Paper>
+				) : (
+					''
+				)}
 			</DashboardLayout>
-			<PopAlert {...sncBarProps} />
 		</>
 	)
 }
