@@ -1,3 +1,3 @@
-import { useQuery } from "react-query";
+import { useQuery } from 'react-query'
 
-export const useStates = () => {};
+export const useStates = () => {}

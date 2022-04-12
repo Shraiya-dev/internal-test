@@ -1,5 +1,4 @@
-import axios from "axios";
-import { getCustomerBookingsAPI } from "../../../api";
+import axios from 'axios'
+import { getCustomerBookingsAPI } from '../../../api'
 
-export const getCustomerBookings = async (phoneNumber) =>
-  axios.get(getCustomerBookingsAPI(phoneNumber));
+export const getCustomerBookings = async (phoneNumber) => axios.get(getCustomerBookingsAPI(phoneNumber))

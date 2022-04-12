@@ -1,1 +1,1 @@
-export { headerMenu, vaccinationCert } from "./headerMenu";
+export { headerMenu, vaccinationCert } from './headerMenu'

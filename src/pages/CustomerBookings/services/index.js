@@ -1,1 +1,1 @@
-export { getCustomerBookings } from "./getCustomerBookings";
+export { getCustomerBookings } from './getCustomerBookings'

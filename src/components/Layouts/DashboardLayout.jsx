@@ -9,122 +9,126 @@ import { ADD_PARTNER_ROUTE, BOOKING_ROUTE, REWARD_PENALTIES_ROUTE, WORKER_INFO_R
 const drawerWidth = 250
 
 const DrawerList = [
-	{
-		label: 'Bookings',
-		icon: <LibraryBooks />,
-		link: BOOKING_ROUTE,
-	},
-	{
-		label: 'Rewards & Penalties',
-		icon: <Redeem />,
-		link: REWARD_PENALTIES_ROUTE,
-	},
-	{
-		label: 'Partners',
-		icon: <Face />,
-		link: ADD_PARTNER_ROUTE,
-	},
-	{
-		label: 'Workers',
-		icon: <Face />,
-		link: WORKER_INFO_ROUTE,
-	},
+    {
+        label: 'Bookings',
+        icon: <LibraryBooks />,
+        link: BOOKING_ROUTE,
+    },
+    {
+        label: 'Rewards & Penalties',
+        icon: <Redeem />,
+        link: REWARD_PENALTIES_ROUTE,
+    },
+    {
+        label: 'Partners',
+        icon: <Face />,
+        link: ADD_PARTNER_ROUTE,
+    },
+    {
+        label: 'Workers',
+        icon: <Face />,
+        link: WORKER_INFO_ROUTE,
+    },
 ]
 
 const DashboardLayout = ({ children }) => {
-	const navigate = useNavigate()
-	const { pathname } = useLocation()
-	const { isUserLoggedIn, logout } = useAuth()
+    const navigate = useNavigate()
+    const { pathname } = useLocation()
+    const { isUserLoggedIn, logout } = useAuth()
 
-	const redirectTo = useCallback(
-		(url) => {
-			navigate(url, {
-				state: {
-					from: pathname,
-				},
-			})
-		},
-		[navigate, pathname]
-	)
-	const menuBtnRef = useRef()
-	const [menuOpen, setMenuOpen] = useState(false)
-	const handleClose = useCallback(() => {
-		setMenuOpen(false)
-	}, [])
-	const handelOpen = useCallback(() => {
-		setMenuOpen(true)
-	}, [])
-	const { user } = useAuth()
+    const redirectTo = useCallback(
+        (url) => {
+            navigate(url, {
+                state: {
+                    from: pathname,
+                },
+            })
+        },
+        [navigate, pathname]
+    )
+    const menuBtnRef = useRef()
+    const [menuOpen, setMenuOpen] = useState(false)
+    const handleClose = useCallback(() => {
+        setMenuOpen(false)
+    }, [])
+    const handelOpen = useCallback(() => {
+        setMenuOpen(true)
+    }, [])
+    const { user } = useAuth()
 
-	const handelLogout = useCallback(() => {
-		if (isUserLoggedIn) {
-			return logout()
-		}
-		navigate('/login', {
-			state: {
-				from: pathname,
-			},
-		})
-	}, [isUserLoggedIn, pathname])
+    const handelLogout = useCallback(() => {
+        if (isUserLoggedIn) {
+            return logout()
+        }
+        navigate('/login', {
+            state: {
+                from: pathname,
+            },
+        })
+    }, [isUserLoggedIn, pathname])
 
-	return (
-		<>
-			<AppBar
-				position="fixed"
-				color="primary"
-				variant="outlined"
-				elevation={0}
-				sx={(theme) => ({
-					p: 1,
-					zIndex: theme.zIndex.drawer + 1,
-					backgroundColor: '#fff !important',
-				})}>
-				<Toolbar
-					sx={{
-						p: 0,
+    return (
+        <>
+            <AppBar
+                position="fixed"
+                color="primary"
+                variant="outlined"
+                elevation={0}
+                sx={(theme) => ({
+                    p: 1,
+                    zIndex: theme.zIndex.drawer + 1,
+                    backgroundColor: '#fff !important',
+                })}
+            >
+                <Toolbar
+                    sx={{
+                        p: 0,
 
-						justifyContent: 'space-between',
-					}}>
-					<img style={{ height: '40px' }} src={projectHeroLogo} alt="project hero" />
-					<IconButton color="primary" ref={menuBtnRef} onClick={handelOpen}>
-						<Person />
-					</IconButton>
-					<Menu anchorEl={menuBtnRef.current} open={menuOpen} onClose={handleClose}>
-						<MenuItem onClick={handleClose}>{user.phoneNumber}</MenuItem>
-						<MenuItem onClick={handelLogout}>Logout</MenuItem>
-					</Menu>
-				</Toolbar>
-			</AppBar>
-			<Drawer
-				variant="permanent"
-				PaperProps={{
-					sx: {
-						width: drawerWidth,
-						paddingTop: 12,
-					},
-				}}>
-				<List>
-					{DrawerList.map((item, index) => (
-						<ListItem
-							sx={(theme) => ({
-								backgroundColor: pathname.includes(item.link) ? theme.palette.primary.main : null,
-								color: pathname.includes(item.link) ? theme.palette.primary.contrastText : '#000',
-								p: 2,
-								'&:hover': {
-									backgroundColor: pathname.includes(item.link) ? theme.palette.primary.light : null,
-								},
-							})}
-							button
-							key={index}
-							onClick={() => {
-								redirectTo(item.link)
-							}}>
-							{/* <ListItemIcon>{item.icon}</ListItemIcon> */}
-							{item.label}
-						</ListItem>
-					))}
-				</List>
-				{/* <List style={{ margin: 'auto 0 0' }}>
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <img style={{ height: '40px' }} src={projectHeroLogo} alt="project hero" />
+                    <IconButton color="primary" ref={menuBtnRef} onClick={handelOpen}>
+                        <Person />
+                    </IconButton>
+                    <Menu anchorEl={menuBtnRef.current} open={menuOpen} onClose={handleClose}>
+                        <MenuItem onClick={handleClose}>{user.phoneNumber}</MenuItem>
+                        <MenuItem onClick={handelLogout}>Logout</MenuItem>
+                    </Menu>
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                variant="permanent"
+                PaperProps={{
+                    sx: {
+                        width: drawerWidth,
+                        paddingTop: 12,
+                    },
+                }}
+            >
+                <List>
+                    {DrawerList.map((item, index) => (
+                        <ListItem
+                            sx={(theme) => ({
+                                backgroundColor: pathname.includes(item.link) ? theme.palette.primary.main : null,
+                                color: pathname.includes(item.link) ? theme.palette.primary.contrastText : '#000',
+                                p: 2,
+                                '&:hover': {
+                                    backgroundColor: pathname.includes(item.link) ? theme.palette.primary.light : null,
+                                },
+                            })}
+                            button
+                            key={index}
+                            onClick={() => {
+                                redirectTo(item.link)
+                            }}
+                        >
+                            {/* <ListItemIcon>{item.icon}</ListItemIcon> */}
+                            {item.label}
+                        </ListItem>
+                    ))}
+                </List>
+                {/* <List style={{ margin: 'auto 0 0' }}>
 						<ListItem
 							button
 							sx={(theme) => ({
@@ -160,19 +164,21 @@ const DashboardLayout = ({ children }) => {
 							)
 						})}
 					</Tabs> */}
-			</Drawer>
-			<main
-				style={{
-					flexGrow: 1,
-					paddingTop: '82px',
-					paddingLeft: drawerWidth,
-				}}>
-				<Box
-					sx={{
-						p: 3,
-						pb: 0,
-					}}>
-					{/* <Button
+            </Drawer>
+            <main
+                style={{
+                    flexGrow: 1,
+                    paddingTop: '82px',
+                    paddingLeft: drawerWidth,
+                }}
+            >
+                <Box
+                    sx={{
+                        p: 3,
+                        pb: 0,
+                    }}
+                >
+                    {/* <Button
 						onClick={() => {
 							navigate(-1)
 						}}
@@ -190,11 +196,11 @@ const DashboardLayout = ({ children }) => {
 						/>
 						Back
 					</Button> */}
-					{children}
-				</Box>
-			</main>
-		</>
-	)
+                    {children}
+                </Box>
+            </main>
+        </>
+    )
 }
 
 export default DashboardLayout

@@ -7,125 +7,136 @@ import { CTAMap } from '../../utils/ctaHelpers'
 import useBookingAction from './hooks/useBookingAction'
 
 const BookingCard = ({ bookingData }) => {
-	const navigate = useNavigate()
-	const { confirmBooking, sncBar, startAllocation, closeAllocation, markAsRTD, markAsDeployed, startProject } =
-		useBookingAction(bookingData)
-	const allowedActions = useMemo(() => CTAMap[bookingData?.status?.enumValue]?.actions, [bookingData])
-	const allowedTabs = useMemo(() => CTAMap[bookingData?.status?.enumValue]?.tabs, [bookingData])
-	const [confirmDialogProps, setConfirmDialogProps] = useState({
-		content: '',
-		open: false,
-		cancel: () => {},
-		confirm: () => {},
-	})
-	const closeDialog = useCallback(() => {
-		setConfirmDialogProps({})
-	}, [])
-	const totalPeopleRequired = useMemo(
-		() => Object.values(bookingData?.peopleRequired)?.reduce((prev, next) => Number(prev) + Number(next)),
-		[bookingData]
-	)
+    const navigate = useNavigate()
+    const { confirmBooking, sncBar, startAllocation, closeAllocation, markAsRTD, markAsDeployed, startProject } =
+        useBookingAction(bookingData)
+    const allowedActions = useMemo(() => CTAMap[bookingData?.status?.enumValue]?.actions, [bookingData])
+    const allowedTabs = useMemo(() => CTAMap[bookingData?.status?.enumValue]?.tabs, [bookingData])
+    const [confirmDialogProps, setConfirmDialogProps] = useState({
+        content: '',
+        open: false,
+        cancel: () => {},
+        confirm: () => {},
+    })
+    const closeDialog = useCallback(() => {
+        setConfirmDialogProps({})
+    }, [])
+    const totalPeopleRequired = useMemo(
+        () => Object.values(bookingData?.peopleRequired)?.reduce((prev, next) => Number(prev) + Number(next)),
+        [bookingData]
+    )
 
-	return (
-		<>
-			<ConfirmationDialog {...confirmDialogProps} />
-			<Paper
-				variant="outlined"
-				sx={{ borderRadius: 1 }}
-				style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-				<Box>
-					<Box display="flex" justifyContent="space-between">
-						<Typography variant="h6" fontWeight={600}>
-							{bookingData?.jobType} ({totalPeopleRequired})
-						</Typography>
-						<Chip
-							sx={(theme) => ({ backgroundColor: theme.palette.grey[200], height: '24px' })}
-							label={bookingData?.status?.enumLabel}
-						/>
-					</Box>
-					<Box display="flex" justifyContent="space-between">
-						<Typography sx={(theme) => ({ color: theme.palette.grey[700] })} variant="caption">
-							ID : {bookingData?.bookingId}
-						</Typography>
-						<Typography sx={(theme) => ({ color: theme.palette.grey[700] })} variant="caption">
-							Created on {bookingData?.createdOn}
-						</Typography>
-					</Box>
-				</Box>
+    return (
+        <>
+            <ConfirmationDialog {...confirmDialogProps} />
+            <Paper
+                variant="outlined"
+                sx={{ borderRadius: 1 }}
+                style={{
+                    padding: '16px',
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <Box>
+                    <Box display="flex" justifyContent="space-between">
+                        <Typography variant="h6" fontWeight={600}>
+                            {bookingData?.jobType} ({totalPeopleRequired})
+                        </Typography>
+                        <Chip
+                            sx={(theme) => ({
+                                backgroundColor: theme.palette.grey[200],
+                                height: '24px',
+                            })}
+                            label={bookingData?.status?.enumLabel}
+                        />
+                    </Box>
+                    <Box display="flex" justifyContent="space-between">
+                        <Typography sx={(theme) => ({ color: theme.palette.grey[700] })} variant="caption">
+                            ID : {bookingData?.bookingId}
+                        </Typography>
+                        <Typography sx={(theme) => ({ color: theme.palette.grey[700] })} variant="caption">
+                            Created on {bookingData?.createdOn}
+                        </Typography>
+                    </Box>
+                </Box>
 
-				{allowedTabs && (
-					<>
-						{/* <Divider style={{ margin: '16px 0' }} /> */}
+                {allowedTabs && (
+                    <>
+                        {/* <Divider style={{ margin: '16px 0' }} /> */}
 
-						<Box mt={2} mb={2} display="flex">
-							{Object.keys(allowedTabs).map((item) => {
-								if (bookingData?.status !== 'COMPLETED') {
-									const [state] = bookingData?.jobCardsStateCount?.filter((obj) => obj.enumValue === item)
-									return (
-										<Paper
-											key={item}
-											sx={(theme) => ({
-												backgroundColor: theme.palette.grey[100],
-												mr: 2,
-												p: 2,
-												cursor: 'pointer',
-											})}>
-											<Typography variant="h5" align="center">
-												{state?.count}
-												{item === 'DEPLOYMENT_COMPLETE' && <>/{totalPeopleRequired}</>}
-											</Typography>
+                        <Box mt={2} mb={2} display="flex">
+                            {Object.keys(allowedTabs).map((item) => {
+                                if (bookingData?.status !== 'COMPLETED') {
+                                    const [state] = bookingData?.jobCardsStateCount?.filter(
+                                        (obj) => obj.enumValue === item
+                                    )
+                                    return (
+                                        <Paper
+                                            key={item}
+                                            sx={(theme) => ({
+                                                backgroundColor: theme.palette.grey[100],
+                                                mr: 2,
+                                                p: 2,
+                                                cursor: 'pointer',
+                                            })}
+                                        >
+                                            <Typography variant="h5" align="center">
+                                                {state?.count}
+                                                {item === 'DEPLOYMENT_COMPLETE' && <>/{totalPeopleRequired}</>}
+                                            </Typography>
 
-											<Typography
-												sx={(theme) => ({
-													color: theme.palette.grey[700],
-												})}
-												align="center">
-												{state?.enumLabel}
-											</Typography>
-										</Paper>
-									)
-								}
-							})}
-						</Box>
-						{/* <Divider style={{ margin: '16px 0' }} /> */}
-					</>
-				)}
-				<Box pt={1} display="flex" justifyContent="space-between">
-					<Box>
-						{Object.keys(bookingData?.peopleRequired).map((item) => {
-							return (
-								<Box pb={1} pt={1} display="flex" alignItems="center" key={item}>
-									{item.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}: {bookingData?.peopleRequired[item]}
-								</Box>
-							)
-						})}
-					</Box>
-					<Box style={{ maxWidth: '50%', overflow: 'hidden' }}>
-						<Box pb={1} pt={1} display="flex" alignItems="center">
-							Company: {bookingData?.cmpName}
-						</Box>
-						<Box pb={1} pt={1} display="flex" alignItems="center">
-							Site Address: {bookingData?.siteAddress}
-						</Box>
-						<Box pb={1} pt={1} display="flex" alignItems="center">
-							Location: {bookingData?.city}, {bookingData?.state}
-						</Box>
-					</Box>
-				</Box>
-				<Divider style={{ margin: '16px 0' }} />
-				<Box display="flex" justifyContent="flex-end">
-					{allowedActions && (
-						<>
-							{allowedActions.view && (
-								<Button
-									variant="outlined"
-									onClick={() => {
-										navigate(`/bookings/${bookingData?.bookingId}`)
-									}}>
-									View Booking
-								</Button>
-							)}
-							{/* <Box
+                                            <Typography
+                                                sx={(theme) => ({
+                                                    color: theme.palette.grey[700],
+                                                })}
+                                                align="center"
+                                            >
+                                                {state?.enumLabel}
+                                            </Typography>
+                                        </Paper>
+                                    )
+                                }
+                            })}
+                        </Box>
+                        {/* <Divider style={{ margin: '16px 0' }} /> */}
+                    </>
+                )}
+                <Box pt={1} display="flex" justifyContent="space-between">
+                    <Box>
+                        {Object.keys(bookingData?.peopleRequired).map((item) => {
+                            return (
+                                <Box pb={1} pt={1} display="flex" alignItems="center" key={item}>
+                                    {item.toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}:{' '}
+                                    {bookingData?.peopleRequired[item]}
+                                </Box>
+                            )
+                        })}
+                    </Box>
+                    <Box style={{ maxWidth: '50%', overflow: 'hidden' }}>
+                        <Box pb={1} pt={1} display="flex" alignItems="center">
+                            Company: {bookingData?.cmpName}
+                        </Box>
+                        <Box pb={1} pt={1} display="flex" alignItems="center">
+                            Site Address: {bookingData?.siteAddress}
+                        </Box>
+                        <Box pb={1} pt={1} display="flex" alignItems="center">
+                            Location: {bookingData?.city}, {bookingData?.state}
+                        </Box>
+                    </Box>
+                </Box>
+                <Divider style={{ margin: '16px 0' }} />
+                <Box display="flex" justifyContent="flex-end">
+                    {allowedActions && (
+                        <>
+                            {allowedActions.view && (
+                                <Button href={`/bookings/${bookingData?.bookingId}`} variant="outlined">
+                                    View Booking
+                                </Button>
+                            )}
+                            {/* <Box
 								display="flex"
 								sx={{
 									'&>*': {
@@ -287,14 +298,14 @@ const BookingCard = ({ bookingData }) => {
 								)} 
 							</Box>
 							*/}
-						</>
-					)}
-				</Box>
-			</Paper>
-			{/* )} */}
-			<PopAlert {...sncBar} />
-		</>
-	)
+                        </>
+                    )}
+                </Box>
+            </Paper>
+            {/* )} */}
+            <PopAlert {...sncBar} />
+        </>
+    )
 }
 
 export default BookingCard

@@ -1,10 +1,10 @@
-import React from "react";
-import { Profiles } from "./components/Profiles";
+import React from 'react'
+import { Profiles } from './components/Profiles'
 
 export const AllocatedWorkers = () => {
-  return (
-    <main>
-      <Profiles />
-    </main>
-  );
-};
+    return (
+        <main>
+            <Profiles />
+        </main>
+    )
+}
