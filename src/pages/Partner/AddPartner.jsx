@@ -86,7 +86,7 @@ const AddPartner = () => {
                         </form>
                         {referralCode !== '' && (
                             <Stack alignItems="center">
-                                <Chip color="primary" label={`Referral Code${referralCode}`} />
+                                <Chip color="primary" label={`Referral Code:  ${referralCode}`} />
                             </Stack>
                         )}
                     </Box>
