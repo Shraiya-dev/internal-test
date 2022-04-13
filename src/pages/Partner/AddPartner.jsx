@@ -33,7 +33,6 @@ const AddPartner = () => {
                     userName: values.userName,
                     phoneNumber: '+91' + values.phoneNumber,
                 })
-                debugger
                 showSnackbar({
                     msg: 'Partner Added Successfully',
                     sev: 'success',
