@@ -85,9 +85,9 @@ export default function DataTable() {
             width: 100,
 
             renderCell: (params) => (
-                <Link to={`/workers/${params?.id}`}>
-                    <Button variant="outlined">View</Button>
-                </Link>
+                <Button onClick={() => viewWorkerInfo(params)} variant="outlined">
+                    View
+                </Button>
             ),
         },
     ]
@@ -100,17 +100,16 @@ export default function DataTable() {
                 <Typography variant="h4" fontWeight={600} align="center">
                     Manage Workers
                 </Typography>
-                <Link to={ADD_WORKER_ROUTE}>
-                    <Button
-                        sx={{
-                            mb: 2,
-                            height: 48,
-                        }}
-                        variant="outlined"
-                    >
-                        Add Worker
-                    </Button>
-                </Link>
+                <Button
+                    href={ADD_WORKER_ROUTE}
+                    sx={{
+                        mb: 2,
+                        height: 48,
+                    }}
+                    variant="outlined"
+                >
+                    Add Worker
+                </Button>
             </Box>
             <Paper>
                 <form onSubmit={form.handleSubmit}>

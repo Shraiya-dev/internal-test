@@ -23,18 +23,18 @@ import { useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../api'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert, setSnackbar } from '../../components/Snackbar'
-import { useSnackbar } from '../../providers/SnackbarProvider'
 import { checkError } from '../../utils/formikValidate'
 import { useWorkerInfo } from '../WorkersInfo/hooks/useWorkerInfo'
 import AddPartners from './AddPartners/AddPartners'
 // import {AddPartners} from './AddPartners'
 
 const Partner = () => {
-    const { showSnackbar } = useSnackbar()
+    const [sncBarProps, setSncBarProps] = useState({
+        msg: '',
+    })
     const [data, setData] = useState([])
     const [open, setOpen] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
-    const [clipData, setClipData] = useState('')
 
     const form = useFormik({
         initialValues: {
@@ -112,14 +112,6 @@ const Partner = () => {
                     }}
                     color="primary"
                     label={params?.row?.referralCode}
-                    onClick={() => {
-                        navigator.clipboard.writeText(params?.row?.referralCode).then(() => {
-                            showSnackbar({
-                                msg: `Referral code Copied successfully: ${params?.row?.referralCode}`,
-                                sev: 'success',
-                            })
-                        })
-                    }}
                 />
             ),
             width: 500,
@@ -166,10 +158,6 @@ const Partner = () => {
                                 onChange={form.handleChange}
                                 onBlur={form.handleBlur}
                                 error={!!checkError('name', form)}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                placeholder="Partner Name"
                             />
                             <TextField
                                 variant="outlined"
@@ -204,15 +192,13 @@ const Partner = () => {
                 </Paper>
                 <Paper sx={{ mt: 2, height: '74vh', width: '100%', p: 2 }}>
                     <DataGrid
-                        disableColumnFilter
-                        disableSelectionOnClick
-                        disableColumnSelector
                         rows={data.map((val) => ({ ...val, id: val.partnerId }))}
                         columns={columns}
                         pageSize={20}
                     />
                 </Paper>
             </DashboardLayout>
+            <PopAlert {...sncBarProps} />
         </>
     )
 }

@@ -1,7 +1,7 @@
 import { Face, LibraryBooks, Person, Redeem } from '@mui/icons-material'
-import { AppBar, Box, Button, Drawer, IconButton, List, ListItem, Menu, MenuItem, Toolbar } from '@mui/material'
+import { AppBar, Box, Drawer, IconButton, List, ListItem, Menu, MenuItem, Toolbar } from '@mui/material'
 import React, { useCallback, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import projectHeroLogo from '../../assets/brand-logo.svg'
 import { useAuth } from '../../providers/AuthProvider'
 import { ADD_PARTNER_ROUTE, BOOKING_ROUTE, REWARD_PENALTIES_ROUTE, WORKER_INFO_ROUTE } from '../../routes'
@@ -118,9 +118,10 @@ const DashboardLayout = ({ children }) => {
                                 },
                             })}
                             button
-                            component={Link}
                             key={index}
-                            to={item.link}
+                            onClick={() => {
+                                redirectTo(item.link)
+                            }}
                         >
                             {/* <ListItemIcon>{item.icon}</ListItemIcon> */}
                             {item.label}

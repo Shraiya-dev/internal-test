@@ -95,7 +95,6 @@ const AddPartners = ({ open, setOpen }) => {
                                     form.handleChange(e)
                                 }
                             }}
-                            helperText={checkError('phoneNumber', form)}
                             onBlur={form.handleBlur}
                             style={{ marginBottom: '20px' }}
                             variant="outlined"

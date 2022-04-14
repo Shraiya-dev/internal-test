@@ -1,6 +1,6 @@
 import { Box, Button, Chip, CircularProgress, Divider, Paper, Typography } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import { PopAlert } from '../../components/Snackbar'
 import { CTAMap } from '../../utils/ctaHelpers'
@@ -132,9 +132,9 @@ const BookingCard = ({ bookingData }) => {
                     {allowedActions && (
                         <>
                             {allowedActions.view && (
-                                <Link to={`/bookings/${bookingData?.bookingId}`}>
-                                    <Button variant="outlined">View Booking</Button>
-                                </Link>
+                                <Button href={`/bookings/${bookingData?.bookingId}`} variant="outlined">
+                                    View Booking
+                                </Button>
                             )}
                             {/* <Box
 								display="flex"
