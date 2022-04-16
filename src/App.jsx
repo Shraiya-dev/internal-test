@@ -31,12 +31,14 @@ import {
     WORKER_INFO_ROUTE,
     ADD_WORKER_ROUTE,
     WORKER_INFO_BY_ID_ROUTE,
+    CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE,
 } from './routes'
 import Registration from './pages/Registration'
 import AddEditWorkerProfile from './pages/workers/AddEditWorkerProfile'
 import BookingById from './pages/Bookings/BookingById'
 import { BookingProvider } from './providers/BookingProvider'
 import { SnackbarProvider } from './providers/SnackbarProvider'
+import CreateBookings from './pages/Bookings/CreateBookings'
 
 // const theme = createTheme({
 // 	palette: {
@@ -176,6 +178,14 @@ function App() {
                                 element={
                                     <PrivateRoute>
                                         <AddWorkerForBooking />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path={CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE}
+                                element={
+                                    <PrivateRoute>
+                                        <CreateBookings />
                                     </PrivateRoute>
                                 }
                             />
