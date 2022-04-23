@@ -176,9 +176,11 @@ export const AttendanceComponent = () => {
                         onClick={() => {
                             setEditAttendanceDialogProps({
                                 open: true,
-                                onClose: () => setEditAttendanceDialogProps({ open: false }),
+                                onClose: () => {
+                                    setEditAttendanceDialogProps({ open: false })
+                                    refreshPage()
+                                },
                             })
-                            refreshPage()
                         }}
                     >
                         Add Attendance
@@ -294,7 +296,7 @@ export const AttendanceComponent = () => {
                         loading={isLoading}
                     />
                 </Paper>
-                <EditAttendanceDialog {...EditAttendanceDialogProps} refreshPage={refreshPage} />
+                <EditAttendanceDialog {...EditAttendanceDialogProps} />
             </Paper>
         </DashboardLayout>
     )

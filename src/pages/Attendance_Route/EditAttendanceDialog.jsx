@@ -4,28 +4,30 @@ import { Button, Chip, Dialog, InputAdornment, Paper, Stack, TextField, Typograp
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import React from 'react'
+import { useSearchParams } from 'react-router-dom'
 import useEditAttendanceDialog from './hooks/useEditAttendanceDialog'
 
 const EditAttendanceDialog = ({ open, data, onClose }) => {
     const { form, searchWorkerForm, workerDetail, setWorkerDetail, isError, deleteAttendance } =
         useEditAttendanceDialog(data, onClose)
-
+    const [sp] = useSearchParams()
     return (
         <Dialog
             open={open}
             onClose={() => {
                 searchWorkerForm.resetForm()
                 setWorkerDetail()
+                form.resetForm()
                 onClose()
             }}
         >
             <Stack p={3}>
-                <Typography variant="h4">Attendance</Typography>
-                <form
-                    onSubmit={async (e) => {
-                        form.handleSubmit(e)
-                    }}
-                >
+                <Stack justifyContent="space-between" direction="row">
+                    <Typography variant="h4">Attendance</Typography>
+                    <Typography variant="h5">{sp.get('date')}</Typography>
+                </Stack>
+
+                <form onSubmit={form.handleSubmit}>
                     <Stack direction={'column'} spacing={4} mt={4}>
                         {!data && (
                             <>
@@ -132,7 +134,6 @@ const EditAttendanceDialog = ({ open, data, onClose }) => {
                                     onClick={() => {
                                         searchWorkerForm.resetForm()
                                         form.resetForm()
-
                                         setWorkerDetail()
                                         onClose()
                                     }}

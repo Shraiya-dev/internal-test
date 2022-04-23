@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { format, isBefore, isValid, parse } from 'date-fns'
+import { format, isBefore, isSameDay, isValid, parse } from 'date-fns'
 import { useFormik } from 'formik'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -11,38 +11,16 @@ const useEditAttendanceDialog = (data, onClose) => {
     const [sp, setSp] = useSearchParams()
     const { showSnackbar } = useSnackbar()
 
-    const updateAttendance = async (values, fh) => {
-        try {
-            const res = await axios.put(`${SERVER_URL}/admin/attendance`, {
-                projectId: data?.projectId,
-                workerId: data?.workerId,
-                date: sp.get('date'),
-                attendanceType: 'clock_in',
-                checkInTime: format(values.checkedInTime, 'hh:mm a'),
-                checkOutTime: format(values.checkedOutTime, 'hh:mm a'),
-            })
-            showSnackbar({
-                msg: 'Updated Attendance Successfully',
-                sev: 'success',
-            })
-            fh.resetForm()
-            onClose()
-        } catch (error) {
-            showSnackbar({
-                msg: error.response.data.developerInfo,
-                sev: 'error',
-            })
-        }
-    }
-    const [workerDetail, setWorkerDetail] = useState()
-    const addAttendance = useCallback(
-        async (values) => {
+    const updateAttendance = useCallback(
+        async (values, fh) => {
             try {
-                const res = await axios.post(`${SERVER_URL}/admin/attendance`, {
-                    workerId: workerDetail?.workerId,
+                const res = await axios.put(`${SERVER_URL}/admin/attendance`, {
+                    projectId: data?.projectId,
+                    workerId: data?.workerId,
                     date: sp.get('date'),
-                    checkInTime: values.checkedInTime ? format(values.checkedInTime, 'hh:mm a').toLowerCase() : null,
-                    checkOutTime: values.checkedOutTime ? format(values.checkedOutTime, 'hh:mm a').toLowerCase() : null,
+                    attendanceType: 'clock_in',
+                    checkInTime: format(values.checkedInTime, 'hh:mm a'),
+                    checkOutTime: format(values.checkedOutTime, 'hh:mm a'),
                 })
                 showSnackbar({
                     msg: 'Updated Attendance Successfully',
@@ -57,7 +35,34 @@ const useEditAttendanceDialog = (data, onClose) => {
                 })
             }
         },
-        [data, sp, workerDetail]
+        [onClose]
+    )
+
+    const [workerDetail, setWorkerDetail] = useState()
+    const addAttendance = useCallback(
+        async (values, fh) => {
+            try {
+                const res = await axios.post(`${SERVER_URL}/admin/attendance`, {
+                    workerId: workerDetail?.workerId,
+                    date: sp.get('date'),
+                    checkInTime: values.checkedInTime ? format(values.checkedInTime, 'hh:mm a').toLowerCase() : null,
+                    checkOutTime: values.checkedOutTime ? format(values.checkedOutTime, 'hh:mm a').toLowerCase() : null,
+                })
+                showSnackbar({
+                    msg: 'Updated Attendance Successfully',
+                    sev: 'success',
+                })
+                fh.resetForm()
+                debugger
+                onClose()
+            } catch (error) {
+                showSnackbar({
+                    msg: error.response.data.developerInfo,
+                    sev: 'error',
+                })
+            }
+        },
+        [data, sp, workerDetail, onClose]
     )
     const searchWorkerForm = useFormik({
         initialValues: {
@@ -106,7 +111,7 @@ const useEditAttendanceDialog = (data, onClose) => {
                 sev: 'error',
             })
         }
-    }, [data, sp])
+    }, [data, sp, onClose])
     const validate = useCallback(
         (values) => {
             const errors = {}
@@ -131,10 +136,29 @@ const useEditAttendanceDialog = (data, onClose) => {
             if (values.checkedOutTime && values.checkedInTime && values.checkedOutTime - values.checkedInTime < 0) {
                 errors.checkedOutTime = 'Check out time Cannot be before check in time'
             }
+            if (isSameDay(parse(sp.get('date'), 'dd/MM/yy', new Date()), new Date())) {
+                if (values.checkedOutTime - new Date() > 0) {
+                    errors.checkedOutTime = 'Check out time cannot be of future'
+                }
+                if (values.checkedInTime - new Date() > 0) {
+                    errors.checkedInTime = 'Check out time cannot be of future'
+                }
+            }
             return errors
         },
-        [data]
+        [data, sp]
     )
+    const onSubmit = useCallback(
+        (v, fh) => {
+            if (data) {
+                updateAttendance(v, fh)
+            } else {
+                addAttendance(v, fh)
+            }
+        },
+        [updateAttendance, addAttendance, data]
+    )
+
     const form = useFormik({
         initialValues: {
             phoneNumber: '',
@@ -142,13 +166,7 @@ const useEditAttendanceDialog = (data, onClose) => {
             checkedOutTime: null,
         },
         validate: validate,
-        onSubmit: (v, fh) => {
-            if (data) {
-                updateAttendance(v, fh)
-            } else {
-                addAttendance(v, fh)
-            }
-        },
+        onSubmit: onSubmit,
     })
 
     useEffect(() => {
