@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { format, isBefore, isSameDay, isValid, parse } from 'date-fns'
+import { format, isAfter, isBefore, isSameDay, isValid, parse } from 'date-fns'
 import { useFormik } from 'formik'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -19,8 +19,8 @@ const useEditAttendanceDialog = (data, onClose) => {
                     workerId: data?.workerId,
                     date: sp.get('date'),
                     attendanceType: 'clock_in',
-                    checkInTime: format(values.checkedInTime, 'hh:mm a'),
-                    checkOutTime: format(values.checkedOutTime, 'hh:mm a'),
+                    checkInTime: values.checkedInTime ? format(values.checkedInTime, 'hh:mm a').toLowerCase() : null,
+                    checkOutTime: values.checkedOutTime ? format(values.checkedOutTime, 'hh:mm a').toLowerCase() : null,
                 })
                 showSnackbar({
                     msg: 'Updated Attendance Successfully',
@@ -127,12 +127,15 @@ const useEditAttendanceDialog = (data, onClose) => {
             if (!isValid(values.checkedInTime)) {
                 errors.checkedInTime = 'Invalid check in time'
             }
-            if (data && !values.checkedOutTime) {
-                errors.checkedOutTime = 'Invalid check out time'
+            console.log(
+                new Date(),
+                parse(sp.get('date'), 'dd/MM/yy', new Date()),
+                isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date()))
+            )
+            if (data && !isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date())) && !values.checkedOutTime) {
+                errors.checkedOutTime = 'Invalid checkk out time'
             }
-            if (data && values.checkedOutTime && !isValid(values.checkedOutTime)) {
-                errors.checkedOutTime = 'Invalid check out time'
-            }
+
             if (values.checkedOutTime && values.checkedInTime && values.checkedOutTime - values.checkedInTime < 0) {
                 errors.checkedOutTime = 'Check out time Cannot be before check in time'
             }
@@ -144,6 +147,10 @@ const useEditAttendanceDialog = (data, onClose) => {
                     errors.checkedInTime = 'Check out time cannot be of future'
                 }
             }
+            if (data && values.checkedOutTime && !isValid(values.checkedOutTime)) {
+                errors.checkedOutTime = 'Invalid check out time'
+            }
+
             return errors
         },
         [data, sp]
