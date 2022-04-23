@@ -25,6 +25,85 @@ export const useBookingForm = () => {
         setformDisabled(!val)
     }, [])
 
+    const updateBooking = useCallback(
+        async (values) => {
+            const updateBookingData = {
+                city: values.city,
+                state: values.state,
+                cmpName: values.cmpName,
+                email: values.email,
+                name: values.name,
+                phoneNumber: values.phoneNumber,
+                siteAddress: values.siteAddress,
+                userName: values.name,
+                schedule: {
+                    bookingDuration: values.durationType,
+                    startDate: values.startDate,
+                    shiftTime: values.shiftTime,
+                },
+                peopleRequired: {
+                    SUPERVISOR: Number(values.qtySupervisor),
+                    HELPER: Number(values.qtyHelper),
+                    TECHNICIAN: Number(values.qtyTechnician),
+                },
+                overTime: {
+                    rate: values.overTimeRate,
+                    buffer: values.overTimeBuffer,
+                    bufferType: values.overTimeBufferType,
+                },
+                earning: {
+                    earningMetaData: [
+                        {
+                            type: 'HELPER',
+                            amount: values.wageHelper,
+                        },
+                        {
+                            type: 'TECHNICIAN',
+                            amount: values.wageTechnition,
+                        },
+                        {
+                            type: 'SUPERVISOR',
+                            amount: values.wageSupervisor,
+                        },
+                    ],
+                },
+                holidayDays: values.holidayDays,
+                isHolidayPaid: values.isHolidayPaid,
+                images: {
+                    accommodations: values.accomodationImages,
+                    site: values.siteImages,
+                },
+                benefits: {
+                    ACCOMODATION: values.accomodation,
+                    PAID_TRAVEL: values.travelAllowance,
+                    FOOD: values.food,
+                    PF: values.pf,
+                    INSURANCE: values.esi,
+                },
+            }
+
+            try {
+                const { status, data } = await axios.put(
+                    `${SERVER_URL}/admin/bookings/${booking?.bookingId}`,
+                    updateBookingData
+                )
+                if (status === 200) {
+                    showSnackbar({
+                        msg: 'Booking Updated Successfully',
+                        sev: 'success',
+                    })
+                    editForm(false)
+                }
+            } catch (error) {
+                showSnackbar({
+                    msg: 'Booking Updated Failed, Invalid Value for some or all fileds',
+                    sev: 'error',
+                })
+            }
+            getBooking()
+        },
+        [booking, getBooking, showSnackbar]
+    )
     const form = useFormik({
         initialValues: {
             cmpName: '',
@@ -48,6 +127,8 @@ export const useBookingForm = () => {
             wageTechnition: '',
             overTimeRate: '',
             overTimeBuffer: '',
+            pf: false,
+            esi: false,
             overTimeBufferType: 'minutes',
             holidayDays: [],
             isHolidayPaid: false,
@@ -108,9 +189,7 @@ export const useBookingForm = () => {
             }
             return errors
         },
-        onSubmit: async (values) => {
-            updateBooking(values)
-        },
+        onSubmit: updateBooking,
     })
 
     const isError = useCallback(
@@ -119,82 +198,6 @@ export const useBookingForm = () => {
             return checkError(fieldName, form)
         },
         [form]
-    )
-
-    const updateBooking = useCallback(
-        async (values) => {
-            const updateBookingData = {
-                city: values.city,
-                state: values.state,
-                cmpName: values.cmpName,
-                durationType: values.durationType,
-                email: values.email,
-                name: values.name,
-                phoneNumber: values.phoneNumber,
-                shiftTime: values.shiftTime,
-                siteAddress: values.siteAddress,
-                startDate: values.startDate,
-                userName: values.name,
-                numOfRequirements: {
-                    supervisor: values.qtySupervisor,
-                    helpCount: values.qtyHelper,
-                    technician: values.qtyTechnician,
-                },
-                overTime: {
-                    rate: values.overTimeRate,
-                    buffer: values.overTimeBuffer,
-                    bufferType: values.overTimeBufferType,
-                },
-                earning: {
-                    earningMetaData: [
-                        {
-                            type: 'HELPER',
-                            amount: values.wageHelper,
-                        },
-                        {
-                            type: 'TECHNICIAN',
-                            amount: values.wageTechnition,
-                        },
-                        {
-                            type: 'SUPERVISOR',
-                            amount: values.wageSupervisor,
-                        },
-                    ],
-                },
-                holidayDays: values.holidayDays,
-                isHolidayPaid: values.isHolidayPaid,
-                images: {
-                    accommodations: values.accomodationImages,
-                    site: values.siteImages,
-                },
-                benefits: {
-                    ACCOMODATION: values.accomodation,
-                    PAID_TRAVEL: values.travelAllowance,
-                    FOOD: values.food,
-                },
-            }
-
-            try {
-                const { status, data } = await axios.put(
-                    `${SERVER_URL}/admin/bookings/${booking?.bookingId}`,
-                    updateBookingData
-                )
-                if (status === 200) {
-                    showSnackbar({
-                        msg: 'Booking Updated Successfully',
-                        sev: 'success',
-                    })
-                    editForm(false)
-                }
-            } catch (error) {
-                showSnackbar({
-                    msg: 'Booking Updated Failed, Invalid Value for some or all fileds',
-                    sev: 'error',
-                })
-            }
-            getBooking()
-        },
-        [booking, getBooking, showSnackbar]
     )
 
     useEffect(() => {
@@ -228,6 +231,9 @@ export const useBookingForm = () => {
                 isHolidayPaid: booking?.isHolidayPaid ?? false,
                 accomodation: booking?.benefits?.includes('ACCOMODATION') ?? false,
                 travelAllowance: booking?.benefits?.includes('PAID_TRAVEL') ?? false,
+                pf: booking?.benefits?.includes('PF') ?? false,
+                esi: booking?.benefits?.includes('INSURANCE') ?? false,
+
                 food: booking?.benefits?.includes('FOOD') ?? false,
             })
         }
@@ -296,6 +302,7 @@ export const useBookingForm = () => {
             form: form,
             formDisabled: formDisabled,
             checkError: isError,
+            getBooking: getBooking,
             siteImages: siteImages,
             setSiteImages: setSiteImages,
             accomoImages: accomoImages,
@@ -314,6 +321,7 @@ export const useBookingForm = () => {
             setSiteImages,
             accomoImages,
             setAccomoImages,
+            getBooking,
             uploadImages,
             isUploadingImages,
             editForm,

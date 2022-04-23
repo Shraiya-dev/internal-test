@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './App.css'
 import { Header, PrivateRoute } from './components'
-import { AllocatedWorkers, CustomerBookings, Login, WorkerProfile } from './pages'
+import { AllocatedWorkers, AttendanceComponent, CustomerBookings, Login, WorkerProfile } from './pages'
 import Attendance from './pages/Attendance'
 import BookingDetailed from './pages/Bookings/BookingDetails'
 import Bookings from './pages/Bookings/Bookings'
@@ -21,7 +21,6 @@ import AddWorkerForBooking from './pages/workers/AddWorkerForBooking'
 import {
     ADD_PARTNER_ROUTE,
     ADD_WORKER_IN_BOOKING_ROUTE,
-    ATTENDANCE_ROUTE,
     BOOKING_BOOKINGID_ROUTE,
     BOOKING_BY_ID_ROUTE,
     BOOKING_ROUTE,
@@ -32,6 +31,8 @@ import {
     ADD_WORKER_ROUTE,
     WORKER_INFO_BY_ID_ROUTE,
     CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE,
+    BOOKINGS_ATTENDANCE_ROUTE,
+    ATTENDANCE_ROUTE,
 } from './routes'
 import Registration from './pages/Registration'
 import AddEditWorkerProfile from './pages/workers/AddEditWorkerProfile'
@@ -114,7 +115,7 @@ function App() {
                                 }
                             />
                             <Route
-                                path={ATTENDANCE_ROUTE}
+                                path={BOOKINGS_ATTENDANCE_ROUTE}
                                 element={
                                     <PrivateRoute>
                                         <Attendance />
@@ -237,6 +238,14 @@ function App() {
                                 element={
                                     <PrivateRoute>
                                         <AllocatedWorkers />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route
+                                path={ATTENDANCE_ROUTE}
+                                element={
+                                    <PrivateRoute>
+                                        <AttendanceComponent />
                                     </PrivateRoute>
                                 }
                             />

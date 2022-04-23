@@ -3,13 +3,9 @@ import {
     Button,
     Chip,
     Dialog,
-    DialogContent,
-    Grid,
     InputAdornment,
-    List,
-    ListItem,
-    ListItemText,
-    Modal,
+    LinearProgress,
+    Pagination,
     Paper,
     Stack,
     TextField,
@@ -22,20 +18,18 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../api'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
-import { PopAlert, setSnackbar } from '../../components/Snackbar'
 import { useSnackbar } from '../../providers/SnackbarProvider'
 import { checkError } from '../../utils/formikValidate'
-import { useWorkerInfo } from '../WorkersInfo/hooks/useWorkerInfo'
 import AddPartners from './AddPartners/AddPartners'
 // import {AddPartners} from './AddPartners'
 
 const Partner = () => {
     const { showSnackbar } = useSnackbar()
     const [data, setData] = useState([])
+    const [hasMore, setHasMore] = useState(false)
     const [open, setOpen] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
-    const [clipData, setClipData] = useState('')
-
+    const [isLoading, setIsLoading] = useState(false)
     const form = useFormik({
         initialValues: {
             name: '',
@@ -60,19 +54,23 @@ const Partner = () => {
         },
     })
     const load = async () => {
+        setIsLoading(true)
         try {
-            searchParams.append('pageSize', 20)
+            searchParams.set('pageSize', 100)
+            searchParams.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
 
             const response = await axios.get(`${getBackendUrl()}/admin/partners?${searchParams}`)
 
             if (response.status === 200) {
                 setData([...response.data.payload.partnerCards])
+                setHasMore(response.data.payload.hasMore)
             }
         } catch (error) {
             setSnackBar({
-                msg: 'failed to fetch workes',
+                msg: 'failed to fetch workers',
             })
         }
+        setIsLoading(false)
     }
 
     useEffect(() => {
@@ -175,9 +173,10 @@ const Partner = () => {
                                 variant="outlined"
                                 label="Phone Number"
                                 name="phoneNumber"
+                                type= 'tel'
                                 value={form.values.phoneNumber}
                                 onChange={(e) => {
-                                    if (e.target.value.length <= 10) {
+                                    if (e.target.value.length <= 10 && !Number.isNaN(Number(e.target.value))) {
                                         form.handleChange(e)
                                     }
                                 }}
@@ -209,7 +208,27 @@ const Partner = () => {
                         disableColumnSelector
                         rows={data.map((val) => ({ ...val, id: val.partnerId }))}
                         columns={columns}
-                        pageSize={20}
+                        components={{
+                            LoadingOverlay: LinearProgress,
+                            Pagination: () => (
+                                <Pagination
+                                    page={searchParams.get('pageNumber') ? Number(searchParams.get('pageNumber')) : 1}
+                                    hideNextButton={!hasMore}
+                                    count={hasMore ? 20 : Number(searchParams.get('pageNumber'))}
+                                    siblingCount={0}
+                                    disabled={isLoading}
+                                    boundaryCount={0}
+                                    showFirstButton={false}
+                                    showLastButton={false}
+                                    color="primary"
+                                    onChange={(e, page) => {
+                                        searchParams.set('pageNumber', page)
+                                        setSearchParams(searchParams)
+                                    }}
+                                />
+                            ),
+                        }}
+                        loading={isLoading}
                     />
                 </Paper>
             </DashboardLayout>

@@ -4,7 +4,13 @@ import React, { useCallback, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import projectHeroLogo from '../../assets/brand-logo.svg'
 import { useAuth } from '../../providers/AuthProvider'
-import { ADD_PARTNER_ROUTE, BOOKING_ROUTE, REWARD_PENALTIES_ROUTE, WORKER_INFO_ROUTE } from '../../routes'
+import {
+    ADD_PARTNER_ROUTE,
+    ATTENDANCE_ROUTE,
+    BOOKING_ROUTE,
+    REWARD_PENALTIES_ROUTE,
+    WORKER_INFO_ROUTE,
+} from '../../routes'
 
 const drawerWidth = 250
 
@@ -28,6 +34,11 @@ const DrawerList = [
         label: 'Workers',
         icon: <Face />,
         link: WORKER_INFO_ROUTE,
+    },
+    {
+        label: 'Attendance',
+        icon: <Face />,
+        link: ATTENDANCE_ROUTE,
     },
 ]
 

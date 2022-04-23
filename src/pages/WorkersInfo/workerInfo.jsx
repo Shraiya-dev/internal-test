@@ -1,44 +1,71 @@
-import { useCallback, useEffect, useState } from 'react'
-import { DataGrid } from '@mui/x-data-grid'
-import { Box, TextField, Button, Paper, Select, MenuItem, Typography, Stack } from '@mui/material'
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import DashboardLayout from '../../components/Layouts/DashboardLayout'
-import { useWorkerInfo } from './hooks/useWorkerInfo'
-import { getSelectOptions } from '../../utils/InputHelpers'
-import { cities, states } from '../../utils/data'
 import { Search } from '@material-ui/icons'
-import { jobTypeOptions } from '../workers/helper'
+import { Download } from '@mui/icons-material'
+import { DatePicker, LoadingButton, LocalizationProvider } from '@mui/lab'
+import {
+    Box,
+    Button,
+    LinearProgress,
+    MenuItem,
+    Pagination,
+    Paper,
+    Select,
+    Stack,
+    TextField,
+    Typography,
+} from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import React from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { ADD_WORKER_ROUTE } from '../../routes'
-import { FourMpRounded } from '@mui/icons-material'
+import { cities, states } from '../../utils/data'
+import { getSelectOptions } from '../../utils/InputHelpers'
+import { jobTypeOptions } from '../workers/helper'
+import { useWorkerInfo } from './hooks/useWorkerInfo'
+import { currentlyOperationalCities } from '../workers/helper'
+const statusValue = [
+    {
+        value: 'none',
+        label: 'Select Status',
+    },
+    {
+        value: 'EMPLOYED',
+        label: 'Employed',
+    },
+    {
+        value: 'AVAILABLE',
+        label: 'Available',
+    },
+    ,
+    {
+        value: 'REGISTERED',
+        label: 'Registered',
+    },
+]
 
 export default function DataTable() {
-    const { pathname } = useLocation()
-    const navigate = useNavigate()
-    let params = new URL(document.location).searchParams
-
-    const addWorkers = useCallback(() => {
-        navigate(ADD_WORKER_ROUTE, {
-            state: {
-                from: pathname,
-            },
-        })
-    }, [navigate, pathname])
-
-    const viewWorkerInfo = useCallback(
-        (workerInfo) => {
-            navigate(`/workers/${workerInfo?.id}/`, {
-                state: {
-                    from: pathname,
-                },
-            })
-        },
-        [navigate, pathname]
-    )
-
+    const { checkError, form, response, isLoading, downloadWorkersWithFilters, isDownloading } = useWorkerInfo()
     const columns = [
         // { field: 'id', headerName: <h4>ID</h4>, width: 220 },
 
-        { field: 'name', headerName: <h4>Name</h4>, width: 150 },
+        {
+            field: 'name',
+            headerName: <h4>Name</h4>,
+            width: 150,
+            renderCell: (params) => (
+                <Link to={`/workers/${params?.id}`}>
+                    <Typography color="primary.main" sx={{ textDecoration: 'underline' }}>
+                        {params?.row.name || 'No name'}
+                    </Typography>
+                </Link>
+            ),
+        },
+        {
+            field: 'status',
+            headerName: <h4>Status</h4>,
+            width: 150,
+        },
         {
             field: 'phoneNumber',
             headerName: <h4>Phone Number</h4>,
@@ -54,7 +81,7 @@ export default function DataTable() {
             headerName: <h4>Skill type</h4>,
             width: 150,
         },
-        { field: 'status', headerName: <h4>Status</h4>, width: 220 },
+
         {
             field: 'bookingId',
             headerName: <h4>Booking ID</h4>,
@@ -77,40 +104,44 @@ export default function DataTable() {
             headerName: <h4>City</h4>,
             width: 150,
         },
-
-        {
-            field: 'action',
-            headerName: <h4>Action</h4>,
-            sortable: false,
-            width: 100,
-
-            renderCell: (params) => (
-                <Link to={`/workers/${params?.id}`}>
-                    <Button variant="outlined">View</Button>
-                </Link>
-            ),
-        },
     ]
 
-    const { checkError, form, workerData } = useWorkerInfo()
-    // console.log(workerData)
+    const { hasMore, workerData } = response
+
+    const [sp, setSp] = useSearchParams()
+
     return (
         <DashboardLayout>
             <Box display="flex" justifyContent="space-between" alignItems={'center'}>
                 <Typography variant="h4" fontWeight={600} align="center">
                     Manage Workers
                 </Typography>
-                <Link to={ADD_WORKER_ROUTE}>
-                    <Button
+                <Stack direction="row" spacing={2}>
+                    <LoadingButton
+                        loading={isDownloading}
+                        loadingPosition="start"
                         sx={{
                             mb: 2,
                             height: 48,
                         }}
+                        startIcon={<Download />}
                         variant="outlined"
+                        onClick={downloadWorkersWithFilters}
                     >
-                        Add Worker
-                    </Button>
-                </Link>
+                        Download
+                    </LoadingButton>
+                    <Link to={ADD_WORKER_ROUTE}>
+                        <Button
+                            sx={{
+                                mb: 2,
+                                height: 48,
+                            }}
+                            variant="contained"
+                        >
+                            Add Worker
+                        </Button>
+                    </Link>
+                </Stack>
             </Box>
             <Paper>
                 <form onSubmit={form.handleSubmit}>
@@ -124,19 +155,26 @@ export default function DataTable() {
                             },
                         }}
                     >
+                        <Select value={form.values.status} name="status" onChange={form.handleChange}>
+                            {statusValue.map((item) => {
+                                return (
+                                    <MenuItem value={item.value} key={item.value}>
+                                        {item.label}
+                                    </MenuItem>
+                                )
+                            })}
+                        </Select>
                         <TextField
                             name="workerName"
                             error={!!checkError('workerName')}
                             value={form.values.workerName}
-                            onChange={(e) => {
-                                form.setFieldValue('workerName', e.target.value)
-                            }}
+                            onChange={form.handleChange}
                             onBlur={form.handleBlur}
                             variant="outlined"
                             label="Search Worker Name"
                         />
 
-                        <Select
+                        {/* <Select
                             variant="outlined"
                             name="state"
                             value={form.values.state}
@@ -147,17 +185,16 @@ export default function DataTable() {
                         >
                             <MenuItem value={'none'}>Select State</MenuItem>
                             {getSelectOptions(states) ?? []}
-                        </Select>
+                        </Select> */}
 
                         <Select
                             name="city"
                             variant="outlined"
-                            disabled={form.values.state === 'none'}
+                            // disabled={form.values.state === 'none'}
                             value={form.values.city}
                             onChange={form.handleChange}
                         >
-                            <MenuItem value={'none'}>Select city</MenuItem>
-                            {getSelectOptions(cities[form.values.state] ?? [])}
+                            {getSelectOptions(currentlyOperationalCities ?? [])}
                         </Select>
 
                         <Select
@@ -173,12 +210,29 @@ export default function DataTable() {
                         <TextField
                             name="phone"
                             error={!!checkError('phone')}
-                            onChange={form.handleChange}
+                            onChange={(e) => {
+                                if (e.target.value.length <= 10 && !isNaN(Number(e.target.value))) {
+                                    form.handleChange(e)
+                                }
+                            }}
                             onBlur={form.handleBlur}
                             variant="outlined"
                             label="Search By Phone"
                             value={form.values.phone}
                         />
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <DatePicker
+                                label="Created Date"
+                                disableFuture
+                                inputFormat="dd/MM/yyyy"
+                                value={form.values.createdAtDate}
+                                onChange={(date) => {
+                                    form.setFieldValue('createdAtDate', date)
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
+
                         <Button type="submit" startIcon={<Search />} color="primary" variant="contained">
                             search
                         </Button>
@@ -187,7 +241,38 @@ export default function DataTable() {
             </Paper>
 
             <Paper sx={{ mt: 2, height: '74vh', width: '100%', p: 2 }}>
-                <DataGrid rows={workerData} columns={columns} pageSize={20} />
+                <DataGrid
+                    disableColumnFilter
+                    disableSelectionOnClick
+                    disableColumnSelector
+                    rows={workerData.map((val) => ({ ...val, id: val.workerId }))}
+                    rowCount={100}
+                    columns={columns}
+                    pageSize={100}
+                    paginationMode="server"
+                    components={{
+                        LoadingOverlay: LinearProgress,
+
+                        Pagination: () => (
+                            <Pagination
+                                page={sp.get('pageNumber') ? Number(sp.get('pageNumber')) : 1}
+                                hideNextButton={!hasMore}
+                                count={hasMore ? 35 : Number(sp.get('pageNumber'))}
+                                siblingCount={0}
+                                disabled={isLoading}
+                                boundaryCount={0}
+                                showFirstButton={false}
+                                showLastButton={false}
+                                color="primary"
+                                onChange={(e, page) => {
+                                    sp.set('pageNumber', page)
+                                    setSp(sp)
+                                }}
+                            />
+                        ),
+                    }}
+                    loading={isLoading}
+                />
             </Paper>
         </DashboardLayout>
     )

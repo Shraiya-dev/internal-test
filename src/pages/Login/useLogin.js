@@ -3,6 +3,7 @@ import { useMutation } from 'react-query'
 import { sendOtp } from '../../services/sendOtp'
 import { isANumber } from '../../utils'
 import { useAuth } from '../../providers/AuthProvider'
+import { useSnackbar } from '../../providers/SnackbarProvider'
 
 const validatePhoneNumber = (phoneNumber) => {
     if (phoneNumber.length === 0) {
@@ -20,7 +21,12 @@ export const useLogin = () => {
     const [error, setError] = useState(null)
     const [otp, setOtp] = useState({ otp: '' })
     const { loginByOtp } = useAuth()
-
+    const { showSnackbar } = useSnackbar()
+    const [snackBarValue, setSnackBarValue] = useState(false)
+    const [mut, setMut] = useState({
+        isSuccess: false,
+        isLoading: false,
+    })
     const mutation = useMutation(sendOtp)
 
     const handlePhoneNumber = (e) => {
@@ -32,14 +38,32 @@ export const useLogin = () => {
 
     const handleOtpChange = (otp) => setOtp({ otp })
 
-    const onPhoneNumberSubmit = () => {
+    const onPhoneNumberSubmit = async () => {
+        console.log('jo')
         setError(null)
         const result = validatePhoneNumber(phoneNumber)
         if (result !== 'valid') {
+            console.log(result)
             return setError((prev) => ({ ...prev, phoneNumber: result }))
         }
-        if (result === 'valid') {
-            mutation.mutate(`+91${phoneNumber}`)
+        // if (result === 'valid') {
+        //     mutation.mutate(`+91${phoneNumber}`)
+        // }
+
+        setMut((prev) => ({ ...prev, isLoading: true }))
+
+        const value = await sendOtp(`+91${phoneNumber}`)
+        setMut((prev) => ({ ...prev, isLoading: false }))
+        if (!value.data.success) {
+            setMut((prev) => ({ ...prev, isSuccess: false }))
+
+            showSnackbar({
+                msg: 'No account found with this phone Number. Please contact admin',
+                sev: 'error',
+            })
+            setSnackBarValue(true)
+        } else {
+            setMut((prev) => ({ ...prev, isSuccess: true }))
         }
     }
 
@@ -51,7 +75,20 @@ export const useLogin = () => {
                 otp: 'OTP must be 6 digits long',
             }))
         }
+        setMut((prev) => ({ ...prev, isLoading: true }))
         const res = await loginByOtp(`+91${phoneNumber}`, otp.otp)
+        if (!res.data.success) {
+            setOtp({
+                otp: '',
+            })
+
+            showSnackbar({
+                msg: res.data.error,
+                sev: 'error',
+            })
+        }
+        setMut((prev) => ({ ...prev, isLoading: false }))
+
         return res
     }
 
@@ -62,7 +99,8 @@ export const useLogin = () => {
         handlePhoneNumber,
         onPhoneNumberSubmit,
         onOtpSubmit,
-        mutation,
+        mutation: mut,
         error,
+        snackBarValue,
     }
 }

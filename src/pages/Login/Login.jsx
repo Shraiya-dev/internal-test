@@ -48,8 +48,17 @@ const useStyles = makeStyles((theme) => {
 export const Login = () => {
     const [isLoading, setIsLoading] = useState(false)
     const classes = useStyles()
-    const { phoneNumber, otp, error, handleOtpChange, handlePhoneNumber, onPhoneNumberSubmit, onOtpSubmit, mutation } =
-        useLogin()
+    const {
+        phoneNumber,
+        otp,
+        error,
+        handleOtpChange,
+        handlePhoneNumber,
+        onPhoneNumberSubmit,
+        onOtpSubmit,
+        mutation,
+        snackBarValue,
+    } = useLogin()
 
     let btnText = 'Send OTP'
 
@@ -67,6 +76,8 @@ export const Login = () => {
         if (mutation.isSuccess && phoneNumber.length === 10 && otp.length === 6) {
             setIsLoading(true)
             return onOtpSubmit()
+        } else {
+            setIsLoading(false)
         }
         return onPhoneNumberSubmit()
     }
@@ -145,13 +156,13 @@ export const Login = () => {
                     type="submit"
                     className={classes.btn}
                     fullWidth
-                    disabled={mutation.isLoading || isLoading || btnDisable()}
+                    disabled={mutation.isLoading || btnDisable()}
                     variant="contained"
                     color="primary"
                     size="large"
                     onClick={onButtonClicked}
                 >
-                    {isLoading ? <CircularProgress style={{ color: '#ffffff' }} size={30} /> : btnText}
+                    {mutation.isLoading ? <CircularProgress style={{ color: '#ffffff' }} size={30} /> : btnText}
                 </Button>
             </form>
         </Layout>

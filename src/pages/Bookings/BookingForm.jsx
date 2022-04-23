@@ -42,6 +42,7 @@ const BookingForm = () => {
         setAccomoImages,
         setSiteImages,
         editForm,
+        getBooking,
         siteImages,
         uploadImages,
         isUploadingImages,
@@ -68,6 +69,7 @@ const BookingForm = () => {
                                 sx={{ mr: 2 }}
                                 variant="outlined"
                                 onClick={() => {
+                                    getBooking()
                                     editForm(false)
                                 }}
                             >
@@ -182,7 +184,7 @@ const BookingForm = () => {
                     <Grid item xs={4}>
                         <TextField
                             fullWidth
-                            disabled={true}
+                            disabled={formDisabled}
                             type="number"
                             variant="outlined"
                             label="Helper*"
@@ -196,7 +198,7 @@ const BookingForm = () => {
                     <Grid item xs={4}>
                         <TextField
                             fullWidth
-                            disabled={true}
+                            disabled={formDisabled}
                             type="number"
                             variant="outlined"
                             label="Technician*"
@@ -210,7 +212,7 @@ const BookingForm = () => {
                     <Grid item xs={4}>
                         <TextField
                             fullWidth
-                            disabled={true}
+                            disabled={formDisabled}
                             type="number"
                             variant="outlined"
                             label="Supervisor*"
@@ -226,7 +228,7 @@ const BookingForm = () => {
                         <Select
                             fullWidth
                             name="shiftTime"
-                            disabled={true}
+                            disabled={formDisabled}
                             value={form.values.shiftTime}
                             onChange={form.handleChange}
                             onBlur={form.handleBlur}
@@ -241,7 +243,7 @@ const BookingForm = () => {
                         <TextField
                             fullWidth
                             type="date"
-                            disabled={true}
+                            disabled={formDisabled}
                             variant="outlined"
                             name={'startDate'}
                             value={format(form.values.startDate, 'yyyy-MM-dd')}
@@ -254,7 +256,7 @@ const BookingForm = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <FormControl disabled={true}>
+                        <FormControl disabled={formDisabled}>
                             <FormLabel id="demo-row-radio-buttons-group-label">Booking Duration *</FormLabel>
                             <RadioGroup
                                 name="durationType"
@@ -273,7 +275,7 @@ const BookingForm = () => {
                         <InputLabel>Site Address *</InputLabel>
                         <TextField
                             fullWidth
-                            disabled={true}
+                            disabled={formDisabled}
                             variant="outlined"
                             name="siteAddress"
                             error={!!checkError('siteAddress')}
@@ -288,7 +290,7 @@ const BookingForm = () => {
                         <InputLabel>State *</InputLabel>
                         <Select
                             fullWidth
-                            disabled={true}
+                            disabled={formDisabled}
                             variant="outlined"
                             name="state"
                             error={!!checkError('state')}
@@ -305,7 +307,7 @@ const BookingForm = () => {
                         <InputLabel>City *</InputLabel>
                         <Select
                             fullWidth
-                            disabled={true}
+                            disabled={formDisabled}
                             variant="outlined"
                             name="city"
                             error={!!checkError('city')}
@@ -526,6 +528,24 @@ const BookingForm = () => {
                             label="Getting Food"
                             name="food"
                             checked={form.values.food}
+                            onChange={form.handleChange}
+                            onBlur={form.handleBlur}
+                        />
+                        <FormControlLabel
+                            disabled={formDisabled}
+                            control={<Checkbox color="primary" />}
+                            label="PF"
+                            name="pf"
+                            checked={form.values.pf}
+                            onChange={form.handleChange}
+                            onBlur={form.handleBlur}
+                        />
+                        <FormControlLabel
+                            disabled={formDisabled}
+                            control={<Checkbox color="primary" />}
+                            label="ESI"
+                            name="esi"
+                            checked={form.values.esi}
                             onChange={form.handleChange}
                             onBlur={form.handleBlur}
                         />

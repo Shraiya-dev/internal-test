@@ -1,7 +1,7 @@
 export const HOME_ROUTE = '/'
 export const LOGIN_ROUTE = '/login'
 export const TAP_ROUTE = '/tap'
-export const ATTENDANCE_ROUTE = '/bookings/:bookingId/attendance'
+export const BOOKINGS_ATTENDANCE_ROUTE = '/bookings/:bookingId/attendance'
 export const REWARD_PENALTIES_ROUTE = '/rewards'
 
 //*-----------------------------new routes------------------------
@@ -18,3 +18,4 @@ export const ADD_WORKER_ROUTE = '/workers/create'
 export const WORKER_INFO_BY_ID_ROUTE = '/workers/:workerId'
 export const ADD_WORKER_IN_BOOKING_ROUTE = '/bookings/:bookingId/workers'
 export const CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE = '/customers/:customerId/bookings/create'
+export const ATTENDANCE_ROUTE = '/attendance'

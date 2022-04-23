@@ -91,7 +91,7 @@ const AddPartners = ({ open, setOpen }) => {
                             fullWidth
                             value={form.values.phoneNumber}
                             onChange={(e) => {
-                                if (e.target.value.length <= 10) {
+                                if (e.target.value.length <= 10 && !Number.isNaN(Number(e.target.value)) ) {
                                     form.handleChange(e)
                                 }
                             }}

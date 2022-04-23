@@ -24,8 +24,8 @@ const useAddWorkerDialog = (jobIdForSkillType) => {
         },
         validate: (values) => {
             const errors = {}
-            // if (values.phoneNumber.length < 10) {
-            // 	errors.phoneNumber = 'Enter Valid phoneNumber'
+            // if (values.skillType === 'none') {
+            //     errors.skillType = 'Select SKill Type'
             // }
             return errors
         },
@@ -55,7 +55,7 @@ const useAddWorkerDialog = (jobIdForSkillType) => {
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/assisted-rtd`, {
                 jobId: jobIdForSkillType[workerDetail.skillType],
-                workerId: workerDetail.id,
+                workerId: workerDetail.workerId,
             })
             setSnackBar({
                 msg: 'worker add as RTD successfully',
@@ -75,7 +75,14 @@ const useAddWorkerDialog = (jobIdForSkillType) => {
             })
         }
     }, [jobIdForSkillType, workerDetail])
-
+    const isError = useCallback(
+        (name) => {
+            const touched = form.touched
+            const errors = form.errors
+            return touched[name] && errors[name] ? errors[name] : null
+        },
+        [form]
+    )
     return useMemo(
         () => ({
             form: form,
@@ -84,8 +91,9 @@ const useAddWorkerDialog = (jobIdForSkillType) => {
             addWorkerJobCardAsRTD: addWorkerJobCardAsRTD,
             sncBar: sncBar,
             setSnackBar: setSnackBar,
+            isError: isError,
         }),
-        [form, workerDetail, addWorkerJobCardAsRTD, sncBar, setSnackBar]
+        [form, workerDetail, addWorkerJobCardAsRTD, sncBar, setSnackBar, isError]
     )
 }
 

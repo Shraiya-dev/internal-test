@@ -20,9 +20,10 @@ import { Link, useParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert } from '../../components/Snackbar'
 import { getSelectOptions } from '../../utils/InputHelpers'
+import { JobTypeOptions } from '../../utils/optionHelpers'
 import {
+    currentlyOperationalCities,
     genderOptions,
-    jobTypeOptions,
     languageOptions,
     phoneTypeOptions,
     vaccinatedOptions,
@@ -45,6 +46,7 @@ const AddEditWorkerProfile = () => {
         showSnackbar,
         worker,
         snackbarProps,
+        fetchWorker,
     } = useAddEditWorkerProfile(workerId)
     const formikProps = useCallback(
         (key) => ({
@@ -106,26 +108,28 @@ const AddEditWorkerProfile = () => {
                                 }}
                             >
                                 {disableForm ? (
-                                    <>
-                                        <Button
-                                            sx={{ mr: 2 }}
-                                            variant="outlined"
-                                            onClick={() => {
-                                                setDisableForm(false)
-                                            }}
-                                        >
-                                            Edit
-                                        </Button>
-                                        {
+                                    workerId && (
+                                        <>
                                             <Button
-                                                disabled={!worker?.isAvailableReady}
+                                                sx={{ mr: 2 }}
                                                 variant="outlined"
-                                                onClick={markWorkerAsAvailable}
+                                                onClick={() => {
+                                                    setDisableForm(false)
+                                                }}
                                             >
-                                                Mark as Available
+                                                Edit
                                             </Button>
-                                        }
-                                    </>
+                                            {
+                                                <Button
+                                                    disabled={!worker?.isAvailableReady}
+                                                    variant="outlined"
+                                                    onClick={markWorkerAsAvailable}
+                                                >
+                                                    Mark as Available
+                                                </Button>
+                                            }
+                                        </>
+                                    )
                                 ) : (
                                     <>
                                         {workerId && (
@@ -134,6 +138,7 @@ const AddEditWorkerProfile = () => {
                                                 sx={{ mr: 2 }}
                                                 onClick={() => {
                                                     setDisableForm(true)
+                                                    fetchWorker()
                                                 }}
                                             >
                                                 Cancel
@@ -164,20 +169,22 @@ const AddEditWorkerProfile = () => {
                                         error={isError('state')}
                                         onChange={(e) => {
                                             form.handleChange(e)
-                                            form.setFieldValue('city', 'none')
+                                            // form.setFieldValue('city', 'none')
                                         }}
                                     >
-                                        {getSelectOptions(stateOptions)}
+                                        <MenuItem value="none">Select State</MenuItem>
+                                        <MenuItem value="uttar pradesh">Uttar Pradesh</MenuItem>
                                     </Select>
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Select
                                         fullWidth
                                         {...formikProps('city')}
+                                        value={form.values.city.toLowerCase()}
                                         error={isError('city')}
                                         disabled={form.values.state === 'none' || disableForm}
                                     >
-                                        {getSelectOptions(cityOptions)}
+                                        {getSelectOptions(currentlyOperationalCities)}
                                     </Select>
                                 </Grid>
                                 <Grid item xs={4}>
@@ -336,7 +343,7 @@ const AddEditWorkerProfile = () => {
                                     <FormControl fullWidth>
                                         <Select {...formikProps('jobType')} error={isError('jobType')}>
                                             <MenuItem value="none">Select Job Type</MenuItem>
-                                            {getSelectOptions(jobTypeOptions)}
+                                            {getSelectOptions(JobTypeOptions)}
                                         </Select>
                                     </FormControl>
                                 </Grid>

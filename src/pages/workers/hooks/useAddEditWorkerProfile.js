@@ -295,12 +295,12 @@ export const useAddEditWorkerProfile = (workerId) => {
         }
     }, [worker])
 
-    useEffect(getStates, [])
-    useEffect(() => {
-        if (stateToCodeMap[form.values.state]) {
-            getCities(stateToCodeMap[form.values.state])
-        }
-    }, [form.values.state, stateToCodeMap])
+    // useEffect(getStates, [])
+    // useEffect(() => {
+    //     if (stateToCodeMap[form.values.state]) {
+    //         getCities(stateToCodeMap[form.values.state])
+    //     }
+    // }, [form.values.state, stateToCodeMap])
 
     return useMemo(
         () => ({
@@ -314,6 +314,7 @@ export const useAddEditWorkerProfile = (workerId) => {
             disableForm: disableForm,
             setDisableForm: setDisableForm,
             markWorkerAsAvailable: markWorkerAsAvailable,
+            fetchWorker: fetchWorker,
         }),
         [
             stateOptions,
@@ -325,6 +326,7 @@ export const useAddEditWorkerProfile = (workerId) => {
             markWorkerAsAvailable,
             isError,
             disableForm,
+            fetchWorker,
             setDisableForm,
         ]
     )
