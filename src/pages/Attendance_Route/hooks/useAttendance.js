@@ -77,8 +77,10 @@ const useAttendance = () => {
         const sp = new URLSearchParams(searchParams)
         try {
             sp.set('pageSize', '100')
-            sp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
-            const { data, status } = await axios.get(`${SERVER_URL}/admin/employee-history?${searchParams.toString()}`)
+            Number(searchParams.get('pageNumber')) > 1
+                ? sp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
+                : sp.delete('pageNumber')
+            const { data, status } = await axios.get(`${SERVER_URL}/admin/employee-history?${sp.toString()}`)
 
             setResponse({ workerData: data.payload.response, hasMore: data.payload.hasMore })
         } catch (error) {

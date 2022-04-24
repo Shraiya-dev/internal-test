@@ -128,7 +128,9 @@ export const useWorkerInfo = () => {
             const sp = new URLSearchParams(searchParams)
             try {
                 sp.set('pageSize', '100')
-                sp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
+                Number(searchParams.get('pageNumber')) > 1
+                    ? sp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
+                    : sp.delete('pageNumber')
 
                 const { data, status } = await axios.get(`${SERVER_URL}/admin/workers?${sp.toString()}`)
 
