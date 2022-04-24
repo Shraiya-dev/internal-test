@@ -76,6 +76,7 @@ const useAttendance = () => {
         setIsLoading(true)
         try {
             searchParams.set('pageSize', '100')
+            searchParams.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
             const { data, status } = await axios.get(`${SERVER_URL}/admin/employee-history?${searchParams.toString()}`)
 
             setResponse({ workerData: data.payload.response, hasMore: data.payload.hasMore })

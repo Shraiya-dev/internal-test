@@ -127,6 +127,8 @@ export const useWorkerInfo = () => {
             setIsLoading(true)
             try {
                 searchParams.set('pageSize', '100')
+                searchParams.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
+
                 const { data, status } = await axios.get(`${SERVER_URL}/admin/workers?${searchParams.toString()}`)
 
                 setResponse({

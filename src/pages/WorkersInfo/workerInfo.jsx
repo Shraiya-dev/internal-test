@@ -120,6 +120,7 @@ export default function DataTable() {
                     <LoadingButton
                         loading={isDownloading}
                         loadingPosition="start"
+                        disabled={!sp.get('createdAt')}
                         sx={{
                             mb: 2,
                             height: 48,
