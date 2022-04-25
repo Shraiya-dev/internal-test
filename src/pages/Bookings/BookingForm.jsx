@@ -280,7 +280,11 @@ const BookingForm = () => {
                             name="siteAddress"
                             error={!!checkError('siteAddress')}
                             value={form.values.siteAddress}
-                            onChange={form.handleChange}
+                            onChange={onChange={(e) => {
+                                if (e.target.value.length <= 500) {
+                                    form.handleChange(e)
+                                }
+                            }}}
                             onBlur={form.handleBlur}
                             multiline
                             minRows={2}
