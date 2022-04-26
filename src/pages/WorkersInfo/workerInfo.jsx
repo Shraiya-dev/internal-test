@@ -21,7 +21,7 @@ import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { ADD_WORKER_ROUTE } from '../../routes'
 import { cities, states } from '../../utils/data'
 import { getSelectOptions } from '../../utils/InputHelpers'
-import { jobTypeOptions } from '../workers/helper'
+import { JobTypeOptions } from '../../utils/optionHelpers'
 import { useWorkerInfo } from './hooks/useWorkerInfo'
 import { currentlyOperationalCities } from '../workers/helper'
 const statusValue = [
@@ -205,7 +205,7 @@ export default function DataTable() {
                             onChange={form.handleChange}
                         >
                             <MenuItem value={'none'}>Job Type</MenuItem>
-                            {getSelectOptions(jobTypeOptions)}
+                            {getSelectOptions(JobTypeOptions)}
                         </Select>
 
                         <TextField

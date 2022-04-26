@@ -1,20 +1,3 @@
-export const jobTypeOptions = [
-    { label: 'Mason', value: 'MASON' },
-    { label: 'carpenter', value: 'CARPENTER' },
-
-    { label: 'Painter', value: 'PAINTER' },
-    { label: 'Bar Bender', value: 'BAR_BENDER' },
-    { label: 'Shuttring Carpenter', value: 'SHUTTRING_CARPENTER' },
-    { label: 'Stone Tile Marble Layer', value: 'STONE_TILE_MARBLE_LAYER' },
-    { label: 'Electrical', value: 'ELECTRICAL' },
-    { label: 'Welder Fitter', value: 'WELDER_FITTER' },
-    { label: 'Gypsum', value: 'GYPSUM' },
-    { label: 'General Helper', value: 'GENERAL_HELPER' },
-    { label: 'Hvac', value: 'HVAC' },
-    { label: 'Plumbing', value: 'PLUMBING' },
-    { label: 'Shuttering Carpenter', value: 'SHUTTERING_CARPENTER' },
-]
-
 export const yoeOptions = [
     {
         value: '0-2',
