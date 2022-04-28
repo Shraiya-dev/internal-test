@@ -19,6 +19,7 @@ import ConfirmationDialog from '../../components/ConfirmationDialog'
 import { PopAlert } from '../../components/Snackbar'
 import { CTAMap } from '../../utils/ctaHelpers'
 import AddWorkerDialog from '../jobCards/AddWorkerDialog'
+import { CancelJobCardConfirmationDialog } from './CancelJobCardCOnfirmationDialoag'
 import EmploymentCompleteDialog from './EmploymentCompleteDialog'
 import { useJobCards } from './hooks/useJobCards'
 
@@ -50,9 +51,17 @@ const JobCards = (booking) => {
         cancel: () => {},
         confirm: () => {},
     })
+    const [cancelJobCardConfirmationDialogProps, setCancelJobCardConfirmationDialogProps] = useState({
+        open: false,
+        cancel: () => {},
+        confirm: () => {},
+        jobCardState: undefined,
+        bookingState: undefined,
+    })
 
     const closeDialog = useCallback(() => {
         setConfirmDialogProps({})
+        setCancelJobCardConfirmationDialogProps({ open: false })
     }, [])
 
     return (
@@ -66,6 +75,7 @@ const JobCards = (booking) => {
                     jobIdForSkillType={bookingSummary?.jobIds}
                 />
             )}
+            <CancelJobCardConfirmationDialog {...cancelJobCardConfirmationDialogProps} />
 
             <Paper>
                 {allowedTabs ? (
@@ -137,38 +147,41 @@ const JobCards = (booking) => {
                                                                     <Box>
                                                                         {allowedTabs[selectedTab]?.jobCardActions
                                                                             ?.cancel && (
-                                                                            // <Button
-                                                                            //     sx={{
-                                                                            //         m: 1,
-                                                                            //     }}
-                                                                            //     onClick={() =>
-                                                                            //         cancelWorkerJobCard(workerCard)
-                                                                            //     }
-                                                                            //     variant="outlined"
-                                                                            // >
-                                                                            //     Cancel
-                                                                            // </Button>
                                                                             <Button
                                                                                 variant="outlined"
                                                                                 onClick={() => {
-                                                                                    setConfirmDialogProps({
-                                                                                        open: true,
-                                                                                        content: (
-                                                                                            <>
-                                                                                                <strong>
-                                                                                                    Remove Hero
-                                                                                                </strong>
-                                                                                                &nbsp;from this booking?
-                                                                                            </>
-                                                                                        ),
-                                                                                        cancel: closeDialog,
-                                                                                        confirm: () => {
-                                                                                            cancelWorkerJobCard(
-                                                                                                workerCard
-                                                                                            )
-                                                                                            closeDialog()
-                                                                                        },
-                                                                                    })
+                                                                                    setCancelJobCardConfirmationDialogProps(
+                                                                                        {
+                                                                                            open: true,
+                                                                                            content: (
+                                                                                                <>
+                                                                                                    <strong>
+                                                                                                        Remove Hero
+                                                                                                    </strong>
+                                                                                                    &nbsp;from this
+                                                                                                    booking?
+                                                                                                </>
+                                                                                            ),
+                                                                                            cancel: closeDialog,
+                                                                                            confirm: (
+                                                                                                churnType,
+                                                                                                churnReason,
+                                                                                                other
+                                                                                            ) => {
+                                                                                                cancelWorkerJobCard(
+                                                                                                    workerCard,
+                                                                                                    churnType,
+                                                                                                    churnReason,
+                                                                                                    other
+                                                                                                )
+                                                                                                closeDialog()
+                                                                                            },
+                                                                                            jobCardState: selectedTab,
+                                                                                            bookingState:
+                                                                                                bookingSummary.status
+                                                                                                    .enumValue,
+                                                                                        }
+                                                                                    )
                                                                                 }}
                                                                             >
                                                                                 Cancel
@@ -216,28 +229,73 @@ const JobCards = (booking) => {
                                                                                 Move to Deployed
                                                                             </Button>
                                                                         )}
-                                                                        {allowedTabs[selectedTab]?.jobCardActions
-                                                                            ?.employmentComplete &&
-                                                                            bookingSummary?.generateEarnings && (
-                                                                                <Button
-                                                                                    sx={{
-                                                                                        m: 1,
-                                                                                    }}
-                                                                                    onClick={() => {
-                                                                                        setEmploymentCompleteDialog({
-                                                                                            open: true,
-                                                                                            setOpen:
-                                                                                                setEmploymentCompleteDialog,
-                                                                                            workerCard: workerCard,
-                                                                                            confirm:
-                                                                                                employmentCompleteForWorker,
-                                                                                        })
-                                                                                    }}
-                                                                                    variant="outlined"
-                                                                                >
-                                                                                    Employment Complete
-                                                                                </Button>
-                                                                            )}
+                                                                        {bookingSummary?.generateEarnings
+                                                                            ? allowedTabs[selectedTab]?.jobCardActions
+                                                                                  ?.employmentComplete && (
+                                                                                  <Button
+                                                                                      sx={{
+                                                                                          m: 1,
+                                                                                      }}
+                                                                                      onClick={() => {
+                                                                                          setEmploymentCompleteDialog({
+                                                                                              open: true,
+                                                                                              setOpen:
+                                                                                                  setEmploymentCompleteDialog,
+                                                                                              workerCard: workerCard,
+                                                                                              confirm:
+                                                                                                  employmentCompleteForWorker,
+                                                                                          })
+                                                                                      }}
+                                                                                      variant="outlined"
+                                                                                  >
+                                                                                      Employment Complete
+                                                                                  </Button>
+                                                                              )
+                                                                            : bookingSummary?.status?.enumValue ===
+                                                                                  'DEPLOYED' && (
+                                                                                  <Button
+                                                                                      variant="outlined"
+                                                                                      onClick={() => {
+                                                                                          setCancelJobCardConfirmationDialogProps(
+                                                                                              {
+                                                                                                  open: true,
+                                                                                                  content: (
+                                                                                                      <>
+                                                                                                          <strong>
+                                                                                                              Remove
+                                                                                                              Hero
+                                                                                                          </strong>
+                                                                                                          &nbsp;from
+                                                                                                          this booking?
+                                                                                                      </>
+                                                                                                  ),
+                                                                                                  cancel: closeDialog,
+                                                                                                  confirm: (
+                                                                                                      churnType,
+                                                                                                      churnReason,
+                                                                                                      other
+                                                                                                  ) => {
+                                                                                                      cancelWorkerJobCard(
+                                                                                                          workerCard,
+                                                                                                          churnType,
+                                                                                                          churnReason,
+                                                                                                          other
+                                                                                                      )
+                                                                                                      closeDialog()
+                                                                                                  },
+                                                                                                  jobCardState:
+                                                                                                      selectedTab,
+                                                                                                  bookingState:
+                                                                                                      bookingSummary
+                                                                                                          .status
+                                                                                                          .enumValue,
+                                                                                              }
+                                                                                          )
+                                                                                      }}
+                                                                                  >
+                                                                                      Cancel
+                                                                                  </Button>
+                                                                              )}
                                                                     </Box>
                                                                 )}
                                                             </TableCell>

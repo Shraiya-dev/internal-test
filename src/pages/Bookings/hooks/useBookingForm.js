@@ -96,7 +96,7 @@ export const useBookingForm = () => {
                 }
             } catch (error) {
                 showSnackbar({
-                    msg: 'Booking Updated Failed, Invalid Value for some or all fileds',
+                    msg: 'Booking Updated Failed, Invalid Value for some or all fields',
                     sev: 'error',
                 })
             }
@@ -125,8 +125,8 @@ export const useBookingForm = () => {
             wageHelper: '',
             wageSupervisor: '',
             wageTechnition: '',
-            overTimeRate: '',
-            overTimeBuffer: '',
+            overTimeRate: 'none',
+            overTimeBuffer: 30,
             pf: false,
             esi: false,
             overTimeBufferType: 'minutes',
@@ -147,10 +147,10 @@ export const useBookingForm = () => {
             if (values.name === '') {
                 errors.name = true
             }
-            if (values.email === '') {
+            if (values.email === '' || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
                 errors.email = true
             }
-            if (values.phoneNumber === '') {
+            if (values.phoneNumber === '' || values.phoneNumber.length < 10) {
                 errors.phoneNumber = true
             }
 
@@ -169,22 +169,45 @@ export const useBookingForm = () => {
             if (Number(values.qtyHelper) !== 0 && values.wageHelper === '') {
                 errors.wageHelper = true
             }
+
+            if (values.qtyHelper == 0 && values.qtySupervisor == 0 && values.qtyTechnician == 0) {
+                errors.qtyHelper = true
+                errors.qtySupervisor = true
+                errors.qtyTechnician = true
+            }
+
+            // if qtyHelper is not 0 that time wages can't be 0
+            if (Number(values.qtyHelper !== 0 && Number(values.wageHelper) === 0)) {
+                errors.wageHelper = true
+            }
+
             if (Number(values.qtySupervisor) !== 0 && values.wageSupervisor === '') {
                 errors.wageSupervisor = true
             }
+            // if qtySupervisor is not 0 that time wages can't be 0
+            if (Number(values.qtySupervisor !== 0 && Number(values.wageSupervisor) === 0)) {
+                errors.wageSupervisor = true
+            }
+
             if (Number(values.qtyTechnician) !== 0 && values.wageTechnition === '') {
                 errors.wageTechnition = true
             }
+
+            //if qtyTechnician is not 0 that time wages can't be 0
+            if (Number(values.qtyTechnician !== 0 && Number(values.wageTechnition) === 0)) {
+                errors.wageTechnition = true
+            }
+
             if (values.overTimeRate === 'none') {
                 errors.overTimeRate = true
             }
-            if (values.overTimeBuffer === '') {
-                errors.overTimeBuffer = true
-            }
+            // if (values.overTimeBuffer === '') {
+            //     errors.overTimeBuffer = true
+            // }
             if (values.overTimeBufferType === '') {
                 errors.overTimeBufferType = true
             }
-            if (values.overTimeRate === '') {
+            if (values.overTimeRate === 'none') {
                 errors.overTimeRate = true
             }
             return errors
@@ -222,8 +245,8 @@ export const useBookingForm = () => {
                 wageHelper: booking?.rateCard?.HELPER ?? '',
                 wageSupervisor: booking?.rateCard?.SUPERVISOR ?? '',
                 wageTechnition: booking?.rateCard?.TECHNICIAN ?? '',
-                overTimeRate: booking?.overTime?.rate ?? '',
-                overTimeBuffer: booking?.overTime?.buffer ?? '',
+                overTimeRate: booking?.overTime?.rate ?? 0,
+                overTimeBuffer: booking?.overTime?.buffer ?? 30,
                 overTimeBufferType: booking?.overTime?.bufferType ?? 'minutes',
                 holidayDays: booking?.holidayDays ?? [],
                 siteImages: booking?.images?.site ?? [],
@@ -257,13 +280,28 @@ export const useBookingForm = () => {
                     imgType = 'accommodations'
                     break
             }
+            const uploadableImages = files.filter((file) =>
+                ['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)
+            )
+            if (files.length !== uploadableImages.length) {
+                showSnackbar({
+                    msg: 'Invalid file type found!',
+                    sev: 'error',
+                })
+                setIsUploadingImages((old) => ({
+                    ...old,
+                    [type]: false,
+                }))
+                return
+            }
 
             const res = await Promise.all(
-                files.map((img) => {
+                uploadableImages.map((img) => {
                     //uploading file
                     const formData = new FormData()
                     formData.set('type', imgType)
                     formData.set('file', img)
+                    console.log(img.type)
                     return axios.post(`${SERVER_URL}/admin/bookings/${booking?.bookingId}/images`, formData)
                 })
             )

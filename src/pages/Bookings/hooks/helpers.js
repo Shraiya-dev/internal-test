@@ -87,5 +87,5 @@ export const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SA
 
 export const overTimeBufferTypeOptions = [
     { label: 'Minutes', value: 'minutes' },
-    { label: 'Hours', value: 'hours' },
+    // { label: 'Hours', value: 'hours' },
 ]

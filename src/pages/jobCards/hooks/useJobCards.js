@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getBackendUrl } from '../../../api'
 import { useBooking } from '../../../providers/BookingProvider'
+import { useLoader } from '../../../providers/LoaderProvider'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 import { CTAMap } from '../../../utils/ctaHelpers'
 const SERVER_URL = getBackendUrl()
@@ -14,7 +15,7 @@ export const useJobCards = () => {
     const allowedTabs = CTAMap[booking?.status]?.tabs
 
     const { showSnackbar } = useSnackbar()
-
+    const { showLoader } = useLoader()
     useEffect(() => {
         if (allowedTabs) {
             setSelectedTab(Object.keys(allowedTabs)[0])
@@ -54,6 +55,7 @@ export const useJobCards = () => {
     }, [reload])
 
     const markJobCardAsAccepted = useCallback(async (workerCard) => {
+        showLoader(true)
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/accept`)
             setReload(true)
@@ -67,8 +69,10 @@ export const useJobCards = () => {
                 sev: 'error',
             })
         }
+        showLoader(false)
     }, [])
     const markWorkerJobCardAsRTD = useCallback(async (workerCard) => {
+        showLoader(true)
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/rtd`)
             setReload(true)
@@ -82,13 +86,16 @@ export const useJobCards = () => {
                 sev: 'error',
             })
         }
+        showLoader(false)
     }, [])
 
-    const cancelWorkerJobCard = useCallback(async (workerCard) => {
+    const cancelWorkerJobCard = useCallback(async (workerCard, churnType, churnReason, other) => {
+        showLoader(true)
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/cancel`, {
-                //todo remove harcoded reasons
-                reason: 'OTHERS',
+                churnType: churnType,
+                reason: churnReason,
+                details: other,
             })
             setReload(true)
             showSnackbar({
@@ -101,8 +108,10 @@ export const useJobCards = () => {
                 sev: 'error',
             })
         }
+        showLoader(false)
     }, [])
     const deployWorkerJobCard = useCallback(async (workerCard) => {
+        showLoader(true)
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/job-cards/${workerCard.jobCardId}/deployed`)
             setReload(true)
@@ -116,15 +125,19 @@ export const useJobCards = () => {
                 sev: 'error',
             })
         }
+        showLoader(false)
     }, [])
     const employmentCompleteForWorker = useCallback(
         async (workerCard, values) => {
+            showLoader(true)
             try {
                 const { status, data } = await axios.post(`${SERVER_URL}/admin/project/remove-employee`, {
                     projectId: bookingSummary?.projectId,
                     employeeId: workerCard?.employeeId,
-                    completionCode: values.reason,
-                    description: values.other,
+                    completionCode: values.completionCode,
+                    partialCompletionReason:
+                        values.partialCompletionReason === 'none' ? undefined : values.partialCompletionReason,
+                    description: values.description,
                     status: 'AVAILABLE',
                 })
                 showSnackbar({
@@ -138,6 +151,7 @@ export const useJobCards = () => {
                     sev: 'error',
                 })
             }
+            showLoader(false)
         },
         [bookingSummary]
     )

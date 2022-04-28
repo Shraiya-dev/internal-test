@@ -11,6 +11,7 @@ import {
     FormLabel,
     Grid,
     IconButton,
+    InputAdornment,
     InputLabel,
     MenuItem,
     Paper,
@@ -136,7 +137,7 @@ const BookingForm = () => {
                             <Grid item xs={12}>
                                 <Paper variant="outlined">
                                     <Box p={2}>
-                                        {tags[form.values.jobType]?.map((tag) => (
+                                        {booking.tags?.map((tag) => (
                                             <Chip
                                                 key={tag}
                                                 disabled={true}
@@ -191,7 +192,11 @@ const BookingForm = () => {
                             name="qtyHelper"
                             error={checkError('qtyHelper')}
                             value={form.values.qtyHelper}
-                            onChange={form.handleChange}
+                            onChange={(e) => {
+                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 500) {
+                                    form.handleChange(e)
+                                }
+                            }}
                             onBlur={form.handleBlur}
                         />
                     </Grid>
@@ -205,8 +210,12 @@ const BookingForm = () => {
                             name="qtyTechnician"
                             error={checkError('qtyTechnician')}
                             value={form.values.qtyTechnician}
-                            onChange={form.handleChange}
                             onBlur={form.handleBlur}
+                            onChange={(e) => {
+                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 500) {
+                                    form.handleChange(e)
+                                }
+                            }}
                         />
                     </Grid>
                     <Grid item xs={4}>
@@ -219,7 +228,11 @@ const BookingForm = () => {
                             name="qtySupervisor"
                             error={checkError('qtySupervisor')}
                             value={form.values.qtySupervisor}
-                            onChange={form.handleChange}
+                            onChange={(e) => {
+                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 500) {
+                                    form.handleChange(e)
+                                }
+                            }}
                             onBlur={form.handleBlur}
                         />
                     </Grid>
@@ -280,11 +293,11 @@ const BookingForm = () => {
                             name="siteAddress"
                             error={!!checkError('siteAddress')}
                             value={form.values.siteAddress}
-                            onChange={onChange={(e) => {
+                            onChange={(e) => {
                                 if (e.target.value.length <= 500) {
                                     form.handleChange(e)
                                 }
-                            }}}
+                            }}
                             onBlur={form.handleBlur}
                             multiline
                             minRows={2}
@@ -351,6 +364,7 @@ const BookingForm = () => {
                             variant="outlined"
                             label="Email *"
                             name="email"
+                            type="email"
                             error={checkError('email')}
                             value={form.values.email}
                             onChange={form.handleChange}
@@ -365,8 +379,13 @@ const BookingForm = () => {
                             label="Phone Number *"
                             name="phoneNumber"
                             error={checkError('phoneNumber')}
-                            value={form.values.phoneNumber}
-                            onChange={form.handleChange}
+                            value={form.values.phoneNumber.replace('+91', '')}
+                            onChange={(e) => {
+                                if (e.target.value.length <= 10) {
+                                    form.handleChange(e)
+                                    console.log(e.target.value)
+                                }
+                            }}
                             onBlur={form.handleBlur}
                         />
                     </Grid>
@@ -401,7 +420,11 @@ const BookingForm = () => {
                             name="wageHelper"
                             error={!!checkError('wageHelper')}
                             value={form.values.wageHelper}
-                            onChange={form.handleChange}
+                            onChange={(e) => {
+                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 2000) {
+                                    form.handleChange(e)
+                                }
+                            }}
                             onBlur={form.handleBlur}
                         />
                     </Grid>
@@ -416,7 +439,11 @@ const BookingForm = () => {
                             name="wageTechnition"
                             error={checkError('wageTechnition')}
                             value={form.values.wageTechnition}
-                            onChange={form.handleChange}
+                            onChange={(e) => {
+                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 2000) {
+                                    form.handleChange(e)
+                                }
+                            }}
                             onBlur={form.handleBlur}
                         />
                     </Grid>
@@ -431,7 +458,11 @@ const BookingForm = () => {
                             name="wageSupervisor"
                             error={checkError('wageSupervisor')}
                             value={form.values.wageSupervisor}
-                            onChange={form.handleChange}
+                            onChange={(e) => {
+                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 2000) {
+                                    form.handleChange(e)
+                                }
+                            }}
                             onBlur={form.handleBlur}
                         />
                     </Grid>
@@ -439,7 +470,7 @@ const BookingForm = () => {
                         <InputLabel>Over Time Details</InputLabel>
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField
+                        {/* <TextField
                             fullWidth
                             disabled={formDisabled}
                             type="number"
@@ -448,12 +479,34 @@ const BookingForm = () => {
                             name="overTimeRate"
                             error={checkError('overTimeRate')}
                             value={form.values.overTimeRate}
-                            onChange={form.handleChange}
+                            onChange={(e) => {
+                                if (e.target.value >= 0 && e.target.value <= 3) {
+                                    form.handleChange(e)
+                                }
+                            }}
                             onBlur={form.handleBlur}
-                        />
+                        /> */}
+                        <Select
+                            fullWidth
+                            disabled={formDisabled}
+                            type="number"
+                            variant="outlined"
+                            name="overTimeRate"
+                            error={checkError('overTimeRate')}
+                            value={form.values.overTimeRate}
+                            onChange={(e) => {
+                                form.setFieldValue('overTimeRate', Number(e.target.value))
+                            }}
+                            onBlur={form.handleBlur}
+                        >
+                            <MenuItem value={'none'}>Select OT Factor</MenuItem>
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={1.5}>1.5</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                        </Select>
                     </Grid>
 
-                    <Grid item xs={4}>
+                    {/* <Grid item xs={4}>
                         <TextField
                             fullWidth
                             disabled={formDisabled}
@@ -463,12 +516,16 @@ const BookingForm = () => {
                             name="overTimeBuffer"
                             error={checkError('overTimeBuffer')}
                             value={form.values.overTimeBuffer}
-                            onChange={form.handleChange}
+                            onChange={(e) => {
+                                if (e.target.value >= 0 && e.target.value <= 60) {
+                                    form.handleChange(e)
+                                }
+                            }}
                             onBlur={form.handleBlur}
                         />
-                    </Grid>
+                    </Grid> */}
 
-                    <Grid item xs={4}>
+                    {/* <Grid item xs={4}>
                         <Select
                             fullWidth
                             disabled={formDisabled}
@@ -481,7 +538,7 @@ const BookingForm = () => {
                         >
                             {getSelectOptions(overTimeBufferTypeOptions)}
                         </Select>
-                    </Grid>
+                    </Grid> */}
                     {/*<Grid item xs={12}>
 						<InputLabel>Select the weekly days off</InputLabel>
 					</Grid>
@@ -558,11 +615,13 @@ const BookingForm = () => {
                     <Grid container spacing={2} item xs={12}>
                         <Grid display="flex" justifyContent="space-between" alignItems="center" item md={12}>
                             <InputLabel>Site Images</InputLabel>
-                            <Stack direction="row">
+                            <Stack>
+                                <Typography variant="caption">Allowed: .jpg/.jpeg/.png</Typography>
                                 <FileInput
                                     sx={{
                                         width: 150,
                                     }}
+                                    accept="image/*"
                                     disabled={formDisabled}
                                     id="siteImages-upload"
                                     label={isUploadingImages.site ? <CircularProgress size={20} /> : 'Upload'}
@@ -570,6 +629,7 @@ const BookingForm = () => {
                                     variant="outlined"
                                     onChange={(e) => {
                                         uploadImages('site', [...e.target.files])
+                                        e.target.value = ''
                                     }}
                                 />
                                 {/* <Button
@@ -634,26 +694,29 @@ const BookingForm = () => {
                                                     position: 'relative',
                                                 }}
                                             >
-                                                <IconButton
-                                                    disabled={formDisabled}
-                                                    size="small"
-                                                    onClick={() => {
-                                                        form.setFieldValue(
-                                                            'siteImages',
-                                                            form.values.siteImages.filter((img) => img !== url)
-                                                        )
-                                                    }}
-                                                    sx={(theme) => ({
-                                                        backgroundColor: theme.palette.grey[600],
-                                                        color: '#fff',
-                                                        position: 'absolute',
-                                                        zIndex: 100,
-                                                        top: -10,
-                                                        right: -10,
-                                                    })}
-                                                >
-                                                    <Close />
-                                                </IconButton>
+                                                {!formDisabled && (
+                                                    <IconButton
+                                                        disabled={formDisabled}
+                                                        size="small"
+                                                        onClick={() => {
+                                                            form.setFieldValue(
+                                                                'siteImages',
+                                                                form.values.siteImages.filter((img) => img !== url)
+                                                            )
+                                                        }}
+                                                        sx={(theme) => ({
+                                                            backgroundColor: theme.palette.grey[600],
+                                                            color: '#fff',
+                                                            position: 'absolute',
+                                                            zIndex: 100,
+                                                            top: -10,
+                                                            right: -10,
+                                                        })}
+                                                    >
+                                                        <Close />
+                                                    </IconButton>
+                                                )}
+
                                                 <img
                                                     style={{ height: '100%', width: '100%' }}
                                                     src={url}
@@ -669,11 +732,13 @@ const BookingForm = () => {
                     <Grid container spacing={2} item xs={12}>
                         <Grid display="flex" justifyContent="space-between" alignItems="center" item md={12}>
                             <InputLabel>Accomodation Images</InputLabel>
-                            <Stack direction="row">
+                            <Stack>
+                                <Typography variant="caption">Allowed: .jpg/.jpeg/.png</Typography>
                                 <FileInput
                                     sx={{
                                         width: 150,
                                     }}
+                                    accept="image/*"
                                     disabled={formDisabled}
                                     id="accomoImages-upload"
                                     label={isUploadingImages.accomodation ? <CircularProgress size={20} /> : 'Upload'}
@@ -681,6 +746,7 @@ const BookingForm = () => {
                                     variant="outlined"
                                     onChange={(e) => {
                                         uploadImages('accomodation', [...e.target.files])
+                                        e.target.value = ''
                                     }}
                                 />
                                 {/* <FileInput
@@ -752,26 +818,31 @@ const BookingForm = () => {
                                                     position: 'relative',
                                                 }}
                                             >
-                                                <IconButton
-                                                    size="small"
-                                                    disabled={formDisabled}
-                                                    onClick={() => {
-                                                        form.setFieldValue(
-                                                            'accomodationImages',
-                                                            form.values.accomodationImages.filter((img) => img !== url)
-                                                        )
-                                                    }}
-                                                    sx={(theme) => ({
-                                                        backgroundColor: theme.palette.grey[600],
-                                                        color: '#fff',
-                                                        position: 'absolute',
-                                                        zIndex: 100,
-                                                        top: -10,
-                                                        right: -10,
-                                                    })}
-                                                >
-                                                    <Close />
-                                                </IconButton>
+                                                {!formDisabled && (
+                                                    <IconButton
+                                                        size="small"
+                                                        disabled={formDisabled}
+                                                        onClick={() => {
+                                                            form.setFieldValue(
+                                                                'accomodationImages',
+                                                                form.values.accomodationImages.filter(
+                                                                    (img) => img !== url
+                                                                )
+                                                            )
+                                                        }}
+                                                        sx={(theme) => ({
+                                                            backgroundColor: theme.palette.grey[600],
+                                                            color: '#fff',
+                                                            position: 'absolute',
+                                                            zIndex: 100,
+                                                            top: -10,
+                                                            right: -10,
+                                                        })}
+                                                    >
+                                                        {!formDisabled && <Close />}
+                                                    </IconButton>
+                                                )}
+
                                                 <img
                                                     style={{ height: '100%', width: '100%' }}
                                                     src={url}

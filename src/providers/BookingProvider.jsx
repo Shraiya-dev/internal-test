@@ -12,6 +12,7 @@ import { differenceInYears } from 'date-fns/esm'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getBackendUrl } from '../api'
+import { useLoader } from './LoaderProvider'
 import { useSnackbar } from './SnackbarProvider'
 const SERVER_URL = getBackendUrl()
 const BookingContext = createContext()
@@ -33,7 +34,7 @@ const BookingProvider = ({ children }) => {
     const handelTabChange = (e, value) => {
         setSelectedTab(value)
     }
-
+    const { showLoader } = useLoader()
     const getBooking = useCallback(async () => {
         try {
             const { data, status } = await axios.get(`${SERVER_URL}/admin/bookings/${bookingId}`)
@@ -98,6 +99,7 @@ const BookingProvider = ({ children }) => {
         }
     }, [booking])
     const confirmBooking = useCallback(async () => {
+        showLoader(true)
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/confirm`)
 
@@ -113,10 +115,13 @@ const BookingProvider = ({ children }) => {
                 sev: 'error',
             })
         }
+
         getBooking()
+        showLoader(false)
     }, [bookingId, getBooking])
 
     const startAllocation = useCallback(async () => {
+        showLoader(true)
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/allocation-pending`)
             if (status === 200) {
@@ -132,8 +137,11 @@ const BookingProvider = ({ children }) => {
             })
         }
         getBooking()
+
+        showLoader(false)
     }, [bookingId, getBooking])
     const closeAllocation = useCallback(async () => {
+        showLoader(true)
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/allocation-closed`)
             if (status === 200) {
@@ -149,8 +157,10 @@ const BookingProvider = ({ children }) => {
             })
         }
         getBooking()
+        showLoader(false)
     }, [bookingId, getBooking])
     const markAsRTD = useCallback(async () => {
+        showLoader(true)
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/mark-rtd`)
             if (status === 200) {
@@ -166,8 +176,10 @@ const BookingProvider = ({ children }) => {
             })
         }
         getBooking()
+        showLoader(false)
     }, [bookingId, getBooking])
     const markAsDeployed = useCallback(async () => {
+        showLoader(true)
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/deployed`)
             if (status === 200) {
@@ -183,8 +195,10 @@ const BookingProvider = ({ children }) => {
             })
         }
         getBooking()
+        showLoader(false)
     }, [bookingId, getBooking])
     const startProject = useCallback(async () => {
+        showLoader(true)
         if (!booking?.projectId || !bookingId) {
             return showSnackbar({
                 msg: 'No Project Found for This booking',
@@ -208,6 +222,7 @@ const BookingProvider = ({ children }) => {
             })
         }
         getBooking()
+        showLoader(false)
     }, [bookingId, getBooking, booking])
 
     useEffect(getBooking, [getBooking])

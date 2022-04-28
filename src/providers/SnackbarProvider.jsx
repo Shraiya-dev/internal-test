@@ -1,8 +1,5 @@
 import { Alert, Snackbar } from '@mui/material'
-import axios from 'axios'
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { getBackendUrl } from '../api'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 //creating snackbar context
 const SnackbarContext = createContext()

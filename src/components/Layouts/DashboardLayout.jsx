@@ -1,5 +1,6 @@
 import { Face, LibraryBooks, Person, Redeem } from '@mui/icons-material'
 import { AppBar, Box, Button, Drawer, IconButton, List, ListItem, Menu, MenuItem, Toolbar } from '@mui/material'
+import { format } from 'date-fns'
 import React, { useCallback, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import projectHeroLogo from '../../assets/brand-logo.svg'
@@ -47,16 +48,6 @@ const DashboardLayout = ({ children }) => {
     const { pathname } = useLocation()
     const { isUserLoggedIn, logout } = useAuth()
 
-    const redirectTo = useCallback(
-        (url) => {
-            navigate(url, {
-                state: {
-                    from: pathname,
-                },
-            })
-        },
-        [navigate, pathname]
-    )
     const menuBtnRef = useRef()
     const [menuOpen, setMenuOpen] = useState(false)
     const handleClose = useCallback(() => {
@@ -66,6 +57,8 @@ const DashboardLayout = ({ children }) => {
         setMenuOpen(true)
     }, [])
     const { user } = useAuth()
+    const sp = new URLSearchParams()
+    sp.set('date', format(new Date(), 'dd/MM/yy'))
 
     const handelLogout = useCallback(() => {
         if (isUserLoggedIn) {
@@ -131,7 +124,7 @@ const DashboardLayout = ({ children }) => {
                             button
                             component={Link}
                             key={index}
-                            to={item.link}
+                            to={item.link == ATTENDANCE_ROUTE ? `${item.link}?${sp.toString()}` : item.link}
                         >
                             {/* <ListItemIcon>{item.icon}</ListItemIcon> */}
                             {item.label}

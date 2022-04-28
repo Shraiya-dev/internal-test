@@ -40,6 +40,7 @@ import BookingById from './pages/Bookings/BookingById'
 import { BookingProvider } from './providers/BookingProvider'
 import { SnackbarProvider } from './providers/SnackbarProvider'
 import CreateBookings from './pages/Bookings/CreateBookings'
+import { LoaderProvider } from './providers/LoaderProvider'
 
 // const theme = createTheme({
 // 	palette: {
@@ -68,16 +69,16 @@ const lightTheme = createTheme({
                 elevation: 0,
             },
         },
-        MuiOutlinedInput: {
-            styleOverrides: {
-                input: {
-                    padding: '0px',
-                },
-                root: {
-                    padding: '14px',
-                },
-            },
-        },
+        // MuiOutlinedInput: {
+        //     styleOverrides: {
+        //         input: {
+        //             padding: '0px',
+        //         },
+        //         root: {
+        //             padding: '14px',
+        //         },
+        //     },
+        // },
         MuiButton: {
             styleOverrides: {
                 root: {
@@ -95,10 +96,11 @@ function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={lightTheme}>
-                <SnackbarProvider>
-                    <div className="App">
-                        <Routes>
-                            {/* <Route
+                <LoaderProvider>
+                    <SnackbarProvider>
+                        <div className="App">
+                            <Routes>
+                                {/* <Route
               path="/"
               element={
                 <PrivateRoute>
@@ -106,125 +108,125 @@ function App() {
                 </PrivateRoute>
               }
             /> */}
-                            <Route
-                                path="/"
-                                element={
-                                    <PrivateRoute>
-                                        <CustomerBookings />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={BOOKINGS_ATTENDANCE_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <Attendance />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={REWARD_PENALTIES_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <RewardAndPenalty />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={ADD_PARTNER_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <Partner />
-                                    </PrivateRoute>
-                                }
-                            />
+                                <Route
+                                    path="/"
+                                    element={
+                                        <PrivateRoute>
+                                            <CustomerBookings />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={BOOKINGS_ATTENDANCE_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <Attendance />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={REWARD_PENALTIES_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <RewardAndPenalty />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={ADD_PARTNER_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <Partner />
+                                        </PrivateRoute>
+                                    }
+                                />
 
-                            <Route
-                                path={WORKER_INFO_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <WorkerInfoTable />
-                                    </PrivateRoute>
-                                }
-                            />
+                                <Route
+                                    path={WORKER_INFO_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <WorkerInfoTable />
+                                        </PrivateRoute>
+                                    }
+                                />
 
-                            <Route
-                                path={WORKER_INFO_BY_ID_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <AddEditWorkerProfile />
-                                    </PrivateRoute>
-                                }
-                            />
+                                <Route
+                                    path={WORKER_INFO_BY_ID_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <AddEditWorkerProfile />
+                                        </PrivateRoute>
+                                    }
+                                />
 
-                            <Route
-                                path={ADD_WORKER_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <AddEditWorkerProfile />
-                                    </PrivateRoute>
-                                }
-                            />
+                                <Route
+                                    path={ADD_WORKER_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <AddEditWorkerProfile />
+                                        </PrivateRoute>
+                                    }
+                                />
 
-                            <Route
-                                path={JOBCARDS_FOR_BOOKING_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <JobCards />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={ADD_WORKER_IN_BOOKING_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <AddWorkerForBooking />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE}
-                                element={
-                                    <PrivateRoute>
-                                        <CreateBookings />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={DASHBOARD_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <Dashboard />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={BOOKING_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <Bookings />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={BOOKING_BY_ID_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <BookingProvider>
-                                            <BookingById />
-                                        </BookingProvider>
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={BOOKING_BOOKINGID_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <Dashboard />
-                                    </PrivateRoute>
-                                }
-                            />
-                            {/* <Route
+                                <Route
+                                    path={JOBCARDS_FOR_BOOKING_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <JobCards />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={ADD_WORKER_IN_BOOKING_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <AddWorkerForBooking />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE}
+                                    element={
+                                        <PrivateRoute>
+                                            <CreateBookings />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={DASHBOARD_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <Dashboard />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={BOOKING_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <Bookings />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={BOOKING_BY_ID_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <BookingProvider>
+                                                <BookingById />
+                                            </BookingProvider>
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={BOOKING_BOOKINGID_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <Dashboard />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                {/* <Route
 							path="/tap"
 							element={
 								<PrivateRoute>
@@ -233,37 +235,38 @@ function App() {
 							}
 							/> */}
 
-                            <Route
-                                path=":bookingId/workers/:status"
-                                element={
-                                    <PrivateRoute>
-                                        <AllocatedWorkers />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path={ATTENDANCE_ROUTE}
-                                element={
-                                    <PrivateRoute>
-                                        <AttendanceComponent />
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route
-                                path="/profile/:workerId/:bookingId"
-                                element={
-                                    <PrivateRoute>
-                                        <WorkerProfileProvider>
-                                            <WorkerProfile />
-                                        </WorkerProfileProvider>
-                                    </PrivateRoute>
-                                }
-                            />
-                            <Route path="/login" element={<Login />} />
-                        </Routes>
-                        <ToastContainer style={{ width: '600px', maxWidth: '100%' }} />
-                    </div>
-                </SnackbarProvider>
+                                <Route
+                                    path=":bookingId/workers/:status"
+                                    element={
+                                        <PrivateRoute>
+                                            <AllocatedWorkers />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={ATTENDANCE_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <AttendanceComponent />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/profile/:workerId/:bookingId"
+                                    element={
+                                        <PrivateRoute>
+                                            <WorkerProfileProvider>
+                                                <WorkerProfile />
+                                            </WorkerProfileProvider>
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route path="/login" element={<Login />} />
+                            </Routes>
+                            <ToastContainer style={{ width: '600px', maxWidth: '100%' }} />
+                        </div>
+                    </SnackbarProvider>
+                </LoaderProvider>
             </ThemeProvider>
         </QueryClientProvider>
     )

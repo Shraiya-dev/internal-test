@@ -1,6 +1,9 @@
 import { Button, Dialog, Paper, Select, Stack, TextField, Typography } from '@mui/material'
+import axios from 'axios'
 import { useFormik } from 'formik'
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect } from 'react'
+import { getBackendUrl } from '../../api'
+import { useSnackbar } from '../../providers/SnackbarProvider'
 import { checkError } from '../../utils/formikValidate'
 import { getSelectOptions } from '../../utils/InputHelpers'
 const reasonOption = [
@@ -11,29 +14,46 @@ const reasonOption = [
     { label: 'Customer Termination', value: 'CUSTOMER_TERMINATION' },
     { label: 'Other', value: 'OTHERS' },
 ]
+const SERVER_URL = getBackendUrl()
 const EmploymentCompleteDialog = ({ open = false, workerCard, setOpen, confirm }) => {
     const handelClose = useCallback(() => {
         setOpen()
         form.resetForm()
     }, [setOpen])
-    const onSubmit = useCallback(
-        async (values) => {
-            confirm(workerCard, values)
+    const { showSnackbar } = useSnackbar()
+    const [completionReason, setCompletionReason] = useState([{ label: 'Select Completion code', value: 'none' }])
+    const [partialCompletionReason, setPartialCompletionReason] = useState([
+        { label: 'Select Partial Completion reason', value: 'none' },
+    ])
 
+    const onSubmit = useCallback(
+        async (values, fh) => {
+            confirm(workerCard, values)
             handelClose()
         },
         [workerCard, handelClose]
     )
     const form = useFormik({
         initialValues: {
-            reason: 'none',
-            otherReason: '',
+            completionCode: 'none',
+            partialCompletionReason: 'none',
+            description: '',
         },
         validate: (values) => {
             const errors = {}
-            if (values.reason === 'none') {
-                errors.reason = 'Reason is required field!'
+            if (values.completionCode === 'none') {
+                errors.completionCode = 'Completion Code is required '
             }
+            if (
+                !['TENURE_COMPLETE', 'none'].includes(values.completionCode) &&
+                values.partialCompletionReason === 'none'
+            ) {
+                errors.partialCompletionReason = 'partialCompletionReason Code is required '
+            }
+            if (values.partialCompletionReason === 'OTHERS' && values.description === '') {
+                errors.description = 'Reason required'
+            }
+
             return errors
         },
         onSubmit: onSubmit,
@@ -45,6 +65,49 @@ const EmploymentCompleteDialog = ({ open = false, workerCard, setOpen, confirm }
         },
         [form]
     )
+    useEffect(async () => {
+        try {
+            const { status, data } = await axios.get(`${SERVER_URL}/gateway/metadata/employee/completion-codes`)
+
+            setCompletionReason([
+                { label: 'Select Completion code', value: 'none' },
+                ...data?.payload?.employmentCompletionCodes?.map((item) => ({
+                    label: item.employmentCompletionCode,
+                    value: item.employmentCompletionCode,
+                })),
+            ])
+        } catch (error) {
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
+        }
+    }, [])
+    useEffect(async () => {
+        form.setFieldValue('partialCompletionReason', 'none')
+        setPartialCompletionReason([{ label: 'Select Completion code', value: 'none' }])
+        if (['TENURE_COMPLETE', 'none'].includes(form.values.completionCode)) return
+        try {
+            const sp = new URLSearchParams()
+            sp.set('completionCode', form.values.completionCode)
+            const { status, data } = await axios.get(
+                `${SERVER_URL}/gateway/metadata/employee/partial-completion-reasons?` + sp
+            )
+
+            setPartialCompletionReason([
+                { label: 'Select Completion code', value: 'none' },
+                ...data?.payload.partialCompletionReasons?.map((item) => ({
+                    label: item.partialCompletionReason,
+                    value: item.partialCompletionReason,
+                })),
+            ])
+        } catch (error) {
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
+        }
+    }, [form.values.completionCode])
 
     return (
         <Dialog open={open} onClose={handelClose}>
@@ -58,26 +121,36 @@ const EmploymentCompleteDialog = ({ open = false, workerCard, setOpen, confirm }
                     <Stack spacing={2}>
                         <Typography variant="h5">Complete Employment</Typography>
                         <Select
-                            value={form.values.reason}
-                            name="reason"
+                            value={form.values.completionCode}
+                            name="completionCode"
                             onChange={form.handleChange}
                             onBlur={form.handleBlur}
-                            error={!!isError('reason')}
+                            error={!!isError('completionCode')}
                         >
-                            {getSelectOptions(reasonOption)}
+                            {getSelectOptions(completionReason)}
                         </Select>
-                        {form.values.reason === 'OTHERS' && (
-                            <TextField
-                                name="other"
-                                value={form.values.other}
-                                error={!!isError('other')}
+                        {!['TENURE_COMPLETE', 'none'].includes(form.values.completionCode) && (
+                            <Select
+                                value={form.values.partialCompletionReason}
+                                name="partialCompletionReason"
                                 onChange={form.handleChange}
                                 onBlur={form.handleBlur}
-                                multiline
-                                minRows={4}
-                                placeholder="Description"
-                            />
+                                error={!!isError('partialCompletionReason')}
+                            >
+                                {getSelectOptions(partialCompletionReason)}
+                            </Select>
                         )}
+                        <TextField
+                            name="description"
+                            value={form.values.description}
+                            error={!!isError('description')}
+                            onChange={form.handleChange}
+                            onBlur={form.handleBlur}
+                            helperText={isError('description')}
+                            multiline
+                            minRows={4}
+                            placeholder="Description"
+                        />
                     </Stack>
                     <Stack pt={2} direction="row" justifyContent="flex-end" spacing={2}>
                         <Button onClick={handelClose} variant="outlined">

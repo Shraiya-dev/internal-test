@@ -46,6 +46,7 @@ const statusValue = [
 
 export default function DataTable() {
     const { checkError, form, response, isLoading, downloadWorkersWithFilters, isDownloading } = useWorkerInfo()
+
     const columns = [
         // { field: 'id', headerName: <h4>ID</h4>, width: 220 },
 

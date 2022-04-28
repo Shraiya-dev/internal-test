@@ -35,7 +35,7 @@ export const FileInput = ({ id, icon, label, disabled, variant, color, className
         >
             {label}
             <label className={classes.hide} ref={labelRef} htmlFor={id}></label>
-            <input className={classes.hide} id={id} type="file" {...props} />
+            <input  className={classes.hide} id={id} type="file" {...props} />
         </Button>
     )
 }
