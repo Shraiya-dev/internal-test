@@ -14,10 +14,10 @@ import {
     Tabs,
     Typography,
 } from '@mui/material'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
-import { PopAlert } from '../../components/Snackbar'
 import { CTAMap } from '../../utils/ctaHelpers'
+import { capitalize } from '../../utils/stringHelpers'
 import AddWorkerDialog from '../jobCards/AddWorkerDialog'
 import { CancelJobCardConfirmationDialog } from './CancelJobCardCOnfirmationDialoag'
 import EmploymentCompleteDialog from './EmploymentCompleteDialog'
@@ -133,6 +133,8 @@ const JobCards = (booking) => {
                                                         <TableCell>Name</TableCell>
                                                         <TableCell>Phone Number</TableCell>
                                                         <TableCell>City</TableCell>
+                                                        <TableCell>Availability</TableCell>
+                                                        <TableCell>Created At</TableCell>
                                                         <TableCell align="center"></TableCell>
                                                     </TableRow>
                                                 </TableHead>
@@ -142,6 +144,19 @@ const JobCards = (booking) => {
                                                             <TableCell>{workerCard.name}</TableCell>
                                                             <TableCell>{workerCard.phoneNumber}</TableCell>
                                                             <TableCell>{workerCard.city}</TableCell>
+                                                            <TableCell>
+                                                                {workerCard.availability
+                                                                    ? capitalize(
+                                                                          workerCard.availability
+                                                                              .split('_')
+                                                                              .join(' ')
+                                                                              .toLowerCase()
+                                                                      )
+                                                                    : ''}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {workerCard.createdAt ? workerCard.createdAt : ''}
+                                                            </TableCell>
                                                             <TableCell align="right">
                                                                 {allowedTabs && (
                                                                     <Box>
