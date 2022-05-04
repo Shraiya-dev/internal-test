@@ -7,7 +7,7 @@ import { getBackendUrl } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 const SERVER_URL = getBackendUrl()
 
-const useEditAttendanceDialog = (data, onClose) => {
+const useEditAttendanceDialog = (data, onClose, field) => {
     const [sp, setSp] = useSearchParams()
     const { showSnackbar } = useSnackbar()
 
@@ -21,6 +21,12 @@ const useEditAttendanceDialog = (data, onClose) => {
                     attendanceType: 'clock_in',
                     checkInTime: values.checkedInTime ? format(values.checkedInTime, 'hh:mm a').toLowerCase() : null,
                     checkOutTime: values.checkedOutTime ? format(values.checkedOutTime, 'hh:mm a').toLowerCase() : null,
+                    otCheckInTime: values.otCheckedInTime
+                        ? format(values.otCheckedInTime, 'hh:mm a').toLowerCase()
+                        : null,
+                    otCheckOutTime: values.otCheckedOutTime
+                        ? format(values.otCheckedOutTime, 'hh:mm a').toLowerCase()
+                        : null,
                 })
                 showSnackbar({
                     msg: 'Updated Attendance Successfully',
@@ -47,6 +53,12 @@ const useEditAttendanceDialog = (data, onClose) => {
                     date: sp.get('date'),
                     checkInTime: values.checkedInTime ? format(values.checkedInTime, 'hh:mm a').toLowerCase() : null,
                     checkOutTime: values.checkedOutTime ? format(values.checkedOutTime, 'hh:mm a').toLowerCase() : null,
+                    otCheckInTime: values.otCheckedInTime
+                        ? format(values.otCheckedInTime, 'hh:mm a').toLowerCase()
+                        : null,
+                    otCheckOutTime: values.otCheckedOutTime
+                        ? format(values.otCheckedOutTime, 'hh:mm a').toLowerCase()
+                        : null,
                 })
                 showSnackbar({
                     msg: 'Updated Attendance Successfully',
@@ -103,8 +115,8 @@ const useEditAttendanceDialog = (data, onClose) => {
                 msg: 'Delete Attendance Successfully',
                 sev: 'success',
             })
-            fh.resetForm()
             onClose()
+            // fh.resetForm()
         } catch (error) {
             showSnackbar({
                 msg: error.response.data.developerInfo,
@@ -112,6 +124,29 @@ const useEditAttendanceDialog = (data, onClose) => {
             })
         }
     }, [data, sp, onClose])
+
+    // delete OT functionality.
+    const deleteOT = useCallback(async () => {
+        try {
+            const payload = {
+                projectId: data?.projectId,
+                workerId: data?.workerId,
+                date: sp.get('date'),
+            }
+            const res = await axios.post(`${SERVER_URL}/admin/attendance/delete-ot`, payload)
+            showSnackbar({
+                msg: 'Delete OT Successfully',
+                sev: 'success',
+            })
+        } catch (error) {
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
+        }
+        onClose()
+    }, [data, sp, onClose])
+
     const validate = useCallback(
         (values) => {
             const errors = {}
@@ -133,7 +168,7 @@ const useEditAttendanceDialog = (data, onClose) => {
                 isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date()))
             )
             if (data && !isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date())) && !values.checkedOutTime) {
-                errors.checkedOutTime = 'Invalid checkk out time'
+                errors.checkedOutTime = 'Invalid check out time'
             }
 
             if (values.checkedOutTime && values.checkedInTime && values.checkedOutTime - values.checkedInTime < 0) {
@@ -151,9 +186,56 @@ const useEditAttendanceDialog = (data, onClose) => {
                 errors.checkedOutTime = 'Invalid check out time'
             }
 
+            // new validation
+
+            if (field === 'ot') {
+                if (!data && values.otCheckedOutTime - new Date() > 0) {
+                    errors.otCheckedOutTime = 'OT Check out time cannot be of future'
+                }
+                if (!data && values.otCheckedInTime - new Date() > 0) {
+                    errors.otCheckedInTime = 'OT Check out time cannot be of future'
+                }
+                if (!values.otCheckedInTime) {
+                    errors.otCheckedInTime = 'Invalid OT check in time'
+                }
+                if (!isValid(values.otCheckedInTime)) {
+                    errors.otCheckedInTime = 'Invalid OT check in time'
+                }
+                console.log(
+                    new Date(),
+                    parse(sp.get('date'), 'dd/MM/yy', new Date()),
+                    isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date()))
+                )
+                if (
+                    data &&
+                    !isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date())) &&
+                    !values.otCheckedOutTime
+                ) {
+                    errors.otCheckedOutTime = 'Invalid OT check out time'
+                }
+
+                if (
+                    values.otCheckedOutTime &&
+                    values.otCheckedInTime &&
+                    values.otCheckedOutTime - values.otCheckedInTime < 0
+                ) {
+                    errors.otCheckedOutTime = 'OT Check out time Cannot be before check in time'
+                }
+                if (isSameDay(parse(sp.get('date'), 'dd/MM/yy', new Date()), new Date())) {
+                    if (values.otCheckedOutTime - new Date() > 0) {
+                        errors.otCheckedOutTime = 'OT Check out time cannot be of future'
+                    }
+                    if (values.otCheckedInTime - new Date() > 0) {
+                        errors.otCheckedInTime = 'OT Check out time cannot be of future'
+                    }
+                }
+                if (data && values.otCheckedOutTime && !isValid(values.otCheckedOutTime)) {
+                    errors.otCheckedOutTime = 'Invalid OT check out time'
+                }
+            }
             return errors
         },
-        [data, sp]
+        [data, sp, field]
     )
     const onSubmit = useCallback(
         (v, fh) => {
@@ -171,6 +253,8 @@ const useEditAttendanceDialog = (data, onClose) => {
             phoneNumber: '',
             checkedInTime: null,
             checkedOutTime: null,
+            otCheckedOutTime: null,
+            otCheckedInTime: null,
         },
         validate: validate,
         onSubmit: onSubmit,
@@ -184,6 +268,14 @@ const useEditAttendanceDialog = (data, onClose) => {
         data?.checkOut
             ? form.setFieldValue('checkedOutTime', parse(data.checkOut, 'hh:mm a', new Date()))
             : form.setFieldValue('checkedOutTime', null)
+
+        data?.otCheckInTime
+            ? form.setFieldValue('otCheckedInTime', parse(data.otCheckInTime, 'hh:mm a', new Date()))
+            : form.setFieldValue('otCheckedInTime', null)
+
+        data?.otCheckOutTime
+            ? form.setFieldValue('otCheckedOutTime', parse(data.otCheckOutTime, 'hh:mm a', new Date()))
+            : form.setFieldValue('otCheckedOutTime', null)
     }, [data])
 
     const isError = useCallback(
@@ -203,8 +295,9 @@ const useEditAttendanceDialog = (data, onClose) => {
             setWorkerDetail: setWorkerDetail,
             isError: isError,
             deleteAttendance: deleteAttendance,
+            deleteOT: deleteOT,
         }),
-        [form, workerDetail, searchWorkerForm, setWorkerDetail, isError, deleteAttendance]
+        [form, workerDetail, searchWorkerForm, setWorkerDetail, isError, deleteAttendance, deleteOT]
     )
 }
 

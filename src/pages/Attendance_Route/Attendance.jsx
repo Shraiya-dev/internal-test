@@ -22,6 +22,7 @@ export const AttendanceComponent = () => {
     const [sp, setSp] = useSearchParams()
 
     const [EditAttendanceDialogProps, setEditAttendanceDialogProps] = useState({
+        field: undefined,
         open: false,
         data: undefined,
         onClose: undefined,
@@ -72,7 +73,7 @@ export const AttendanceComponent = () => {
         // },
         {
             field: 'attendance',
-            headerName: <h4>Checked In / Checked Out</h4>,
+            headerName: <h4>Check In / Check Out</h4>,
             width: 230,
             renderCell: (params) => {
                 return (
@@ -85,6 +86,41 @@ export const AttendanceComponent = () => {
                             color="primary"
                             onClick={() => {
                                 setEditAttendanceDialogProps({
+                                    field: 'attendance',
+                                    open: true,
+                                    data: params.row,
+                                    onClose: () => {
+                                        setEditAttendanceDialogProps({
+                                            open: false,
+                                            data: undefined,
+                                        }),
+                                            refreshPage()
+                                    },
+                                })
+                            }}
+                        >
+                            <Edit fontSize="inherit" />
+                        </IconButton>
+                    </Stack>
+                )
+            },
+        },
+        {
+            field: 'ot',
+            headerName: <h4> OT Check In / OT Check Out</h4>,
+            width: 280,
+            renderCell: (params) => {
+                return (
+                    <Stack sx={{ width: '100%' }} direction="row" justifyContent="space-between" alignItems={'center'}>
+                        <Typography>
+                            {params.row.otCheckInTime ?? 'NA'} / {params.row.otCheckOutTime ?? 'NA'}
+                        </Typography>
+                        <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => {
+                                setEditAttendanceDialogProps({
+                                    field: 'ot',
                                     open: true,
                                     data: params.row,
                                     onClose: () => {

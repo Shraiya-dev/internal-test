@@ -44,6 +44,25 @@ const statusValue = [
     },
 ]
 
+const skillType = [
+    {
+        value: 'none',
+        label: 'Select Skill',
+    },
+    {
+        value: 'TECHNICIAN',
+        label: 'Technician',
+    },
+    {
+        value: 'SUPERVISOR',
+        label: 'Supervisor',
+    },
+    {
+        value: 'HELPER',
+        label: 'Helper',
+    },
+]
+
 export default function DataTable() {
     const { checkError, form, response, isLoading, downloadWorkersWithFilters, isDownloading } = useWorkerInfo()
 
@@ -209,6 +228,18 @@ export default function DataTable() {
                             {getSelectOptions(JobTypeOptions)}
                         </Select>
 
+                        {/* Skill type */}
+
+                        <Select value={form.values.skillType} name="skillType" onChange={form.handleChange}>
+                            {skillType.map((item) => {
+                                return (
+                                    <MenuItem value={item.value} key={item.value}>
+                                        {item.label}
+                                    </MenuItem>
+                                )
+                            })}
+                        </Select>
+
                         <TextField
                             name="phone"
                             error={!!checkError('phone')}
@@ -256,21 +287,27 @@ export default function DataTable() {
                         LoadingOverlay: LinearProgress,
 
                         Pagination: () => (
-                            <Pagination
-                                page={sp.get('pageNumber') ? Number(sp.get('pageNumber')) : 1}
-                                hideNextButton={!hasMore}
-                                count={hasMore ? 35 : Number(sp.get('pageNumber'))}
-                                siblingCount={0}
-                                disabled={isLoading}
-                                boundaryCount={0}
-                                showFirstButton={false}
-                                showLastButton={false}
-                                color="primary"
-                                onChange={(e, page) => {
-                                    sp.set('pageNumber', page)
-                                    setSp(sp)
-                                }}
-                            />
+                            <>
+                                <Stack direction="row" alignItems="center">
+                                    Workers: {workerData.length}
+                                    <Pagination
+                                        page={sp.get('pageNumber') ? Number(sp.get('pageNumber')) : 1}
+                                        hideNextButton={!hasMore}
+                                        count={hasMore ? 35 : Number(sp.get('pageNumber'))}
+                                        siblingCount={0}
+                                        disabled={isLoading}
+                                        boundaryCount={0}
+                                        showFirstButton={false}
+                                        showLastButton={false}
+                                        color="primary"
+                                        onChange={(e, page) => {
+                                            sp.set('pageNumber', page)
+                                            setSp(sp)
+                                            document.querySelector('.MuiDataGrid-virtualScroller').scrollTop = 0
+                                        }}
+                                    />
+                                </Stack>
+                            </>
                         ),
                     }}
                     loading={isLoading}

@@ -67,6 +67,11 @@ export const useWorkerInfo = () => {
             } else {
                 sP.delete('status')
             }
+            if (values.skillType !== 'none') {
+                sP.set('skillType', values.skillType)
+            } else {
+                sP.delete('skillType')
+            }
             setSearchParams(sP, {
                 replace: true,
             })
@@ -82,6 +87,7 @@ export const useWorkerInfo = () => {
             phone: '',
             jobType: 'none',
             createdAtDate: null,
+            skillType:'none',
         },
         validate: (values) => {},
         onSubmit: onSubmit,
@@ -111,6 +117,11 @@ export const useWorkerInfo = () => {
         if (searchParams.get('status')) {
             form.setFieldValue('status', searchParams.get('status'))
         }
+        if (searchParams.get('skillType')) {
+            form.setFieldValue('skillType', searchParams.get('skillType'))
+        }
+        
+
         fetchWorkerData(searchParams)
     }, [searchParams])
 

@@ -15,15 +15,15 @@ import React from 'react'
 import { isError } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { PopAlert } from '../../components/Snackbar'
-import { getSelectOptions } from '../../utils/InputHelpers'
+// import { getSelectOptions } from '../../utils/InputHelpers'
 import useAddWorkerDialog from './hooks/useAddWorkerDialog'
 
-const skillTypeOptions = [
-    { label: 'Select Skill Type*', value: 'none' },
-    { label: 'Helper', value: 'HELPER' },
-    { label: 'Supervisor', value: 'SUPERVISOR' },
-    { label: 'Techician', value: 'TECHNICIAN' },
-]
+// const skillTypeOptions = [
+//     { label: 'Select Skill Type*', value: 'none' },
+//     { label: 'Helper', value: 'HELPER' },
+//     { label: 'Supervisor', value: 'SUPERVISOR' },
+//     { label: 'Techician', value: 'TECHNICIAN' },
+// ]
 
 const AddWorkerDialog = ({ open, setOpen, jobIdForSkillType, setReload }) => {
     const { form, workerDetail, addWorkerJobCardAsRTD, isError, sncBar, setWorkerDetail } =
@@ -52,7 +52,7 @@ const AddWorkerDialog = ({ open, setOpen, jobIdForSkillType, setReload }) => {
                             },
                         }}
                     >
-                        <Select
+                        {/* <Select
                             variant="outlined"
                             name="skillType"
                             value={form.values.skillType}
@@ -61,7 +61,7 @@ const AddWorkerDialog = ({ open, setOpen, jobIdForSkillType, setReload }) => {
                             onBlur={form.handleBlur}
                         >
                             {getSelectOptions(skillTypeOptions)}
-                        </Select>
+                        </Select> */}
                         <TextField
                             fullWidth
                             variant="outlined"
@@ -154,7 +154,7 @@ const AddWorkerDialog = ({ open, setOpen, jobIdForSkillType, setReload }) => {
                         Close
                     </Button>
                     <Button
-                        disabled={!workerDetail}
+                        // disabled={!workerDetail}
                         onClick={async () => {
                             await addWorkerJobCardAsRTD()
                             setReload(true)
@@ -162,7 +162,7 @@ const AddWorkerDialog = ({ open, setOpen, jobIdForSkillType, setReload }) => {
                         }}
                         variant="contained"
                     >
-                        Add Hero
+                        Add Hero as {workerDetail?.skillType}
                     </Button>
                 </DialogActions>
             </Dialog>

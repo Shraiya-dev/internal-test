@@ -7,10 +7,11 @@ import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useEditAttendanceDialog from './hooks/useEditAttendanceDialog'
 
-const EditAttendanceDialog = ({ open, data, onClose }) => {
-    const { form, searchWorkerForm, workerDetail, setWorkerDetail, isError, deleteAttendance } =
-        useEditAttendanceDialog(data, onClose)
+const EditAttendanceDialog = ({ open, data, onClose, field }) => {
+    const { form, searchWorkerForm, workerDetail, setWorkerDetail, isError, deleteAttendance , deleteOT} =
+        useEditAttendanceDialog(data, onClose, field)
     const [sp] = useSearchParams()
+    // console.log(field)
     return (
         <Dialog
             open={open}
@@ -81,52 +82,101 @@ const EditAttendanceDialog = ({ open, data, onClose }) => {
                                 )}
                             </>
                         )}
-                        <Stack direction={'row'} spacing={2}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DesktopTimePicker
-                                    disableOpenPicker
-                                    label="Check In Time"
-                                    value={form.values.checkedInTime}
-                                    onError={() => {
-                                        form.setFieldValue('checkedInTime', null)
-                                    }}
-                                    onChange={(date) => {
-                                        form.setFieldValue('checkedInTime', date)
-                                    }}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            name="checkedInTime"
-                                            error={!!isError('checkedInTime')}
-                                            onBlur={form.handleBlur}
-                                            helperText={isError('checkedInTime')}
-                                        />
-                                    )}
-                                />
-                            </LocalizationProvider>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DesktopTimePicker
-                                    disableOpenPicker
-                                    onError={() => {
-                                        form.setFieldValue('checkedOutTime', null)
-                                    }}
-                                    label="Check Out Time"
-                                    value={form.values.checkedOutTime}
-                                    onChange={(date) => {
-                                        form.setFieldValue('checkedOutTime', date)
-                                    }}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            error={!!isError('checkedOutTime')}
-                                            name="checkedOutTime"
-                                            onBlur={form.handleBlur}
-                                            helperText={isError('checkedOutTime')}
-                                        />
-                                    )}
-                                />
-                            </LocalizationProvider>
-                        </Stack>
+                        {field === 'ot' ? (
+                            <Stack direction={'row'} spacing={2}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DesktopTimePicker
+                                        disableOpenPicker
+                                        label="OT Check In Time"
+                                        value={form.values.otCheckedInTime}
+                                        onError={() => {
+                                            form.setFieldValue('otCheckedInTime', null)
+                                        }}
+                                        onChange={(date) => {
+                                            form.setFieldValue('otCheckedInTime', date)
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                name="otCheckedInTime"
+                                                error={!!isError('otCheckedInTime')}
+                                                onBlur={form.handleBlur}
+                                                helperText={isError('otCheckedInTime')}
+                                            />
+                                        )}
+                                    />
+                                </LocalizationProvider>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DesktopTimePicker
+                                        disableOpenPicker
+                                        onError={() => {
+                                            form.setFieldValue('otCheckedOutTime', null)
+                                        }}
+                                        label="OT Check Out Time"
+                                        value={form.values.otCheckedOutTime}
+                                        onChange={(date) => {
+                                            form.setFieldValue('otCheckedOutTime', date)
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                error={!!isError('otCheckedOutTime')}
+                                                name="otCheckedOutTime"
+                                                onBlur={form.handleBlur}
+                                                helperText={isError('otCheckedOutTime')}
+                                            />
+                                        )}
+                                    />
+                                </LocalizationProvider>
+                            </Stack>
+                        ) : (
+                            <Stack direction={'row'} spacing={2}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DesktopTimePicker
+                                        disableOpenPicker
+                                        label="Check In Time"
+                                        value={form.values.checkedInTime}
+                                        onError={() => {
+                                            form.setFieldValue('checkedInTime', null)
+                                        }}
+                                        onChange={(date) => {
+                                            form.setFieldValue('checkedInTime', date)
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                name="checkedInTime"
+                                                error={!!isError('checkedInTime')}
+                                                onBlur={form.handleBlur}
+                                                helperText={isError('checkedInTime')}
+                                            />
+                                        )}
+                                    />
+                                </LocalizationProvider>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DesktopTimePicker
+                                        disableOpenPicker
+                                        onError={() => {
+                                            form.setFieldValue('checkedOutTime', null)
+                                        }}
+                                        label="Check Out Time"
+                                        value={form.values.checkedOutTime}
+                                        onChange={(date) => {
+                                            form.setFieldValue('checkedOutTime', date)
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                error={!!isError('checkedOutTime')}
+                                                name="checkedOutTime"
+                                                onBlur={form.handleBlur}
+                                                helperText={isError('checkedOutTime')}
+                                            />
+                                        )}
+                                    />
+                                </LocalizationProvider>
+                            </Stack>
+                        )}
                         <Stack direction="row-reverse" justifyContent="space-between">
                             <Stack direction={'row'} justifyContent="end" spacing={1}>
                                 <Button
@@ -148,9 +198,14 @@ const EditAttendanceDialog = ({ open, data, onClose }) => {
                                     Save
                                 </Button>
                             </Stack>
-                            {data && (
+                            {data && field !== 'ot' && (
                                 <Button color="error" variant="outlined" onClick={deleteAttendance}>
                                     Delete Attendance
+                                </Button>
+                            )}
+                            {data && field === 'ot' && (
+                                <Button color="error" variant="outlined" onClick={deleteOT}>
+                                    Delete OT
                                 </Button>
                             )}
                         </Stack>
