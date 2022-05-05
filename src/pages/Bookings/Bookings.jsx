@@ -3,6 +3,7 @@ import { Box, Button, Grid, LinearProgress, Typography, MenuItem, Paper, Select,
 import React from 'react'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert } from '../../components/Snackbar'
+import { JobTypeOptions } from '../../utils/optionHelpers'
 import { StatusCard } from '../CustomerBookings/components/StatusCard'
 import BookingCard from './BookingCard'
 import { useBooking } from './hooks/useBooking'
@@ -50,6 +51,26 @@ const Bookings = () => {
                                     )
                                 })}
                             </Select>
+                            <Select
+                                variant="outlined"
+                                sx={{
+                                    width: '200px',
+                                    marginRight: 2,
+                                }}
+                                value={form.values.jobType}
+                                onChange={(e) => {
+                                    form.setFieldValue('jobType', e.target.value)
+                                }}
+                            >
+                                <MenuItem value={'none'}>Select Job Type</MenuItem>
+                                {JobTypeOptions.map((opt) => {
+                                    return (
+                                        <MenuItem key={opt.value} value={opt.value}>
+                                            {opt.label}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
                             <TextField
                                 name="customerNumber"
                                 error={!!checkError('customerNumber')}
@@ -76,6 +97,7 @@ const Bookings = () => {
                                 variant="outlined"
                                 label="Booking Id"
                             />
+
                             <Button type="submit" color="primary" startIcon={<Search />} variant="contained">
                                 search
                             </Button>

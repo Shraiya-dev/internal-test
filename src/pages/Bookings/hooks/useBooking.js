@@ -35,6 +35,7 @@ export const useBooking = () => {
     const form = useFormik({
         initialValues: {
             bookingStatus: 'none',
+            jobType: 'none',
             customerNumber: '',
             bookingId: '',
         },
@@ -50,6 +51,7 @@ export const useBooking = () => {
             values.bookingStatus !== 'none'
                 ? serachP.set('status', values.bookingStatus)
                 : searchParams.delete('status')
+            values.jobType !== 'none' ? serachP.set('jobType', values.jobType) : searchParams.delete('jobType')
             values.bookingId ? serachP.set('bookingId', values.bookingId) : searchParams.delete('bookingId')
 
             setSearchParams(serachP, {
@@ -58,33 +60,42 @@ export const useBooking = () => {
             fetchBookingForPhoneNumber(
                 serachP.get('phoneNumber'),
                 serachP.get('status'),
-                serachP.get('bookingId')
+                serachP.get('bookingId'),
+                searchP.get('jobType')
             )
-            
         },
     })
     useEffect(() => {
-        if (searchParams.get('phoneNumber') || searchParams.get('status') || searchParams.get('bookingId') || reload) {
+        if (
+            searchParams.get('phoneNumber') ||
+            searchParams.get('status') ||
+            searchParams.get('bookingId') ||
+            searchParams.get('jobType') ||
+            reload
+        ) {
             form.setValues({
                 bookingStatus: searchParams.get('status') || 'none',
                 customerNumber: searchParams.get('phoneNumber') || '',
                 bookingId: searchParams.get('bookingId') || '',
+                jobType: searchParams.get('jobType') || 'none',
             })
             fetchBookingForPhoneNumber(
                 searchParams.get('phoneNumber'),
                 searchParams.get('status'),
-                searchParams.get('bookingId')
+                searchParams.get('bookingId'),
+                searchParams.get('jobType')
             )
         }
     }, [searchParams, reload])
 
-    const fetchBookingForPhoneNumber = useCallback(async (phoneNumber, bookingStatus, bookingId) => {
+    const fetchBookingForPhoneNumber = useCallback(async (phoneNumber, bookingStatus, bookingId, jobType) => {
         setIsLoading(true)
         try {
             const serachP = new URLSearchParams()
             phoneNumber && serachP.set('phoneNumber', '+91' + phoneNumber)
             bookingStatus && serachP.set('status', bookingStatus)
             bookingId && serachP.set('bookingId', bookingId)
+            jobType && serachP.set('jobType', jobType)
 
             const { data, status } = await axios.get(`${SERVER_URL}/admin/bookings?${serachP.toString()}`)
             setBookings(data?.payload?.response?.bookings)

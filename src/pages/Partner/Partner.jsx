@@ -47,6 +47,7 @@ const Partner = () => {
             const serachP = new URLSearchParams()
             values.phoneNumber ? serachP.set('phoneNumber', values.phoneNumber) : searchParams.delete('phoneNumber')
             values.name !== '' ? serachP.set('name', values.name) : searchParams.delete('name')
+            serachP.delete('pageNumber')
 
             setSearchParams(serachP, {
                 replace: true,
@@ -173,7 +174,7 @@ const Partner = () => {
                                 variant="outlined"
                                 label="Phone Number"
                                 name="phoneNumber"
-                                type= 'tel'
+                                type="tel"
                                 value={form.values.phoneNumber}
                                 onChange={(e) => {
                                     if (e.target.value.length <= 10 && !Number.isNaN(Number(e.target.value))) {
@@ -211,21 +212,27 @@ const Partner = () => {
                         components={{
                             LoadingOverlay: LinearProgress,
                             Pagination: () => (
-                                <Pagination
-                                    page={searchParams.get('pageNumber') ? Number(searchParams.get('pageNumber')) : 1}
-                                    hideNextButton={!hasMore}
-                                    count={hasMore ? 20 : Number(searchParams.get('pageNumber'))}
-                                    siblingCount={0}
-                                    disabled={isLoading}
-                                    boundaryCount={0}
-                                    showFirstButton={false}
-                                    showLastButton={false}
-                                    color="primary"
-                                    onChange={(e, page) => {
-                                        searchParams.set('pageNumber', page)
-                                        setSearchParams(searchParams)
-                                    }}
-                                />
+                                <Stack direction="row" alignItems="center">
+                                    Partners: {data.length}
+                                    <Pagination
+                                        page={
+                                            searchParams.get('pageNumber') ? Number(searchParams.get('pageNumber')) : 1
+                                        }
+                                        hideNextButton={!hasMore}
+                                        count={hasMore ? 35 : Number(searchParams.get('pageNumber'))}
+                                        siblingCount={0}
+                                        disabled={isLoading}
+                                        boundaryCount={0}
+                                        showFirstButton={false}
+                                        showLastButton={false}
+                                        color="primary"
+                                        onChange={(e, page) => {
+                                            searchParams.set('pageNumber', page)
+                                            setSearchParams(searchParams)
+                                            document.querySelector('.MuiDataGrid-virtualScroller').scrollTop = 0
+                                        }}
+                                    />
+                                </Stack>
                             ),
                         }}
                         loading={isLoading}

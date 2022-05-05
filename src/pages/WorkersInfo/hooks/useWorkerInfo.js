@@ -87,7 +87,7 @@ export const useWorkerInfo = () => {
             phone: '',
             jobType: 'none',
             createdAtDate: null,
-            skillType:'none',
+            skillType: 'none',
         },
         validate: (values) => {},
         onSubmit: onSubmit,
@@ -120,7 +120,7 @@ export const useWorkerInfo = () => {
         if (searchParams.get('skillType')) {
             form.setFieldValue('skillType', searchParams.get('skillType'))
         }
-        
+        searchParams.delete('pageNumber')
 
         fetchWorkerData(searchParams)
     }, [searchParams])

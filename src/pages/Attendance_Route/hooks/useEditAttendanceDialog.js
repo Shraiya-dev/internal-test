@@ -65,7 +65,6 @@ const useEditAttendanceDialog = (data, onClose, field) => {
                     sev: 'success',
                 })
                 fh.resetForm()
-                debugger
                 onClose()
             } catch (error) {
                 showSnackbar({

@@ -26,6 +26,7 @@ const BookingById = () => {
         markAsDeployed,
         startProject,
         timer,
+        cancelBooking,
     } = useBooking()
     const [confirmDialogProps, setConfirmDialogProps] = useState({
         content: '',
@@ -77,7 +78,32 @@ const BookingById = () => {
                             </Stack>
                         </Stack>
                         <Stack justifyContent="flex-end" alignItems="flex-end">
-                            <Stack direction="row" justifyContent="flex-end">
+                            <Stack direction="row" justifyContent="flex-end" spacing={2}>
+                                {allowedActions?.cancel && (
+                                    <Button
+                                        variant="outlined"
+                                        sx={{
+                                            height: 48,
+                                        }}
+                                        onClick={() =>
+                                            setConfirmDialogProps({
+                                                open: true,
+                                                content: (
+                                                    <>
+                                                        This action will<strong> Cancel </strong>this booking?
+                                                    </>
+                                                ),
+                                                cancel: closeDialog,
+                                                confirm: () => {
+                                                    cancelBooking()
+                                                    closeDialog()
+                                                },
+                                            })
+                                        }
+                                    >
+                                        Cancel Booking
+                                    </Button>
+                                )}
                                 {allowedActions?.confirm && (
                                     <Button
                                         variant="contained"

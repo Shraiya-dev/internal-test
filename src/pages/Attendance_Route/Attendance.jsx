@@ -312,21 +312,25 @@ export const AttendanceComponent = () => {
                             LoadingOverlay: LinearProgress,
 
                             Pagination: () => (
-                                <Pagination
-                                    page={sp.get('pageNumber') ? Number(sp.get('pageNumber')) : 1}
-                                    hideNextButton={!hasMore}
-                                    count={hasMore ? 35 : Number(sp.get('pageNumber'))}
-                                    siblingCount={0}
-                                    disabled={isLoading}
-                                    boundaryCount={0}
-                                    showFirstButton={false}
-                                    showLastButton={false}
-                                    color="primary"
-                                    onChange={(e, page) => {
-                                        sp.set('pageNumber', page)
-                                        setSp(sp)
-                                    }}
-                                />
+                                <Stack direction="row" alignItems="center">
+                                    Workers: {workerData.length}
+                                    <Pagination
+                                        page={sp.get('pageNumber') ? Number(sp.get('pageNumber')) : 1}
+                                        hideNextButton={!hasMore}
+                                        count={hasMore ? 35 : Number(sp.get('pageNumber'))}
+                                        siblingCount={0}
+                                        disabled={isLoading}
+                                        boundaryCount={0}
+                                        showFirstButton={false}
+                                        showLastButton={false}
+                                        color="primary"
+                                        onChange={(e, page) => {
+                                            sp.set('pageNumber', page)
+                                            setSp(sp)
+                                            document.querySelector('.MuiDataGrid-virtualScroller').scrollTop = 0
+                                        }}
+                                    />
+                                </Stack>
                             ),
                         }}
                         loading={isLoading}

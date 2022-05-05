@@ -98,6 +98,24 @@ const BookingProvider = ({ children }) => {
             clearInterval(x)
         }
     }, [booking])
+    const cancelBooking = useCallback(async () => {
+        try {
+            const { status } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/cancel`)
+            if (status === 200) {
+                showSnackbar({
+                    msg: 'Successfully Canceled booking',
+                    sev: 'success',
+                })
+                navigate('/bookings')
+            }
+        } catch (error) {
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
+        }
+    }, [])
+
     const confirmBooking = useCallback(async () => {
         showLoader(true)
         try {
@@ -261,6 +279,7 @@ const BookingProvider = ({ children }) => {
             markAsDeployed: markAsDeployed,
             startProject: startProject,
             timer: timer,
+            cancelBooking: cancelBooking,
         }),
         [
             booking,
@@ -273,6 +292,7 @@ const BookingProvider = ({ children }) => {
             markAsRTD,
             markAsDeployed,
             startProject,
+            cancelBooking,
             timer,
         ]
     )

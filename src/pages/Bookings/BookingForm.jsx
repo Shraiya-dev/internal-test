@@ -29,6 +29,7 @@ import { useSnackbar } from '../../providers/SnackbarProvider'
 import { CTAMap } from '../../utils/ctaHelpers'
 import { cities, states } from '../../utils/data'
 import { getSelectOptions } from '../../utils/InputHelpers'
+import { getTimeOptions } from '../../utils/timeOptions'
 import { bookingDurations } from './BookingDetails'
 import { days, JobTypeOptions, overTimeBufferTypeOptions, shiftTimingOptions, tags } from './hooks/helpers'
 import { useBookingForm } from './hooks/useBookingForm'
@@ -114,7 +115,7 @@ const BookingForm = () => {
                 <Typography variant="h6" mb={2}>
                     Customer Provided Details
                 </Typography>
-                <Grid container spacing={2} item xs={12} md={8} lg={6}>
+                <Grid container spacing={2} item xs={12} md={7}>
                     <Grid item xs={12}>
                         <Stack>
                             <InputLabel>Job Type</InputLabel>
@@ -236,22 +237,37 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                     </Grid>
-                    <Grid item xs={6}>
-                        <InputLabel>Shift Timing *</InputLabel>
+                    <Grid item xs={4}>
+                        <InputLabel>Shift Start Timing *</InputLabel>
                         <Select
                             fullWidth
-                            name="shiftTime"
                             disabled={formDisabled}
-                            value={form.values.shiftTime}
+                            variant="outlined"
+                            name={'shiftStartTime'}
+                            value={form.values.shiftStartTime}
+                            error={!!checkError('shiftStartTime')}
                             onChange={form.handleChange}
                             onBlur={form.handleBlur}
-                            error={!!checkError('shiftTime')}
-                            variant="outlined"
                         >
-                            {getSelectOptions(shiftTimingOptions)}
+                            {getSelectOptions([{ label: 'Select Start Time', value: 'none' }, ...getTimeOptions('am')])}
                         </Select>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>
+                        <InputLabel>Shift End Timing *</InputLabel>
+                        <Select
+                            fullWidth
+                            disabled={formDisabled}
+                            variant="outlined"
+                            name={'shiftEndTime'}
+                            value={form.values.shiftEndTime}
+                            error={!!checkError('shiftEndTime')}
+                            onChange={form.handleChange}
+                            onBlur={form.handleBlur}
+                        >
+                            {getSelectOptions([{ label: 'Select End Time', value: 'none' }, ...getTimeOptions('pm')])}
+                        </Select>
+                    </Grid>
+                    <Grid item xs={4}>
                         <InputLabel>Start Date *</InputLabel>
                         <TextField
                             fullWidth

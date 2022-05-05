@@ -40,6 +40,8 @@ export const useBookingForm = () => {
                     bookingDuration: values.durationType,
                     startDate: values.startDate,
                     shiftTime: values.shiftTime,
+                    shiftStartTime: values.shiftStartTime,
+                    shiftEndTime: values.shiftEndTime,
                 },
                 peopleRequired: {
                     SUPERVISOR: Number(values.qtySupervisor),
@@ -122,6 +124,8 @@ export const useBookingForm = () => {
             state: 'none',
             city: 'none',
             shiftTime: 'none',
+            shiftStartTime: 'none',
+            shiftEndTime: 'none',
             wageHelper: '',
             wageSupervisor: '',
             wageTechnition: '',
@@ -163,9 +167,7 @@ export const useBookingForm = () => {
             if (values.city === 'none') {
                 errors.city = true
             }
-            if (values.shiftTime === 'none') {
-                errors.shiftTime = true
-            }
+
             if (Number(values.qtyHelper) !== 0 && values.wageHelper === '') {
                 errors.wageHelper = true
             }
@@ -244,8 +246,10 @@ export const useBookingForm = () => {
                 phoneNumber: booking?.phoneNumber ?? 'none',
                 wageHelper: booking?.rateCard?.HELPER ?? '',
                 wageSupervisor: booking?.rateCard?.SUPERVISOR ?? '',
+                shiftStartTime: booking?.schedule?.shiftStartTime ?? 'none',
+                shiftEndTime: booking?.schedule?.shiftEndTime ?? 'none',
                 wageTechnition: booking?.rateCard?.TECHNICIAN ?? '',
-                overTimeRate: booking?.overTime?.rate ?? 0,
+                overTimeRate: booking?.overTime?.rate ?? 'none',
                 overTimeBuffer: booking?.overTime?.buffer ?? 30,
                 overTimeBufferType: booking?.overTime?.bufferType ?? 'minutes',
                 holidayDays: booking?.holidayDays ?? [],

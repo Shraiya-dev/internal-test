@@ -43,7 +43,7 @@ const useAttendance = () => {
             } else {
                 sP.set('date', format(new Date(), 'dd/MM/yy'))
             }
-
+            sP.delete('pageNumber')
             setSearchParams(sP, {
                 replace: true,
             })
