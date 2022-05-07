@@ -118,6 +118,7 @@ export const AttendanceComponent = () => {
                         <IconButton
                             size="small"
                             color="primary"
+                            disabled={!(params.row.checkIn && params.row.checkOut)}
                             onClick={() => {
                                 setEditAttendanceDialogProps({
                                     field: 'ot',

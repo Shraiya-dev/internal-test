@@ -72,6 +72,7 @@ export const useWorkerInfo = () => {
             } else {
                 sP.delete('skillType')
             }
+            sP.delete('pageNumber')
             setSearchParams(sP, {
                 replace: true,
             })
@@ -120,7 +121,6 @@ export const useWorkerInfo = () => {
         if (searchParams.get('skillType')) {
             form.setFieldValue('skillType', searchParams.get('skillType'))
         }
-        searchParams.delete('pageNumber')
 
         fetchWorkerData(searchParams)
     }, [searchParams])

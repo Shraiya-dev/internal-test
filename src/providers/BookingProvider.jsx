@@ -100,7 +100,7 @@ const BookingProvider = ({ children }) => {
     }, [booking])
     const cancelBooking = useCallback(async () => {
         try {
-            const { status } = await axios.put(`${SERVER_URL}/admin/bookings/${bookingId}/cancel`)
+            const { status } = await axios.put(`${SERVER_URL}/gateway/admin-api/bookings/${bookingId}/cancel`)
             if (status === 200) {
                 showSnackbar({
                     msg: 'Successfully Canceled booking',
