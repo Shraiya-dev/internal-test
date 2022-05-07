@@ -3,7 +3,7 @@ export const CTAMap = {
         actions: {
             view: true,
             edit: true,
-            // cancel: true,
+            cancel: true,
             confirm: true,
         },
     },

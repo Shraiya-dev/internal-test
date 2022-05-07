@@ -51,7 +51,7 @@ const Bookings = () => {
                                     )
                                 })}
                             </Select>
-                            {/* <Select
+                            <Select
                                 variant="outlined"
                                 sx={{
                                     width: '200px',
@@ -70,7 +70,7 @@ const Bookings = () => {
                                         </MenuItem>
                                     )
                                 })}
-                            </Select> */}
+                            </Select>
                             <TextField
                                 name="customerNumber"
                                 error={!!checkError('customerNumber')}
