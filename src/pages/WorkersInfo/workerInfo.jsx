@@ -121,7 +121,7 @@ export default function DataTable() {
         {
             field: 'onboardingDetails?.type',
             headerName: <h4>Onboarding Channel</h4>,
-            width: 150,
+            width: 200,
             renderCell: (params) => {
                 return params?.row?.onboardingDetails?.type ?? ''
             },
