@@ -118,7 +118,19 @@ export default function DataTable() {
                 </Link>
             ),
         },
-        { field: 'state', headerName: <h4>State</h4>, width: 150 },
+        {
+            field: 'onboardingDetails?.type',
+            headerName: <h4>Onboarding Channel</h4>,
+            width: 150,
+            renderCell: (params) => {
+                return params?.row?.onboardingDetails?.type ?? ''
+            },
+        },
+        {
+            field: 'state',
+            headerName: <h4>State</h4>,
+            width: 150,
+        },
         {
             field: 'city',
             headerName: <h4>City</h4>,

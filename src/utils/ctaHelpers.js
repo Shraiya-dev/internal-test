@@ -5,17 +5,20 @@ export const CTAMap = {
             edit: true,
             cancel: true,
             confirm: true,
+            duplicate: true,
         },
     },
     CONFIRMED: {
         actions: {
             view: true,
             startAllocation: true,
+            duplicate: true,
         },
     },
     ALLOCATION_PENDING: {
         actions: {
             view: true,
+            duplicate: true,
         },
     },
     ALLOCATION_IN_PROGRESS: {
@@ -43,6 +46,7 @@ export const CTAMap = {
             view: true,
             jobCards: true,
             closeAllocation: true,
+            duplicate: true,
         },
     },
     ALLOCATION_CLOSED: {
@@ -70,6 +74,7 @@ export const CTAMap = {
             view: true,
             jobCards: true,
             rtd: true,
+            duplicate: true,
         },
     },
     READY_TO_DEPLOY: {
@@ -90,6 +95,7 @@ export const CTAMap = {
             view: true,
             jobCards: true,
             deploy: true,
+            duplicate: true,
         },
     },
     DEPLOYED: {
@@ -107,6 +113,7 @@ export const CTAMap = {
             view: true,
             attendance: true,
             startProject: true,
+            duplicate: true,
         },
     },
 }

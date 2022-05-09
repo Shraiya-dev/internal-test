@@ -3,7 +3,7 @@ import { KeyboardBackspace } from '@mui/icons-material'
 import { Button, Chip, IconButton, Paper, Stack, Tab, Tabs, Typography } from '@mui/material'
 import { add, getUnixTime } from 'date-fns'
 import { useCallback, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTimer } from 'react-timer-hook'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
@@ -27,6 +27,7 @@ const BookingById = () => {
         startProject,
         timer,
         cancelBooking,
+        createDuplicateBookings,
     } = useBooking()
     const [confirmDialogProps, setConfirmDialogProps] = useState({
         content: '',
@@ -34,7 +35,6 @@ const BookingById = () => {
         cancel: () => {},
         confirm: () => {},
     })
-
     const allowedActions = useMemo(() => CTAMap[booking?.status]?.actions, [booking])
     const closeDialog = useCallback(() => {
         setConfirmDialogProps({})
@@ -71,6 +71,23 @@ const BookingById = () => {
                                         .map((item) => capitalize(item))
                                         .join(' ')}
                                     <Chip sx={{ ml: 2 }} label={booking?.status} />
+                                    {booking?.parentBookingId && (
+                                        <Chip
+                                            sx={{ ml: 2 }}
+                                            label={
+                                                <>
+                                                    Parent Booking:
+                                                    <Link to={`/bookings/${booking?.parentBookingId}`}>
+                                                        <Typography sx={{
+                                                            textDecoration:'underline'
+                                                        }}  variant='caption' component='span' color="primary.main"    >
+                                                            {booking?.parentBookingId}
+                                                        </Typography>
+                                                    </Link>
+                                                </>
+                                            }
+                                        />
+                                    )}
                                 </Typography>
                                 <Typography variant="caption" fontWeight={400}>
                                     ID: {booking?.bookingId}
@@ -102,6 +119,31 @@ const BookingById = () => {
                                         }
                                     >
                                         Cancel Booking
+                                    </Button>
+                                )}
+                                {allowedActions?.duplicate && (
+                                    <Button
+                                        variant="outlined"
+                                        sx={{
+                                            height: 48,
+                                        }}
+                                        onClick={() =>
+                                            setConfirmDialogProps({
+                                                open: true,
+                                                content: (
+                                                    <>
+                                                        This action will<strong> Duplicate </strong>this booking.
+                                                    </>
+                                                ),
+                                                cancel: closeDialog,
+                                                confirm: () => {
+                                                    createDuplicateBookings()
+                                                    closeDialog()
+                                                },
+                                            })
+                                        }
+                                    >
+                                        Duplicate Booking
                                     </Button>
                                 )}
                                 {allowedActions?.confirm && (

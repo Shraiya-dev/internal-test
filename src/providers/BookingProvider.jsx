@@ -99,6 +99,7 @@ const BookingProvider = ({ children }) => {
         }
     }, [booking])
     const cancelBooking = useCallback(async () => {
+        showLoader(true)
         try {
             const { status } = await axios.put(`${SERVER_URL}/gateway/admin-api/bookings/${bookingId}/cancel`)
             if (status === 200) {
@@ -114,7 +115,28 @@ const BookingProvider = ({ children }) => {
                 sev: 'error',
             })
         }
-    }, [])
+        showLoader(false)
+    }, [bookingId])
+
+    const createDuplicateBookings = useCallback(async () => {
+        showLoader(true)
+        try {
+            const { status, data } = await axios.post(`${SERVER_URL}/gateway/admin-api/bookings/${bookingId}/duplicate`)
+            if (status === 200) {
+                showSnackbar({
+                    msg: `Successfully Created duplicate booking, ${data.payload.bookingId}`,
+                    sev: 'success',
+                })
+                navigate(`/bookings/${data.payload.bookingId}`)
+            }
+        } catch (error) {
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
+        }
+        showLoader(false)
+    }, [bookingId])
 
     const confirmBooking = useCallback(async () => {
         showLoader(true)
@@ -280,6 +302,8 @@ const BookingProvider = ({ children }) => {
             startProject: startProject,
             timer: timer,
             cancelBooking: cancelBooking,
+            createDuplicateBookings: createDuplicateBookings,
+            navigate: navigate,
         }),
         [
             booking,
@@ -294,6 +318,8 @@ const BookingProvider = ({ children }) => {
             startProject,
             cancelBooking,
             timer,
+            createDuplicateBookings,
+            navigate,
         ]
     )
     return <Provider value={providerValue}>{children}</Provider>

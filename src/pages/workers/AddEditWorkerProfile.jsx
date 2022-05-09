@@ -335,6 +335,33 @@ const AddEditWorkerProfile = () => {
                             </Grid>
                         </Container>
                     </Paper>
+                    {worker?.onboardingDetails && (
+                        <Paper sx={{ p: 2, m: 2 }}>
+                            <Container>
+                                <h3>Onboarding Channel Information</h3>
+                                <Grid container>
+                                    <Grid item xs={3}>
+                                        <h4 style={{ margin: '5px 0' }}>Onboarding Type</h4>
+                                        <Typography>{worker.onboardingDetails.type}</Typography>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <h4 style={{ margin: '5px 0' }}>Partner Name</h4>
+                                        <Typography>{worker.onboardingDetails.partner.name}</Typography>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <h4 style={{ margin: '5px 0' }}>Partner Number</h4>
+                                        <Typography>{worker.onboardingDetails.partner.phoneNumber}</Typography>
+                                    </Grid>
+
+                                    <Grid item xs={3}>
+                                        <h4 style={{ margin: '5px 0' }}>Referral Code</h4>
+
+                                        <Chip color="primary" label={worker.onboardingDetails.partner.referralCode} />
+                                    </Grid>
+                                </Grid>
+                            </Container>
+                        </Paper>
+                    )}
                     <Paper sx={{ p: 2, m: 2 }}>
                         <Container>
                             <h3>Job Information</h3>
