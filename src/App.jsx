@@ -33,6 +33,7 @@ import {
     CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE,
     BOOKINGS_ATTENDANCE_ROUTE,
     ATTENDANCE_ROUTE,
+    JCA_ROUTE,
 } from './routes'
 import Registration from './pages/Registration'
 import AddEditWorkerProfile from './pages/workers/AddEditWorkerProfile'
@@ -41,6 +42,7 @@ import { BookingProvider } from './providers/BookingProvider'
 import { SnackbarProvider } from './providers/SnackbarProvider'
 import CreateBookings from './pages/Bookings/CreateBookings'
 import { LoaderProvider } from './providers/LoaderProvider'
+import JCA from './pages/JCA/jobCards'
 
 // const theme = createTheme({
 // 	palette: {
@@ -181,6 +183,14 @@ function App() {
                                     element={
                                         <PrivateRoute>
                                             <AddWorkerForBooking />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={JCA_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <JCA />
                                         </PrivateRoute>
                                     }
                                 />

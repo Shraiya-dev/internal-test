@@ -9,6 +9,7 @@ import {
     ADD_PARTNER_ROUTE,
     ATTENDANCE_ROUTE,
     BOOKING_ROUTE,
+    JCA_ROUTE,
     REWARD_PENALTIES_ROUTE,
     WORKER_INFO_ROUTE,
 } from '../../routes'
@@ -20,6 +21,11 @@ const DrawerList = [
         label: 'Bookings',
         icon: <LibraryBooks />,
         link: BOOKING_ROUTE,
+    },
+    {
+        label: 'Job Cards',
+        icon: <LibraryBooks />,
+        link: JCA_ROUTE,
     },
     {
         label: 'Rewards & Penalties',

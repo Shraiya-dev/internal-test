@@ -98,25 +98,31 @@ const BookingProvider = ({ children }) => {
             clearInterval(x)
         }
     }, [booking])
-    const cancelBooking = useCallback(async () => {
-        showLoader(true)
-        try {
-            const { status } = await axios.put(`${SERVER_URL}/gateway/admin-api/bookings/${bookingId}/cancel`)
-            if (status === 200) {
-                showSnackbar({
-                    msg: 'Successfully Canceled booking',
-                    sev: 'success',
+    const cancelBooking = useCallback(
+        async (values) => {
+            showLoader(true)
+            try {
+                const { status } = await axios.put(`${SERVER_URL}/gateway/admin-api/bookings/${bookingId}/cancel`, {
+                    cancelReason: values.cancellationReason,
+                    details: values.details,
                 })
-                navigate('/bookings')
+                if (status === 200) {
+                    showSnackbar({
+                        msg: 'Successfully Canceled booking',
+                        sev: 'success',
+                    })
+                    navigate('/bookings')
+                }
+            } catch (error) {
+                showSnackbar({
+                    msg: error.response.data.developerInfo,
+                    sev: 'error',
+                })
             }
-        } catch (error) {
-            showSnackbar({
-                msg: error.response.data.developerInfo,
-                sev: 'error',
-            })
-        }
-        showLoader(false)
-    }, [bookingId])
+            showLoader(false)
+        },
+        [bookingId]
+    )
 
     const createDuplicateBookings = useCallback(async () => {
         showLoader(true)

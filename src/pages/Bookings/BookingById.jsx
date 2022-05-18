@@ -5,6 +5,7 @@ import { add, getUnixTime } from 'date-fns'
 import { useCallback, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTimer } from 'react-timer-hook'
+import CancelBookingConfirmationDialog from '../../components/CancelBookingConfirmationDialog'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useBooking } from '../../providers/BookingProvider'
@@ -35,14 +36,21 @@ const BookingById = () => {
         cancel: () => {},
         confirm: () => {},
     })
+    const [cancelBookingConfirmationDialogProps, setCancelBookingConfirmationDialogProps] = useState({
+        open: false,
+        cancel: () => {},
+        confirm: () => {},
+    })
     const allowedActions = useMemo(() => CTAMap[booking?.status]?.actions, [booking])
     const closeDialog = useCallback(() => {
         setConfirmDialogProps({})
+        setCancelBookingConfirmationDialogProps({})
     }, [])
     const navigate = useNavigate()
 
     return (
         <>
+            <CancelBookingConfirmationDialog {...cancelBookingConfirmationDialogProps} />
             <DashboardLayout>
                 <Paper sx={{ p: 2 }}>
                     <Stack direction="row" alignItems="stretch" justifyContent="space-between">
@@ -78,9 +86,14 @@ const BookingById = () => {
                                                 <>
                                                     Parent Booking:
                                                     <Link to={`/bookings/${booking?.parentBookingId}`}>
-                                                        <Typography sx={{
-                                                            textDecoration:'underline'
-                                                        }}  variant='caption' component='span' color="primary.main"    >
+                                                        <Typography
+                                                            sx={{
+                                                                textDecoration: 'underline',
+                                                            }}
+                                                            variant="caption"
+                                                            component="span"
+                                                            color="primary.main"
+                                                        >
                                                             {booking?.parentBookingId}
                                                         </Typography>
                                                     </Link>
@@ -103,16 +116,11 @@ const BookingById = () => {
                                             height: 48,
                                         }}
                                         onClick={() =>
-                                            setConfirmDialogProps({
+                                            setCancelBookingConfirmationDialogProps({
                                                 open: true,
-                                                content: (
-                                                    <>
-                                                        This action will<strong> Cancel </strong>this booking?
-                                                    </>
-                                                ),
                                                 cancel: closeDialog,
-                                                confirm: () => {
-                                                    cancelBooking()
+                                                confirm: (value) => {
+                                                    cancelBooking(value)
                                                     closeDialog()
                                                 },
                                             })
