@@ -8,7 +8,7 @@ import { useSearchParams } from 'react-router-dom'
 import useEditAttendanceDialog from './hooks/useEditAttendanceDialog'
 
 const EditAttendanceDialog = ({ open, data, onClose, field }) => {
-    const { form, searchWorkerForm, workerDetail, setWorkerDetail, isError, deleteAttendance , deleteOT} =
+    const { form, searchWorkerForm, workerDetail, setWorkerDetail, isError, deleteAttendance, deleteOT } =
         useEditAttendanceDialog(data, onClose, field)
     const [sp] = useSearchParams()
     // console.log(field)
@@ -190,11 +190,7 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
                                 >
                                     Cancel
                                 </Button>
-                                <Button
-                                    disabled={!(data?.status === 'EMPLOYED' || workerDetail?.status === 'EMPLOYED')}
-                                    type="submit"
-                                    variant="contained"
-                                >
+                                <Button type="submit" variant="contained">
                                     Save
                                 </Button>
                             </Stack>

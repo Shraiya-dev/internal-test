@@ -15,7 +15,7 @@ const reasonOption = [
     { label: 'Other', value: 'OTHERS' },
 ]
 const SERVER_URL = getBackendUrl()
-const EmploymentCompleteDialog = ({ open = false, workerCard, setOpen, confirm }) => {
+const EmploymentCompleteDialog = ({ open = false, setOpen, confirm }) => {
     const handelClose = useCallback(() => {
         setOpen()
         form.resetForm()
@@ -28,10 +28,10 @@ const EmploymentCompleteDialog = ({ open = false, workerCard, setOpen, confirm }
 
     const onSubmit = useCallback(
         async (values, fh) => {
-            confirm(workerCard, values)
+            await confirm(values)
             handelClose()
         },
-        [workerCard, handelClose]
+        [handelClose]
     )
     const form = useFormik({
         initialValues: {
@@ -71,10 +71,12 @@ const EmploymentCompleteDialog = ({ open = false, workerCard, setOpen, confirm }
 
             setCompletionReason([
                 { label: 'Select Completion code', value: 'none' },
-                ...data?.payload?.employmentCompletionCodes?.map((item) => ({
-                    label: item.employmentCompletionCode,
-                    value: item.employmentCompletionCode,
-                })),
+                ...data?.payload?.employmentCompletionCodes
+                    ?.filter((item) => item.employmentCompletionCode !== 'TENURE_COMPLETE')
+                    ?.map((item) => ({
+                        label: item.employmentCompletionCode,
+                        value: item.employmentCompletionCode,
+                    })),
             ])
         } catch (error) {
             showSnackbar({

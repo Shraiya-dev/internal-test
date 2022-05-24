@@ -9,6 +9,7 @@ import {
     ADD_PARTNER_ROUTE,
     ATTENDANCE_ROUTE,
     BOOKING_ROUTE,
+    PROJECT_ROUTE,
     JCA_ROUTE,
     REWARD_PENALTIES_ROUTE,
     WORKER_INFO_ROUTE,
@@ -17,6 +18,11 @@ import {
 const drawerWidth = 250
 
 const DrawerList = [
+    {
+        label: 'Projects',
+        icon: <LibraryBooks />,
+        link: PROJECT_ROUTE,
+    },
     {
         label: 'Bookings',
         icon: <LibraryBooks />,

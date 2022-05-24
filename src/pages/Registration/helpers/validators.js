@@ -9,14 +9,14 @@ export const validatePhoneNumber = (number) => {
 
 export const validatePinCode = (pincode) => {
     if (pincode) {
-        return regexPatterns.pinCode.test(pincode) ? true : false
+        return regexPatterns.pincode.test(pincode) ? true : false
     }
     return false
 }
 
 export const validateOTP = (otp) => {
     if (otp) {
-        return regexPatterns.pinCode.test(otp) ? true : false
+        return regexPatterns.pincode.test(otp) ? true : false
     }
     return false
 }

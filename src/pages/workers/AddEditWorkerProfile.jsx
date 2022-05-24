@@ -19,6 +19,7 @@ import React, { useCallback } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert } from '../../components/Snackbar'
+import { useLocationMetadata } from '../../hooks/useLocationMetadata'
 import { getSelectOptions } from '../../utils/InputHelpers'
 import { JobTypeOptions } from '../../utils/optionHelpers'
 import {
@@ -36,14 +37,14 @@ import useAddEditWorkerProfile from './hooks/useAddEditWorkerProfile'
 const AddEditWorkerProfile = () => {
     const { workerId } = useParams()
     const {
+        states,
+        districts,
+        setStateId,
         form,
-        cityOptions,
-        stateOptions,
         disableForm,
         setDisableForm,
         isError,
         markWorkerAsAvailable,
-        showSnackbar,
         worker,
         snackbarProps,
         fetchWorker,
@@ -59,7 +60,6 @@ const AddEditWorkerProfile = () => {
         }),
         [form, disableForm]
     )
-
     return (
         <>
             <DashboardLayout>
@@ -169,22 +169,28 @@ const AddEditWorkerProfile = () => {
                                         error={isError('state')}
                                         onChange={(e) => {
                                             form.handleChange(e)
-                                            // form.setFieldValue('city', 'none')
+                                            form.setFieldValue('city', 'none')
+                                            setStateId(e.target.value)
                                         }}
                                     >
                                         <MenuItem value="none">Select State</MenuItem>
-                                        <MenuItem value="uttar pradesh">Uttar Pradesh</MenuItem>
+                                        {states?.map((item) => (
+                                            <MenuItem value={item.value}>{item.label}</MenuItem>
+                                        ))}
                                     </Select>
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Select
                                         fullWidth
                                         {...formikProps('city')}
-                                        value={form.values.city.toLowerCase()}
+                                        value={form.values.city}
                                         error={isError('city')}
                                         disabled={form.values.state === 'none' || disableForm}
                                     >
-                                        {getSelectOptions(currentlyOperationalCities)}
+                                        <MenuItem value="none">Select Districts</MenuItem>
+                                        {districts?.map((item) => (
+                                            <MenuItem value={item.value}>{item.label}</MenuItem>
+                                        ))}
                                     </Select>
                                 </Grid>
                                 <Grid item xs={4}>

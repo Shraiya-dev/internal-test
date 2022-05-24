@@ -1,30 +1,30 @@
 import { debounce } from '@mui/material'
 import axios from 'axios'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
-import { useSnackbar } from '../../../providers/SnackbarProvider'
 const SERVER_URL = getBackendUrl()
-export const useBookings = () => {
+
+export const useEmployeeDashboard = () => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [reload, setReload] = useState(false)
     const [response, setResponse] = useState({
-        bookings: [],
+        employees: [],
         hasMore: false,
     })
-    const { showSnackbar } = useSnackbar()
+    const { projectId } = useParams()
     const [isLoading, setIsLoading] = useState(false)
 
-    const getBookings = useCallback(
+    const getEmployees = useCallback(
         debounce(async (searchParams) => {
             setIsLoading(true)
             try {
                 const nsp = new URLSearchParams(searchParams)
+                nsp.set('projectId', projectId)
                 Number(searchParams.get('pageNumber')) > 1
                     ? nsp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
                     : nsp.delete('pageNumber')
                 nsp.set('pageSize', 20)
-                const { data, status } = await axios.get(`${SERVER_URL}/gateway/admin-api/bookings?${nsp.toString()}`)
+                const { data, status } = await axios.get(`${SERVER_URL}/gateway/admin-api/employees?${nsp.toString()}`)
                 setResponse(data.payload)
             } catch (error) {
                 console.log(error)
@@ -33,22 +33,12 @@ export const useBookings = () => {
         }, 500),
         []
     )
+    const refreshList = useCallback(() => {
+        getEmployees(searchParams)
+    }, [searchParams, getEmployees])
     useEffect(() => {
-        if (searchParams.toString().length === 0) {
-            setSearchParams({ status: 'RECEIVED' })
-            return
-        }
-        getBookings(searchParams)
+        getEmployees(searchParams)
     }, [searchParams])
-
-    return useMemo(
-        () => ({
-            bookings: response?.bookings ?? [],
-            hasMore: response?.hasMore ?? false,
-            isLoading: isLoading,
-            getBookings: getBookings,
-            reloadBookings: setReload,
-        }),
-        [response, setReload, isLoading, getBookings]
-    )
+    const { response: employees, hasMore } = response
+    return useMemo(() => ({ hasMore, isLoading, employees, refreshList }), [hasMore, isLoading, employees, refreshList])
 }

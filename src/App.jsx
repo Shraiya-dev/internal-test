@@ -1,48 +1,50 @@
 // import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+//import AddWorker from './pages/Registration/Dashboard'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './App.css'
-import { Header, PrivateRoute } from './components'
+import { PrivateRoute } from './components'
 import { AllocatedWorkers, AttendanceComponent, CustomerBookings, Login, WorkerProfile } from './pages'
 import Attendance from './pages/Attendance'
-import BookingDetailed from './pages/Bookings/BookingDetails'
+import BookingById from './pages/Bookings/BookingById'
 import Bookings from './pages/Bookings/Bookings'
+import CreateBookings from './pages/Bookings/CreateBookings'
 import Dashboard from './pages/Dashboard/Dashboard'
+import JCA from './pages/JCA/jobCards'
 import JobCards from './pages/jobCards/JobCards'
 import Partner from './pages/Partner/Partner'
+import Project from './pages/Project/Project'
+import ProjectById from './pages/Project/ProjectById'
+import { ProjectProvider } from './pages/Project/provider/ProjectProvider'
 import RewardAndPenalty from './pages/Rewards'
 import { WorkerProfileProvider } from './pages/WorkerProfile/providers/WorkerProfileProvider/WorkerProfileProvider'
-import WorkerInfoTable from './pages/WorkersInfo/workerInfo'
-//import AddWorker from './pages/Registration/Dashboard'
-import { ThemeProvider, createTheme } from '@mui/material/styles'
-
+import AddEditWorkerProfile from './pages/workers/AddEditWorkerProfile'
 import AddWorkerForBooking from './pages/workers/AddWorkerForBooking'
+import WorkerInfoTable from './pages/WorkersInfo/workerInfo'
+import { BookingProvider } from './providers/BookingProvider'
+import { LoaderProvider } from './providers/LoaderProvider'
+import { SnackbarProvider } from './providers/SnackbarProvider'
 import {
     ADD_PARTNER_ROUTE,
     ADD_WORKER_IN_BOOKING_ROUTE,
+    ADD_WORKER_ROUTE,
+    ATTENDANCE_ROUTE,
+    BOOKINGS_ATTENDANCE_ROUTE,
     BOOKING_BOOKINGID_ROUTE,
     BOOKING_BY_ID_ROUTE,
     BOOKING_ROUTE,
-    DASHBOARD_ROUTE,
-    JOBCARDS_FOR_BOOKING_ROUTE,
-    REWARD_PENALTIES_ROUTE,
-    WORKER_INFO_ROUTE,
-    ADD_WORKER_ROUTE,
-    WORKER_INFO_BY_ID_ROUTE,
     CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE,
-    BOOKINGS_ATTENDANCE_ROUTE,
-    ATTENDANCE_ROUTE,
+    DASHBOARD_ROUTE,
     JCA_ROUTE,
+    JOBCARDS_FOR_BOOKING_ROUTE,
+    PROJECT_BY_ID_ROUTE,
+    PROJECT_ROUTE,
+    REWARD_PENALTIES_ROUTE,
+    WORKER_INFO_BY_ID_ROUTE,
+    WORKER_INFO_ROUTE,
 } from './routes'
-import Registration from './pages/Registration'
-import AddEditWorkerProfile from './pages/workers/AddEditWorkerProfile'
-import BookingById from './pages/Bookings/BookingById'
-import { BookingProvider } from './providers/BookingProvider'
-import { SnackbarProvider } from './providers/SnackbarProvider'
-import CreateBookings from './pages/Bookings/CreateBookings'
-import { LoaderProvider } from './providers/LoaderProvider'
-import JCA from './pages/JCA/jobCards'
 
 // const theme = createTheme({
 // 	palette: {
@@ -81,6 +83,11 @@ const lightTheme = createTheme({
         //         },
         //     },
         // },
+        MuiInput: {
+            defaultProps: {
+                disableUnderline: true,
+            },
+        },
         MuiButton: {
             styleOverrides: {
                 root: {
@@ -126,6 +133,15 @@ function App() {
                                         </PrivateRoute>
                                     }
                                 />
+                                {/* added new route project */}
+                                <Route
+                                    path={PROJECT_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <Project />
+                                        </PrivateRoute>
+                                    }
+                                />
                                 <Route
                                     path={REWARD_PENALTIES_ROUTE}
                                     element={
@@ -139,6 +155,16 @@ function App() {
                                     element={
                                         <PrivateRoute>
                                             <Partner />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={PROJECT_BY_ID_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <ProjectProvider>
+                                                <ProjectById />
+                                            </ProjectProvider>
                                         </PrivateRoute>
                                     }
                                 />

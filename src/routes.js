@@ -6,6 +6,9 @@ export const REWARD_PENALTIES_ROUTE = '/rewards'
 
 //*-----------------------------new routes------------------------
 
+export const PROJECT_ROUTE = '/projects'
+export const PROJECT_BY_ID_ROUTE = '/projects/:projectId'
+export const ADD_PROJECT_ROUTE = '/projects/create'
 export const DASHBOARD_ROUTE = '/dashboard'
 export const BOOKING_ROUTE = '/bookings'
 export const BOOKING_BY_ID_ROUTE = '/bookings/:bookingId'

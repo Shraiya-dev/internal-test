@@ -128,8 +128,8 @@ const Partner = () => {
     return (
         <>
             <DashboardLayout>
-                <Box display="flex" justifyContent="space-between" alignItems={'center'}>
-                    <Typography variant="h4" fontWeight={600} align="center">
+                <Stack direction="row" justifyContent="space-between" alignItems={'center'}>
+                    <Typography variant="h4" fontWeight={600}>
                         Manage Partner
                     </Typography>
                     <Button
@@ -144,7 +144,7 @@ const Partner = () => {
                     >
                         Add Partner
                     </Button>
-                </Box>
+                </Stack>
                 <Paper>
                     <form onSubmit={form.handleSubmit}>
                         <Stack

@@ -1,41 +1,63 @@
-import { Button } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { Upload } from '@mui/icons-material'
+import { LoadingButton } from '@mui/lab'
+import { Button, InputAdornment, TextField } from '@mui/material'
+import { styled } from '@mui/system'
 import { useRef } from 'react'
 
-const useStyles = makeStyles((theme) => ({
-    fileInputContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    hide: {
+const CustomButton = styled(LoadingButton)(({ theme }) => ({
+    '.hide': {
         visibility: 'hidden',
         width: 0,
         height: 0,
     },
-    labelStyle: {
-        cursor: 'pointer',
-    },
 }))
 
-export const FileInput = ({ id, icon, label, disabled, variant, color, className, sx, ...props }) => {
-    const classes = useStyles()
+export const FileInput = ({
+    id,
+    startIcon,
+    isLoading,
+    label,
+    disabled,
+    variant,
+    color,
+    className,
+    sx,
+    ...inputProps
+}) => {
     const labelRef = useRef()
     return (
-        <Button
+        <CustomButton
             sx={sx}
             disabled={disabled}
             onClick={() => {
                 labelRef.current.click()
             }}
-            className={className}
-            startIcon={icon}
+            startIcon={startIcon}
+            loadingPosition="start"
+            loading={isLoading}
             variant={variant}
             color={color}
         >
             {label}
-            <label className={classes.hide} ref={labelRef} htmlFor={id}></label>
-            <input  className={classes.hide} id={id} type="file" {...props} />
-        </Button>
+            <label className={'hide'} ref={labelRef} htmlFor={id}></label>
+            <input className={'hide'} id={id} type="file" {...inputProps} />
+        </CustomButton>
+    )
+}
+
+export const PhoneField = ({ onChange, ...rest }) => {
+    return (
+        <TextField
+            type={'number'}
+            InputProps={{
+                startAdornment: <InputAdornment position="start">+91</InputAdornment>,
+            }}
+            {...rest}
+            onChange={(e) => {
+                if (!isNaN(Number(e.target.value)) && e.target.value.length <= 10 && onChange) {
+                    onChange(e)
+                }
+            }}
+        />
     )
 }

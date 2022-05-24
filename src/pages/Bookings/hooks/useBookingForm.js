@@ -3,16 +3,16 @@ import { useFormik } from 'formik'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
+import { BookingDurations } from '../../../constant/booking'
 import { useBooking } from '../../../providers/BookingProvider'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 import { checkError } from '../../../utils/formikValidate'
-import { bookingDurations } from '../BookingDetails'
 const SERVER_URL = getBackendUrl()
 export const useBookingForm = () => {
     const { bookingId } = useParams()
-    const { getBooking, booking } = useBooking()
+    const { getBooking, booking, project, customer } = useBooking()
 
-    const [formDisabled, setformDisabled] = useState(true)
+    const [formDisabled, setFormDisabled] = useState(true)
     const [siteImages, setSiteImages] = useState([])
     const [accomoImages, setAccomoImages] = useState([])
 
@@ -22,83 +22,47 @@ export const useBookingForm = () => {
         accomodation: false,
     })
     const editForm = useCallback((val) => {
-        setformDisabled(!val)
+        setFormDisabled(!val)
     }, [])
-
     const updateBooking = useCallback(
         async (values) => {
             const updateBookingData = {
-                city: values.city,
-                state: values.state,
-                cmpName: values.cmpName,
-                email: values.email,
-                name: values.name,
-                phoneNumber: values.phoneNumber,
-                siteAddress: values.siteAddress,
-                userName: values.name,
-                schedule: {
-                    bookingDuration: values.durationType,
-                    startDate: values.startDate,
-                    shiftTime: values.shiftTime,
-                    shiftStartTime: values.shiftStartTime,
-                    shiftEndTime: values.shiftEndTime,
+                requirements: {
+                    SUPERVISOR: {
+                        count: Number(values.qtySupervisor),
+                        wage: Number(values.wageSupervisor),
+                    },
+                    HELPER: {
+                        count: Number(values.qtyHelper),
+                        wage: Number(values.wageHelper),
+                    },
+                    TECHNICIAN: {
+                        count: Number(values.qtyTechnician),
+                        wage: Number(values.wageTechnition),
+                    },
                 },
-                peopleRequired: {
-                    SUPERVISOR: Number(values.qtySupervisor),
-                    HELPER: Number(values.qtyHelper),
-                    TECHNICIAN: Number(values.qtyTechnician),
-                },
+                startDate: values.startDate,
+
+                shiftTime: `${values.shiftStartTime}-${values.shiftEndTime}`,
+                bookingDuration: values?.durationType,
                 overTime: {
                     rate: values.overTimeRate,
-                    buffer: values.overTimeBuffer,
-                    bufferType: values.overTimeBufferType,
-                },
-                earning: {
-                    earningMetaData: [
-                        {
-                            type: 'HELPER',
-                            amount: values.wageHelper,
-                        },
-                        {
-                            type: 'TECHNICIAN',
-                            amount: values.wageTechnition,
-                        },
-                        {
-                            type: 'SUPERVISOR',
-                            amount: values.wageSupervisor,
-                        },
-                    ],
-                },
-                holidayDays: values.holidayDays,
-                isHolidayPaid: values.isHolidayPaid,
-                images: {
-                    accommodations: values.accomodationImages,
-                    site: values.siteImages,
-                },
-                benefits: {
-                    ACCOMODATION: values.accomodation,
-                    PAID_TRAVEL: values.travelAllowance,
-                    FOOD: values.food,
-                    PF: values.pf,
-                    INSURANCE: values.esi,
                 },
             }
 
             try {
                 const { status, data } = await axios.put(
-                    `${SERVER_URL}/admin/bookings/${booking?.bookingId}`,
+                    `${SERVER_URL}/gateway/admin-api/bookings/${booking?.bookingId}`,
                     updateBookingData
                 )
-                if (status === 200) {
-                    showSnackbar({
-                        msg: 'Booking Updated Successfully',
-                        sev: 'success',
-                    })
-                    editForm(false)
-                }
+                showSnackbar({
+                    msg: 'Booking Updated Successfully',
+                    sev: 'success',
+                })
+                editForm(false)
             } catch (error) {
                 showSnackbar({
-                    msg: 'Booking Updated Failed, Invalid Value for some or all fields',
+                    msg: error?.response?.data?.developerInfo,
                     sev: 'error',
                 })
             }
@@ -120,7 +84,7 @@ export const useBookingForm = () => {
             qtyTechnician: 0,
             qtySupervisor: 0,
             startDate: new Date(),
-            durationType: bookingDurations[0],
+            durationType: BookingDurations[0],
             state: 'none',
             city: 'none',
             shiftTime: 'none',
@@ -145,30 +109,7 @@ export const useBookingForm = () => {
         validate: (values) => {
             const errors = {}
 
-            if (values.cmpName === '') {
-                errors.cmpName = true
-            }
-            if (values.name === '') {
-                errors.name = true
-            }
-            if (values.email === '' || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = true
-            }
-            if (values.phoneNumber === '' || values.phoneNumber.length < 10) {
-                errors.phoneNumber = true
-            }
-
-            if (values.siteAddress === '') {
-                errors.siteAddress = true
-            }
-            if (values.state === 'none') {
-                errors.state = true
-            }
-            if (values.city === 'none') {
-                errors.city = true
-            }
-
-            if (Number(values.qtyHelper) !== 0 && values.wageHelper === '') {
+            if (Number(values.qtyHelper) && values.wageHelper === '') {
                 errors.wageHelper = true
             }
 
@@ -179,39 +120,31 @@ export const useBookingForm = () => {
             }
 
             // if qtyHelper is not 0 that time wages can't be 0
-            if (Number(values.qtyHelper !== 0 && Number(values.wageHelper) === 0)) {
+            if (Number(values.qtyHelper && Number(values.wageHelper) === 0)) {
                 errors.wageHelper = true
             }
 
-            if (Number(values.qtySupervisor) !== 0 && values.wageSupervisor === '') {
+            if (Number(values.qtySupervisor) && values.wageSupervisor === '') {
                 errors.wageSupervisor = true
             }
             // if qtySupervisor is not 0 that time wages can't be 0
-            if (Number(values.qtySupervisor !== 0 && Number(values.wageSupervisor) === 0)) {
+            if (Number(values.qtySupervisor && Number(values.wageSupervisor) === 0)) {
                 errors.wageSupervisor = true
             }
 
-            if (Number(values.qtyTechnician) !== 0 && values.wageTechnition === '') {
+            if (Number(values.qtyTechnician) && values.wageTechnition === '') {
                 errors.wageTechnition = true
             }
 
             //if qtyTechnician is not 0 that time wages can't be 0
-            if (Number(values.qtyTechnician !== 0 && Number(values.wageTechnition) === 0)) {
+            if (Number(values.qtyTechnician && Number(values.wageTechnition) === 0)) {
                 errors.wageTechnition = true
             }
 
             if (values.overTimeRate === 'none') {
                 errors.overTimeRate = true
             }
-            // if (values.overTimeBuffer === '') {
-            //     errors.overTimeBuffer = true
-            // }
-            if (values.overTimeBufferType === '') {
-                errors.overTimeBufferType = true
-            }
-            if (values.overTimeRate === 'none') {
-                errors.overTimeRate = true
-            }
+
             return errors
         },
         onSubmit: updateBooking,
@@ -226,45 +159,44 @@ export const useBookingForm = () => {
     )
 
     useEffect(() => {
-        if (booking) {
+        if (booking || customer || project) {
             form.setValues({
                 jobType: booking?.jobType ?? '',
-                tags: [...booking?.tags] ?? '',
+                tags: [...booking?.tags],
                 otherJobType: booking?.otherJobType ?? '',
-                startDate: new Date(booking?.schedule.startDate) ?? '',
-                shiftTime: booking?.schedule.shiftTime ?? 'none',
-                durationType: booking?.schedule.bookingDuration ?? [],
-                state: booking?.state ?? '',
-                city: booking?.city ?? '',
-                siteAddress: booking?.siteAddress ?? 0,
+                startDate: booking?.schedule?.startDate ? new Date(booking?.schedule?.startDate) : new Date(),
+                shiftTime: booking?.shiftTimings?.split('-')[0] ?? 'none',
+                durationType: booking?.schedule?.bookingDuration ?? BookingDurations[0],
+                state: project?.state ?? 'none',
+                city: project?.city ?? 'none',
+                siteAddress: project?.siteAddress ?? '',
                 qtyHelper: booking?.peopleRequired.HELPER ?? 0,
                 qtyTechnician: booking?.peopleRequired.TECHNICIAN ?? 0,
-                qtySupervisor: booking?.peopleRequired.SUPERVISOR ?? new Date(),
-                cmpName: booking?.cmpName ?? bookingDurations[0],
-                name: booking?.userName ?? 'none',
-                email: booking?.email ?? 'none',
-                phoneNumber: booking?.phoneNumber ?? 'none',
-                wageHelper: booking?.rateCard?.HELPER ?? '',
-                wageSupervisor: booking?.rateCard?.SUPERVISOR ?? '',
-                shiftStartTime: booking?.schedule?.shiftStartTime ?? 'none',
-                shiftEndTime: booking?.schedule?.shiftEndTime ?? 'none',
-                wageTechnition: booking?.rateCard?.TECHNICIAN ?? '',
+                qtySupervisor: booking?.peopleRequired.SUPERVISOR ?? 0,
+                cmpName: customer?.companyName ?? '',
+                name: customer?.name ?? '',
+                email: customer?.email ?? '',
+                phoneNumber: customer?.phoneNumber ?? '',
+                wageSupervisor: booking?.rateCard?.SUPERVISOR ?? 0,
+                wageTechnition: booking?.rateCard?.TECHNICIAN ?? 0,
+                wageHelper: booking?.rateCard?.HELPER ?? 0,
+                shiftStartTime: booking?.schedule?.shiftTime?.split('-')[0] ?? 'none',
+                shiftEndTime: booking?.schedule?.shiftTime.split('-')[1] ?? 'none',
                 overTimeRate: booking?.overTime?.rate ?? 'none',
                 overTimeBuffer: booking?.overTime?.buffer ?? 30,
                 overTimeBufferType: booking?.overTime?.bufferType ?? 'minutes',
                 holidayDays: booking?.holidayDays ?? [],
-                siteImages: booking?.images?.site ?? [],
-                accomodationImages: booking?.images?.accommodations ?? [],
-                isHolidayPaid: booking?.isHolidayPaid ?? false,
+                siteImages: project?.images?.site ?? [],
+                accomodationImages: project?.images?.accommodations ?? [],
+                isHolidayPaid: booking?.isHolidayPaid ?? booking?.isHolidayPaid ?? false,
                 accomodation: booking?.benefits?.includes('ACCOMODATION') ?? false,
                 travelAllowance: booking?.benefits?.includes('PAID_TRAVEL') ?? false,
                 pf: booking?.benefits?.includes('PF') ?? false,
                 esi: booking?.benefits?.includes('INSURANCE') ?? false,
-
                 food: booking?.benefits?.includes('FOOD') ?? false,
             })
         }
-    }, [booking])
+    }, [booking, customer, project])
 
     const uploadImages = useCallback(
         async (type, files) => {
@@ -335,11 +267,13 @@ export const useBookingForm = () => {
                 [type]: false,
             }))
         },
-        [booking, form, showSnackbar]
+        [booking, project, customer, form, showSnackbar]
     )
     return useMemo(
         () => ({
             booking: booking,
+            customer: customer,
+            project: project,
             updateBooking: updateBooking,
             form: form,
             formDisabled: formDisabled,
@@ -355,6 +289,8 @@ export const useBookingForm = () => {
         }),
         [
             booking,
+            customer,
+            project,
             updateBooking,
             form,
             formDisabled,

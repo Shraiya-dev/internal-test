@@ -1,14 +1,5 @@
 import axios from 'axios'
-import {
-    add,
-    differenceInDays,
-    differenceInHours,
-    differenceInMinutes,
-    differenceInSeconds,
-    getUnixTime,
-    sub,
-} from 'date-fns'
-import { differenceInYears } from 'date-fns/esm'
+import { add, differenceInHours, differenceInMinutes } from 'date-fns'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getBackendUrl } from '../api'
@@ -29,7 +20,8 @@ const BookingProvider = ({ children }) => {
     const navigate = useNavigate()
     const { showSnackbar } = useSnackbar()
     const [timer, setTimer] = useState({})
-    const [booking, setBooking] = useState()
+    const [response, setResponse] = useState({})
+    const { booking, customer, project } = response
     const [selectedTab, setSelectedTab] = useState()
     const handelTabChange = (e, value) => {
         setSelectedTab(value)
@@ -37,9 +29,9 @@ const BookingProvider = ({ children }) => {
     const { showLoader } = useLoader()
     const getBooking = useCallback(async () => {
         try {
-            const { data, status } = await axios.get(`${SERVER_URL}/admin/bookings/${bookingId}`)
+            const { data, status } = await axios.get(`${SERVER_URL}/gateway/admin-api/bookings/${bookingId}`)
             if (status === 200) {
-                setBooking(data.payload)
+                setResponse(data.payload)
             }
         } catch (error) {
             showSnackbar({
@@ -245,14 +237,14 @@ const BookingProvider = ({ children }) => {
     }, [bookingId, getBooking])
     const startProject = useCallback(async () => {
         showLoader(true)
-        if (!booking?.projectId || !bookingId) {
+        if (!project?.projectId || !bookingId) {
             return showSnackbar({
                 msg: 'No Project Found for This booking',
             })
         }
         try {
             const { status, data } = await axios.put(`${SERVER_URL}/admin/project/start`, {
-                projectId: booking?.projectId,
+                projectId: project?.projectId,
                 bookingId: bookingId,
             })
             if (status === 200) {
@@ -269,7 +261,7 @@ const BookingProvider = ({ children }) => {
         }
         getBooking()
         showLoader(false)
-    }, [bookingId, getBooking, booking])
+    }, [bookingId, getBooking, project])
 
     useEffect(getBooking, [getBooking])
     useEffect(() => {
@@ -280,23 +272,11 @@ const BookingProvider = ({ children }) => {
         }
     }, [booking])
 
-    // const timer = useMemo(() => {
-    // 	const lastTime = booking?.statusHistory?.filter((item) => item?.status === booking?.status)[0].timestamp
-    // 	const t = add(new Date(lastTime), {
-    // 		hours: 72,
-    // 	})
-
-    // 	return {
-    // 		days: 0,
-    // 		hours: t.getHours(),
-    // 		minutes: 0,
-    // 		seconds: t.getSeconds(),
-    // 	}
-    // }, [booking])
-
     const providerValue = useMemo(
         () => ({
             booking: booking,
+            project: project,
+            customer: customer,
             handelTabChange: handelTabChange,
             selectedTab: selectedTab,
             getBooking: getBooking,
@@ -313,6 +293,8 @@ const BookingProvider = ({ children }) => {
         }),
         [
             booking,
+            project,
+            customer,
             handelTabChange,
             selectedTab,
             getBooking,

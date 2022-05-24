@@ -11,15 +11,17 @@ import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useBooking } from '../../providers/BookingProvider'
 import { capitalize } from '../../utils'
 import { CTAMap } from '../../utils/ctaHelpers'
+import { formatEnum } from '../../utils/stringHelpers'
 import JobCards from '../jobCards/JobCards'
 import BookingForm from './BookingForm'
 
 const BookingById = () => {
-    // const { booking, handelTabChange, selectedTab } = useBookingById()
     const {
         handelTabChange,
         selectedTab,
         booking,
+        project,
+        customer,
         confirmBooking,
         startAllocation,
         closeAllocation,
@@ -36,12 +38,12 @@ const BookingById = () => {
         cancel: () => {},
         confirm: () => {},
     })
+    const allowedActions = useMemo(() => CTAMap[booking?.status]?.actions, [booking])
     const [cancelBookingConfirmationDialogProps, setCancelBookingConfirmationDialogProps] = useState({
         open: false,
         cancel: () => {},
         confirm: () => {},
     })
-    const allowedActions = useMemo(() => CTAMap[booking?.status]?.actions, [booking])
     const closeDialog = useCallback(() => {
         setConfirmDialogProps({})
         setCancelBookingConfirmationDialogProps({})
@@ -74,10 +76,7 @@ const BookingById = () => {
                             </IconButton>
                             <Stack>
                                 <Typography variant="h4" fontWeight={600}>
-                                    {booking?.jobType
-                                        .split('_')
-                                        .map((item) => capitalize(item))
-                                        .join(' ')}
+                                    {formatEnum(booking?.jobType)}
                                     <Chip sx={{ ml: 2 }} label={booking?.status} />
                                     {booking?.parentBookingId && (
                                         <Chip
@@ -103,7 +102,7 @@ const BookingById = () => {
                                     )}
                                 </Typography>
                                 <Typography variant="caption" fontWeight={400}>
-                                    ID: {booking?.bookingId}
+                                    ID: {booking?._id}
                                 </Typography>
                             </Stack>
                         </Stack>
@@ -160,13 +159,27 @@ const BookingById = () => {
                                         sx={{
                                             height: 48,
                                         }}
-                                        disabled={!booking.isConfirmationReady}
                                         onClick={() =>
                                             setConfirmDialogProps({
                                                 open: true,
                                                 content: (
                                                     <>
-                                                        Move booking to<strong> Confirmation </strong>state?
+                                                        <Typography variant="h6">
+                                                            Move booking to<strong> Confirmation </strong>state?
+                                                        </Typography>
+                                                        <Typography variant="caption">
+                                                            Please verify the project details{' '}
+                                                            <Link to={`/projects/${project?._id}?`}>
+                                                                <Typography
+                                                                    variant="caption"
+                                                                    sx={{ textDecoration: 'underline' }}
+                                                                    color="primary.main"
+                                                                >
+                                                                    {project?.name}
+                                                                </Typography>
+                                                            </Link>{' '}
+                                                            before confirming the booking
+                                                        </Typography>
                                                     </>
                                                 ),
                                                 cancel: closeDialog,
@@ -282,7 +295,7 @@ const BookingById = () => {
                                         Make Booking Deployed
                                     </Button>
                                 )}
-                                {allowedActions?.startProject && !booking?.generateEarnings && (
+                                {allowedActions?.startProject && !project?.generateEarnings && (
                                     <Button
                                         variant="contained"
                                         sx={{
@@ -303,21 +316,32 @@ const BookingById = () => {
                                         Start Project
                                     </Button>
                                 )}
-                                {allowedActions?.attendance && booking?.generateEarnings && (
-                                    <Button
-                                        variant="contained"
-                                        sx={{
-                                            height: 48,
-                                        }}
-                                        onClick={() => {
-                                            navigate(`/attendance?bookingId=${booking?.bookingId}`)
-                                        }}
-                                    >
-                                        Manage Attendance
-                                    </Button>
+                                {allowedActions?.attendance && project?.generateEarnings && (
+                                    <Link to={`/attendance?projectId=${project._id}`}>
+                                        <Button
+                                            variant="contained"
+                                            sx={{
+                                                height: 48,
+                                            }}
+                                        >
+                                            Manage Attendance
+                                        </Button>
+                                    </Link>
+                                )}
+                                {allowedActions?.manageEmployees && project?.generateEarnings && (
+                                    <Link to={`/projects/${project?._id}?tab=employee`}>
+                                        <Button
+                                            variant="contained"
+                                            sx={{
+                                                height: 48,
+                                            }}
+                                        >
+                                            Manage Employees
+                                        </Button>
+                                    </Link>
                                 )}
                             </Stack>
-                            {booking?.status === 'ALLOCATION_IN_PROGRESS' && (
+                            {booking?.status.enumValue === 'ALLOCATION_IN_PROGRESS' && (
                                 <Typography
                                     sx={{
                                         mt: 1,
@@ -330,7 +354,7 @@ const BookingById = () => {
                                     Time remaining to close Allocation: {`${timer.hours} Hrs ${timer.minutes} Mins`}
                                 </Typography>
                             )}
-                            {booking?.status === 'ALLOCATION_CLOSED' && (
+                            {booking?.status.enumValue === 'ALLOCATION_CLOSED' && (
                                 <Typography
                                     sx={{
                                         mt: 1,
@@ -388,7 +412,7 @@ const BookingById = () => {
                                 position: 'relative',
                             }}
                         >
-                            <JobCards booking={booking} />
+                            <JobCards />
                         </TabPanel>
                     </TabContext>
                 </Paper>

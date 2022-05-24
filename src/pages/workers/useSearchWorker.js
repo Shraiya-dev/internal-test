@@ -42,7 +42,7 @@ export const useSearchWorker = () => {
                 }
             } catch (error) {
                 setSnackBar({
-                    msg: 'failed to fetch workes',
+                    msg: 'failed to fetch worker',
                 })
             }
         },
@@ -54,7 +54,14 @@ export const useSearchWorker = () => {
         [form, isError]
     )
     return useMemo(
-        () => ({ form: form, workers: workers, setSnackBar: setSnackBar, sncBar: sncBar, checkError: checkError }),
-        [form, setSnackBar, sncBar, checkError, workers]
+        () => ({
+            form: form,
+            workers: workers,
+            setSnackBar: setSnackBar,
+            sncBar: sncBar,
+            checkError: checkError,
+            setWorkers: setWorkers,
+        }),
+        [form, setSnackBar, sncBar, checkError, workers, setWorkers]
     )
 }

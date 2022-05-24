@@ -87,7 +87,7 @@ export const CTAMap = {
             },
             DEPLOYMENT_COMPLETE: {
                 jobCardActions: {
-                    cancel: true,
+                    // cancel: true,
                 },
             },
         },
@@ -102,7 +102,7 @@ export const CTAMap = {
         tabs: {
             DEPLOYMENT_COMPLETE: {
                 jobCardActions: {
-                    employmentComplete: true,
+                    manageEmployee: true,
                 },
             },
             COMPLETED: {
@@ -112,8 +112,9 @@ export const CTAMap = {
         actions: {
             view: true,
             attendance: true,
-            startProject: true,
+            startProject: false,
             duplicate: true,
+            manageEmployees: true,
         },
     },
 }

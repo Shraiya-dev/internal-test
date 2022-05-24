@@ -22,15 +22,11 @@ import {
 } from '@mui/material'
 import React, { useState } from 'react'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
+import { BookingDurations, JobTypeOptions } from '../../constant/booking'
+import { CityOptions } from '../../constant/city'
+import { StatesOptions } from '../../constant/state'
 import { getSelectOptions } from '../../utils/InputHelpers'
-import {
-    bookingDuration,
-    JobTypeOptions,
-    ShiftTime,
-    StatesOptions,
-    tags,
-    CitiesOptions,
-} from '../../utils/optionHelpers'
+import { ShiftTime, tags } from '../../utils/optionHelpers'
 import useCreateBookings from './hooks/useCreateBookings'
 
 const CreateBookings = () => {
@@ -234,7 +230,7 @@ const CreateBookings = () => {
                                             onBlur={form.handleBlur}
                                         >
                                             <Stack direction={'row'} spacing={2}>
-                                                {bookingDuration.map((options) => {
+                                                {BookingDurations.map((options) => {
                                                     return (
                                                         <FormControlLabel
                                                             key={options.value}
@@ -273,7 +269,7 @@ const CreateBookings = () => {
                                             error={!!checkError('city')}
                                         >
                                             <MenuItem value={'none'}>Select city</MenuItem>
-                                            {getSelectOptions(CitiesOptions[form.values.state.toLowerCase()])}
+                                            {getSelectOptions(CityOptions[form.values.state.toLowerCase()])}
                                         </Select>
                                     </Grid>
                                     <Grid item xs={12}>

@@ -1,7 +1,7 @@
-import { AddBox } from '@mui/icons-material'
 import {
     Box,
     Button,
+    Grid,
     InputAdornment,
     LinearProgress,
     Pagination,
@@ -14,9 +14,8 @@ import { DataGrid } from '@mui/x-data-grid'
 import React from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
-import { QueryField, QueryMultiSelect, QueryReset, QuerySelect } from '../../components/queryInputs'
+import { QueryField, QueryMultiSelect, QueryReset } from '../../components/queryInputs'
 import { JobCardStates } from '../../constant/jobCards'
-import { getSelectOptions } from '../../utils/InputHelpers'
 import { useJobCards } from './hooks/useJobCards'
 
 export default function JCA() {
@@ -56,7 +55,7 @@ export default function JCA() {
                         textDecoration: 'underline',
                         color: '#244CB3',
                     }}
-                    to={`/bookings/${params?.row.bookingId}`}
+                    to={`/bookings/${params?.row.bookingId}?tab=${params.row?.jobCardState}`}
                 >
                     {params?.row?.bookingId}
                 </Link>
@@ -157,32 +156,43 @@ export default function JCA() {
 
     return (
         <DashboardLayout>
-            <Box display="flex" justifyContent="space-between" alignItems={'center'}>
-                <Typography variant="h4" fontWeight={600} align="center">
-                    Manage Job Cards
-                </Typography>
-            </Box>
-            <Paper>
-                <Stack p={2} direction={'row'} spacing={2} alignItems="stretch">
-                    <QueryMultiSelect sx={{ width: 300 }} name="jobCardStates">
-                        {getSelectOptions(JobCardStates)}
-                    </QueryMultiSelect>
-                    <QueryField
-                        variant="outlined"
-                        label="Worker Phone"
-                        placeholder="Enter Phone Number"
-                        validation={(val) => val.length <= 10 && !isNaN(Number(val))}
-                        name="workerPhone"
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">+91</InputAdornment>,
-                        }}
-                    />
-                    <QueryField variant="outlined" label="Booking Id" placeholder="Enter Booking ID" name="bookingId" />
-                    <Button variant="contained" onClick={() => getJobCards(sp)}>
-                        Search
-                    </Button>
-                    <QueryReset>Clear Filters</QueryReset>
-                </Stack>
+            <Typography variant="h4" fontWeight={600}>
+                Manage Job Cards
+            </Typography>
+            <Paper sx={{ p: 2 }}>
+                <Grid container spacing={2}>
+                    <Grid item>
+                        <QueryMultiSelect sx={{ width: 300 }} name="jobCardStates" options={JobCardStates} />
+                    </Grid>
+                    <Grid item>
+                        <QueryField
+                            variant="outlined"
+                            label="Worker Phone"
+                            placeholder="Enter Phone Number"
+                            validation={(val) => val.length <= 10 && !isNaN(Number(val))}
+                            name="workerPhone"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">+91</InputAdornment>,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item>
+                        <QueryField
+                            variant="outlined"
+                            label="Booking Id"
+                            placeholder="Enter Booking ID"
+                            name="bookingId"
+                        />
+                    </Grid>
+                    <Grid item display="flex">
+                        <Button variant="contained" onClick={() => getJobCards(sp)}>
+                            Search
+                        </Button>
+                    </Grid>
+                    <Grid item display="flex">
+                        <QueryReset>Clear Filters</QueryReset>
+                    </Grid>
+                </Grid>
             </Paper>
 
             <Paper sx={{ mt: 2, height: '74vh', width: '100%', p: 2 }}>

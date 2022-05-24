@@ -47,12 +47,12 @@ export const useWorkerInfo = () => {
             //     sP.delete('city')
             // }
             if (values.city != 'none') {
-                sP.set('city', values.city.toLowerCase())
+                sP.set('city', values.city)
             } else {
                 sP.delete('city')
             }
             if (values.state !== 'none') {
-                sP.set('state', values.state.toLowerCase())
+                sP.set('state', values.state)
             } else {
                 sP.delete('state')
             }

@@ -2,14 +2,15 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getBackendUrl } from '../../../api'
+import { useLocationMetadata } from '../../../hooks/useLocationMetadata'
 import { checkError } from '../../../utils/formikValidate'
 
 const BACKEND_URL = getBackendUrl()
 const parseBodyPayload = (values) => {
     return {
         name: values.name,
-        state: values.state,
-        city: values.city,
+        state: values.state.toUpperCase(),
+        city: values.city.toUpperCase(),
         phoneNumber: '+91' + values.phoneNumber,
         lp: values.lp,
         gender: values.gender,
@@ -42,7 +43,7 @@ const parseBodyPayload = (values) => {
 }
 const regexPatterns = {
     phoneNumber: /^[0-9]{10}$/,
-    pinCode: /^[0-9]{6}$/,
+    pincode: /^[0-9]{6}$/,
     aadhar: /^[2-9]\d{11}$/,
     bankAccount: /^\d{9,18}$/,
     pan: /^[A-Z]{5}\d{4}[A-Z]$/,
@@ -50,8 +51,8 @@ const regexPatterns = {
     isNum: /^\d*$/,
 }
 export const useAddEditWorkerProfile = (workerId) => {
-    const [stateOptions, setStateOptions] = useState([{ label: 'Select State', value: 'none' }])
-    const [cityOptions, setCityOptions] = useState([{ label: 'Select City', value: 'none' }])
+    const { states, districts, setStateId } = useLocationMetadata()
+
     const [stateToCodeMap, setStateToCodeMap] = useState({})
     const [snackbarProps, setSnackbarProps] = useState()
     const [disableForm, setDisableForm] = useState(!!workerId)
@@ -63,41 +64,7 @@ export const useAddEditWorkerProfile = (workerId) => {
     }, [])
 
     const [worker, setWorker] = useState()
-    const getStates = useCallback(async () => {
-        setStateOptions([{ label: 'Select State', value: 'none' }])
-        const res = await fetch('https://api.countrystatecity.in/v1/countries/IN/states', {
-            headers: {
-                'x-cscapi-key': 'QkQzdDlBOXBwNHhjWjczR1lKTmpEWXZSUXhaZ3hYaDN4OHNaYmtodQ==',
-            },
-        }).then((res) => res.json())
-        const stateToCode = {}
 
-        setStateOptions((stateOptions) => [
-            ...stateOptions,
-            ...res.map((stateInfo) => {
-                const { iso2, name } = stateInfo
-                stateToCode[name.toLowerCase()] = iso2
-                return { label: name, value: name.toLowerCase() }
-            }),
-        ])
-        setStateToCodeMap(stateToCode)
-    })
-
-    const getCities = useCallback(async (state) => {
-        setCityOptions([{ label: 'Select City', value: 'none' }])
-        const res = await fetch(`https://api.countrystatecity.in/v1/countries/IN/states/${state}/cities`, {
-            headers: {
-                'x-cscapi-key': 'QkQzdDlBOXBwNHhjWjczR1lKTmpEWXZSUXhaZ3hYaDN4OHNaYmtodQ==',
-            },
-        }).then((res) => res.json())
-        setCityOptions((cityOptions) => [
-            ...cityOptions,
-            ...res.map((city) => ({
-                label: city.name,
-                value: city.name.toLowerCase(),
-            })),
-        ])
-    }, [])
     const fetchWorker = useCallback(async () => {
         if (workerId) {
             try {
@@ -251,6 +218,7 @@ export const useAddEditWorkerProfile = (workerId) => {
                     errors.accHolderName = true
                 }
             }
+            console.log(values)
             return errors
         },
         onSubmit: (v, fh) => {
@@ -271,6 +239,7 @@ export const useAddEditWorkerProfile = (workerId) => {
 
     useEffect(() => {
         if (worker) {
+            setStateId(worker?.state)
             form.setValues({
                 name: worker?.name ?? '',
                 state: worker?.state ?? 'none',
@@ -305,8 +274,6 @@ export const useAddEditWorkerProfile = (workerId) => {
     return useMemo(
         () => ({
             form: form,
-            stateOptions: stateOptions,
-            cityOptions: cityOptions,
             snackbarProps: snackbarProps,
             showSnackbar: showSnackbar,
             isError: isError,
@@ -315,10 +282,11 @@ export const useAddEditWorkerProfile = (workerId) => {
             setDisableForm: setDisableForm,
             markWorkerAsAvailable: markWorkerAsAvailable,
             fetchWorker: fetchWorker,
+            states,
+            districts,
+            setStateId,
         }),
         [
-            stateOptions,
-            cityOptions,
             form,
             snackbarProps,
             worker,
@@ -328,6 +296,9 @@ export const useAddEditWorkerProfile = (workerId) => {
             disableForm,
             fetchWorker,
             setDisableForm,
+            states,
+            districts,
+            setStateId,
         ]
     )
 }

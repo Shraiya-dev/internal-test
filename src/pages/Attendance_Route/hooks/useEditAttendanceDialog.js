@@ -17,6 +17,7 @@ const useEditAttendanceDialog = (data, onClose, field) => {
                 const res = await axios.put(`${SERVER_URL}/admin/attendance`, {
                     projectId: data?.projectId,
                     workerId: data?.workerId,
+                    employeeId: data?.employeeId,
                     date: sp.get('date'),
                     attendanceType: 'clock_in',
                     checkInTime: values.checkedInTime ? format(values.checkedInTime, 'hh:mm a').toLowerCase() : null,

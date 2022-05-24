@@ -1,5 +1,4 @@
-import { Button, Chip, Select, TextField } from '@mui/material'
-import { Box } from '@mui/system'
+import { Button, Checkbox, Hidden, ListItemText, MenuItem, Select, TextField } from '@mui/material'
 import { useSearchParams } from 'react-router-dom'
 
 export const QueryField = ({ name, validation, ...rest }) => {
@@ -58,11 +57,20 @@ export const QuerySelect = ({ name, validation, children, ...rest }) => {
     )
 }
 
-export const QueryMultiSelect = ({ name, validation, children, ...rest }) => {
+export const QueryMultiSelect = ({ name, validation, options = [], ...rest }) => {
     const [sp, setSp] = useSearchParams()
     const filterArr = sp.get(name)
     return (
         <Select
+            renderValue={(selected) =>
+                selected
+                    .map((item) => {
+                        const val = options?.find((opt) => opt.value === item)
+                        return val?.label
+                    })
+                    .filter((item) => item)
+                    .join(',')
+            }
             multiple
             value={filterArr?.split(',') ?? ['none']}
             onChange={(e) => {
@@ -85,11 +93,16 @@ export const QueryMultiSelect = ({ name, validation, children, ...rest }) => {
             }}
             {...rest}
         >
-            {children}
+            {options.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                    <Checkbox className="a" checked={sp.get(name)?.split(',')?.indexOf(item.value) > -1} />
+                    <ListItemText primary={item.label} />
+                </MenuItem>
+            ))}
         </Select>
     )
 }
-export const QueryReset = ({ children, ...props }) => {
+export const QueryReset = ({ children, except, ...props }) => {
     const [sp, setSp] = useSearchParams()
 
     return (
@@ -97,7 +110,12 @@ export const QueryReset = ({ children, ...props }) => {
             variant="outlined"
             color="error"
             onClick={() => {
-                setSp(new URLSearchParams())
+                const nsp = new URLSearchParams()
+                except?.map((item) => {
+                    sp.get(item) && nsp.set(item, sp.get(item))
+                })
+
+                setSp(nsp)
             }}
             {...props}
         >

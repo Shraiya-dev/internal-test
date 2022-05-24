@@ -24,6 +24,7 @@ import { getSelectOptions } from '../../utils/InputHelpers'
 import { JobTypeOptions } from '../../utils/optionHelpers'
 import { useWorkerInfo } from './hooks/useWorkerInfo'
 import { currentlyOperationalCities } from '../workers/helper'
+import { useLocationMetadata } from '../../hooks/useLocationMetadata'
 const statusValue = [
     {
         value: 'none',
@@ -65,6 +66,7 @@ const skillType = [
 
 export default function DataTable() {
     const { checkError, form, response, isLoading, downloadWorkersWithFilters, isDownloading } = useWorkerInfo()
+    const { states, districts, setStateId } = useLocationMetadata()
 
     const columns = [
         // { field: 'id', headerName: <h4>ID</h4>, width: 220 },
@@ -207,27 +209,28 @@ export default function DataTable() {
                             label="Search Worker Name"
                         />
 
-                        {/* <Select
+                        <Select
                             variant="outlined"
                             name="state"
                             value={form.values.state}
                             onChange={(e) => {
                                 form.setFieldValue('city', 'none')
                                 form.handleChange(e)
+                                setStateId(e.target.value)
                             }}
                         >
                             <MenuItem value={'none'}>Select State</MenuItem>
-                            {getSelectOptions(states) ?? []}
-                        </Select> */}
-
+                            {states.map((item) => <MenuItem value={item.value}>{item.label}</MenuItem>) ?? []}
+                        </Select>
                         <Select
                             name="city"
                             variant="outlined"
-                            // disabled={form.values.state === 'none'}
+                            disabled={form.values.state === 'none'}
                             value={form.values.city}
                             onChange={form.handleChange}
                         >
-                            {getSelectOptions(currentlyOperationalCities ?? [])}
+                            <MenuItem value={'none'}>Select District</MenuItem>
+                            {districts.map((item) => <MenuItem value={item.value}>{item.label}</MenuItem>) ?? []}
                         </Select>
 
                         <Select

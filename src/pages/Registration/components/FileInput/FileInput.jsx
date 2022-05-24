@@ -1,68 +1,50 @@
-import React from 'react'
+import { Button, styled, Box } from '@mui/material'
 
-// MUI components
-import { makeStyles } from '@mui/styles'
-import TextField from '@mui/material/TextField'
-import { FormHelperText } from '@mui/material'
-import { ERROR_TEXT } from '../../utils/constants/text'
+import { useRef } from 'react'
 
-const useStyles = makeStyles({
-    heading: {
-        margin: '0 0 24px 0',
-        fontSize: '1.2rem',
-        color: '#0d0c22',
-        fontWeight: 900,
+const CustomPaper = styled(Box)(({ theme }) => ({
+    '.fileInputContainer': {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    subHeading: {
-        fontSize: '0.8rem',
-        color: '#0d0c22',
-        fontWeight: 900,
+    '.hide': {
+        visibility: 'hidden',
+        width: 0,
+        height: 0,
     },
-    image: {
-        width: 'auto',
-        height: 200,
-        maxWidth: '100%',
+    '.labelStyle': {
+        cursor: 'pointer',
     },
-    fileUpload: {
-        width: '95%',
-        '&:hover .MuiOutlinedInput-notchedOutline, &.Mui-Focused .MuiOutlinedInput-notchedOutline': {
-            border: '1px solid #e2e2e1 !important',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-            border: '1px solid #e2e2e1',
-            overflow: 'hidden',
-            borderRadius: 3,
-        },
-    },
-})
+}))
 
-const FileInput = ({ name = '', heading = '', error = '', value = null, src, onChange }) => {
-    const classes = useStyles()
+export const FileInput = ({ ...props }) => {
+    const labelRef = useRef()
+
+    const { id, icon, label, disabled, variant, color, className, sx, ...inputProps } = props
     return (
-        <>
-            <p className={classes.heading}>{heading}</p>
-            <TextField
-                type="file"
-                name={name}
-                className={classes.fileUpload}
-                inputProps={{
-                    accept: 'image/*',
+        <CustomPaper flex={1}>
+            <Button
+                sx={sx}
+                disabled={disabled}
+                onClick={() => {
+                    labelRef.current.click()
                 }}
-                onChange={onChange}
-            />
-            {value && (
-                <>
-                    <p className={classes.subHeading}>Preview</p>
-                    <img src={src} alt="preview" className={classes.image} />
-                </>
-            )}
-            {error && (
-                <FormHelperText error={error} id="outlined-weight-helper-text">
-                    {ERROR_TEXT.FIELD_REQUIRED}
-                </FormHelperText>
-            )}
-        </>
+                // startIcon={icon}
+                variant={variant}
+                color={color}
+                style={{
+                    border: '1px dashed rgba(6, 31, 72, 0.5)',
+                    borderRadius: 8,
+                    padding: 20,
+                    width: '100%',
+                    height: '100%',
+                }}
+            >
+                {icon}
+                <label className={'hide'} ref={labelRef} htmlFor={id}></label>
+                <input className={'hide'} id={id} type="file" {...inputProps} />
+            </Button>
+        </CustomPaper>
     )
 }
-
-export default FileInput

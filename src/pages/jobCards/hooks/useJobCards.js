@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { useBooking } from '../../../providers/BookingProvider'
 import { useLoader } from '../../../providers/LoaderProvider'
@@ -10,24 +11,25 @@ export const useJobCards = () => {
     const [reload, setReload] = useState(false)
     const [skillTypeSummary, setSkillTypeSummary] = useState()
     const [bookingSummary, setBookingSummary] = useState()
+    const [sp, setSp] = useSearchParams()
+
     const { booking } = useBooking()
-    const [selectedTab, setSelectedTab] = useState()
-    const allowedTabs = CTAMap[booking?.status]?.tabs
+    const [selectedTab, setSelectedTab] = useState(sp.get('tab'))
+    const allowedTabs = useMemo(() => CTAMap[booking?.status]?.tabs, [booking])
 
     const { showSnackbar } = useSnackbar()
     const { showLoader } = useLoader()
     useEffect(() => {
         if (allowedTabs) {
-            setSelectedTab(Object.keys(allowedTabs)[0])
+            setSelectedTab(sp.get('tab') ?? Object.keys(allowedTabs)[0])
         }
-    }, [booking])
+    }, [sp])
 
     const fetchJobCardsBasedOnStatus = useCallback(async () => {
         if (!selectedTab) return
         try {
             const { status, data } = await axios.get(
-                //todo remove hardcoded page size and add proper pagination
-                `${SERVER_URL}/admin/bookings/${booking.bookingId}/job-card/status/${selectedTab}?pageNumber=0&pageSize=1000`
+                `${SERVER_URL}/gateway/admin-api/bookings/${booking._id}/job-card/status/${selectedTab}?pageNumber=0&pageSize=1000`
             )
             setSkillTypeSummary(data.payload.skillTypeSummary)
             setBookingSummary(data.payload.overallSummary.bookingSummary)
@@ -127,38 +129,15 @@ export const useJobCards = () => {
         }
         showLoader(false)
     }, [])
-    const employmentCompleteForWorker = useCallback(
-        async (workerCard, values) => {
-            showLoader(true)
-            try {
-                const { status, data } = await axios.post(`${SERVER_URL}/admin/project/remove-employee`, {
-                    projectId: bookingSummary?.projectId,
-                    employeeId: workerCard?.employeeId,
-                    completionCode: values.completionCode,
-                    partialCompletionReason:
-                        values.partialCompletionReason === 'none' ? undefined : values.partialCompletionReason,
-                    description: values.description,
-                    status: 'AVAILABLE',
-                })
-                showSnackbar({
-                    msg: 'Employment marked as complete',
-                    sev: 'success',
-                })
-                setReload(true)
-            } catch (error) {
-                showSnackbar({
-                    msg: error.response.data.developerInfo,
-                    sev: 'error',
-                })
-            }
-            showLoader(false)
-        },
-        [bookingSummary]
-    )
 
-    const handelTabChange = useCallback((e, state) => {
-        setSelectedTab(state)
-    }, [])
+    const handelTabChange = useCallback(
+        (e, state) => {
+            const nsp = new URLSearchParams(sp)
+            nsp.set('tab', state)
+            setSp(nsp)
+        },
+        [sp]
+    )
 
     useEffect(() => {
         fetchJobCardsBasedOnStatus()
@@ -175,7 +154,6 @@ export const useJobCards = () => {
             cancelWorkerJobCard: cancelWorkerJobCard,
             deployWorkerJobCard: deployWorkerJobCard,
             setReload: setReload,
-            employmentCompleteForWorker: employmentCompleteForWorker,
             markJobCardAsAccepted: markJobCardAsAccepted,
         }
     }, [
@@ -185,7 +163,6 @@ export const useJobCards = () => {
         markWorkerJobCardAsRTD,
         cancelWorkerJobCard,
         deployWorkerJobCard,
-        employmentCompleteForWorker,
         markJobCardAsAccepted,
     ])
 }

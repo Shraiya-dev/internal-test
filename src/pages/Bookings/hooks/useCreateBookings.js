@@ -4,8 +4,9 @@ import { useFormik } from 'formik'
 import { useCallback, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
+import { BookingDurations } from '../../../constant/booking'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
-import { bookingDuration, validateEmail } from '../../../utils/optionHelpers'
+import { validateEmail } from '../../../utils/optionHelpers'
 const SERVER_URL = getBackendUrl()
 
 const useCreateBookings = () => {
@@ -22,7 +23,7 @@ const useCreateBookings = () => {
             qtySupervisor: 0,
             shiftTime: 'none',
             date: new Date(),
-            bookingDuration: bookingDuration[0].value,
+            bookingDuration: BookingDurations[0].value,
             state: 'none',
             city: 'none',
             address: '',
