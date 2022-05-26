@@ -4,6 +4,7 @@ import { DatePicker, LoadingButton, LocalizationProvider } from '@mui/lab'
 import {
     Box,
     Button,
+    InputAdornment,
     LinearProgress,
     MenuItem,
     Pagination,
@@ -262,6 +263,9 @@ export default function DataTable() {
                                 if (e.target.value.length <= 10 && !isNaN(Number(e.target.value))) {
                                     form.handleChange(e)
                                 }
+                            }}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">+91</InputAdornment>,
                             }}
                             onBlur={form.handleBlur}
                             variant="outlined"

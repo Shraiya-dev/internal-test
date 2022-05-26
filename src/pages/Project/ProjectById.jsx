@@ -235,6 +235,7 @@ const ProjectById = () => {
                                             placeholder="Enter Phone Number"
                                             validation={(val) => val.length <= 10 && !isNaN(Number(val))}
                                             name="phoneNumber"
+                                            error={sp.get('phoneNumber') && sp.get('phoneNumber').length < 10}
                                             InputProps={{
                                                 startAdornment: <InputAdornment position="start">+91</InputAdornment>,
                                             }}
@@ -265,7 +266,7 @@ const ProjectById = () => {
                                     </Grid>
 
                                     <Grid display="flex" item>
-                                        <Button variant="contained" onClick={() => getJobCards(sp)}>
+                                        <Button variant="contained" onClick={() => getEmployees(sp)}>
                                             Search
                                         </Button>
                                     </Grid>

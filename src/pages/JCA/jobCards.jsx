@@ -174,6 +174,7 @@ export default function JCA() {
                             InputProps={{
                                 startAdornment: <InputAdornment position="start">+91</InputAdornment>,
                             }}
+                            error={sp.get('workerPhone') && sp.get('workerPhone').length < 10}
                         />
                     </Grid>
                     <Grid item>

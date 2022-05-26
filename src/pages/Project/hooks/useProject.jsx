@@ -18,6 +18,7 @@ export const useProject = () => {
 
     const getProjects = useCallback(
         debounce(async (searchParams) => {
+            if (searchParams.get('customerPhone') && searchParams.get('customerPhone').length !== 10) return
             setIsLoading(true)
             try {
                 const sp = new URLSearchParams(searchParams)

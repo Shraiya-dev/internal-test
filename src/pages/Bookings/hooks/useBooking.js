@@ -17,6 +17,7 @@ export const useBookings = () => {
 
     const getBookings = useCallback(
         debounce(async (searchParams) => {
+            if (searchParams.get('customerNumber') && searchParams.get('customerNumber').length !== 10) return
             setIsLoading(true)
             try {
                 const nsp = new URLSearchParams(searchParams)

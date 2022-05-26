@@ -16,6 +16,7 @@ export const useEmployeeDashboard = () => {
 
     const getEmployees = useCallback(
         debounce(async (searchParams) => {
+            if (searchParams.get('phoneNumber') && searchParams.get('phoneNumber').length !== 10) return
             setIsLoading(true)
             try {
                 const nsp = new URLSearchParams(searchParams)
@@ -40,5 +41,8 @@ export const useEmployeeDashboard = () => {
         getEmployees(searchParams)
     }, [searchParams])
     const { response: employees, hasMore } = response
-    return useMemo(() => ({ hasMore, isLoading, employees, refreshList }), [hasMore, isLoading, employees, refreshList])
+    return useMemo(
+        () => ({ hasMore, isLoading, employees, refreshList, getEmployees }),
+        [hasMore, isLoading, employees, refreshList, getEmployees]
+    )
 }

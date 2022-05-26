@@ -41,6 +41,7 @@ const Bookings = () => {
                             }}
                             placeholder="Enter Phone Number"
                             name="customerNumber"
+                            error={searchParams.get('customerNumber') && searchParams.get('customerNumber').length < 10}
                         />
                         <QueryField
                             label="Project Id"

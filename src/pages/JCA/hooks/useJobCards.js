@@ -16,6 +16,8 @@ export const useJobCards = () => {
     })
     const getJobCards = useCallback(
         debounce(async (searchParams) => {
+            if (searchParams.get('workerPhone') && searchParams.get('workerPhone').length !== 10) return
+
             const nsp = new URLSearchParams(searchParams)
             Number(searchParams.get('pageNumber')) > 1
                 ? nsp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)

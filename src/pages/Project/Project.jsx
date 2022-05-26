@@ -33,6 +33,7 @@ const Project = () => {
                             label="Customer Phone"
                             placeholder="Enter Customer Number"
                             validation={(val) => val.length <= 10 && !isNaN(Number(val))}
+                            error={sp.get('customerPhone') && sp.get('customerPhone').length < 10}
                             name="customerPhone"
                             InputProps={{
                                 startAdornment: <InputAdornment position="start">+91</InputAdornment>,
