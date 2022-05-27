@@ -1,3 +1,5 @@
+import { Download } from '@mui/icons-material'
+import { LoadingButton } from '@mui/lab'
 import {
     Box,
     Button,
@@ -19,7 +21,7 @@ import { JobCardStates } from '../../constant/jobCards'
 import { useJobCards } from './hooks/useJobCards'
 
 export default function JCA() {
-    const { isLoading, jobCards, hasMore, getJobCards } = useJobCards()
+    const { isLoading, isDownloading, jobCards, hasMore, getJobCards, downloadJcaWithFilters } = useJobCards()
 
     const columns = [
         {
@@ -156,9 +158,23 @@ export default function JCA() {
 
     return (
         <DashboardLayout>
-            <Typography variant="h4" fontWeight={600}>
-                Manage Job Cards
-            </Typography>
+            <Stack direction="row" justifyContent="space-between" mb={1}>
+                <Typography variant="h4" fontWeight={600}>
+                    Manage Job Cards
+                </Typography>
+                <LoadingButton
+                    loading={isDownloading}
+                    disabled={sp.toString().length === 0}
+                    loadingPosition="start"
+                    type="download"
+                    startIcon={<Download />}
+                    color="primary"
+                    variant="outlined"
+                    onClick={downloadJcaWithFilters}
+                >
+                    DOWNLOAD
+                </LoadingButton>
+            </Stack>
             <Paper sx={{ p: 2 }}>
                 <Grid container spacing={2}>
                     <Grid item>

@@ -5,10 +5,13 @@ import { useEffect } from 'react'
 import { debounce } from '@mui/material'
 import axios from 'axios'
 import { getBackendUrl } from '../../../api'
+import { useSnackbar } from '../../../providers/SnackbarProvider'
 const SERVER_URL = getBackendUrl()
 
 export const useJobCards = () => {
     const [isLoading, setIsLoading] = useState(false)
+    const [isDownloading, setIsDownloading] = useState(false)
+    const { showSnackbar } = useSnackbar()
     const [searchParams, setSearchParams] = useSearchParams()
     const [response, setResponse] = useReducer((p, n) => ({ ...p, ...n }), {
         jobCards: [],
@@ -37,19 +40,56 @@ export const useJobCards = () => {
                     ],
                     hasMore: data.payload.hasMore,
                 })
-            } catch (error) {}
+            } catch (error) {
+                showSnackbar({
+                    msg: error.response.data.developerInfo,
+                    sev: 'error',
+                })
+            }
             setIsLoading(false)
         }, 500),
         []
     )
+    const downloadJcaWithFilters = useCallback(async () => {
+        if (searchParams.get('workerPhone') && searchParams.get('workerPhone').length !== 10) return
+        setIsDownloading(true)
+        try {
+            const res = await axios.get(
+                `${SERVER_URL}/gateway/admin-api/job-cards/download?` + searchParams.toString(),
+                {
+                    responseType: 'blob',
+                }
+            )
+
+            const url = window.URL.createObjectURL(res.data)
+            var a = document.createElement('a')
+            a.href = url
+            a.download = 'Job_cards_' + new Date().toLocaleDateString() + '.xlsx'
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            showSnackbar({
+                msg: 'Download Complete',
+                sev: 'success',
+            })
+        } catch (error) {
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
+        }
+        setIsDownloading(false)
+    }, [searchParams, showSnackbar])
     useEffect(() => {
         getJobCards(searchParams)
     }, [searchParams])
 
     return {
         isLoading: isLoading,
+        isDownloading: isDownloading,
         jobCards: response?.jobCards,
         hasMore: response?.hasMore,
         getJobCards: getJobCards,
+        downloadJcaWithFilters: downloadJcaWithFilters,
     }
 }

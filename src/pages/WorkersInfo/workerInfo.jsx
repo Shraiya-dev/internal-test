@@ -115,9 +115,25 @@ export default function DataTable() {
                         textDecoration: 'underline',
                         color: '#244CB3',
                     }}
-                    to={`/bookings/${params?.row.bookingId}`}
+                    to={`/bookings/${params?.row?.bookingId}`}
                 >
                     {params?.row?.bookingId}
+                </Link>
+            ),
+        },
+        {
+            field: 'projectId',
+            headerName: <h4>Project ID</h4>,
+            width: 150,
+            renderCell: (params) => (
+                <Link
+                    style={{
+                        textDecoration: 'underline',
+                        color: '#244CB3',
+                    }}
+                    to={`/projects/${params?.row?.projectId}`}
+                >
+                    {params?.row?.projectId}
                 </Link>
             ),
         },
