@@ -144,6 +144,10 @@ const BookingForm = () => {
                         <InputLabel>PhoneNumber</InputLabel>
                         <Typography variant="h6">{customer?.phoneNumber}</Typography>
                     </Grid>
+                    <Grid item xs={12} md={4}>
+                        <InputLabel>GSTIN</InputLabel>
+                        <Typography variant="h6">{customer?.GSTIN}</Typography>
+                    </Grid>
                 </Grid>
                 <Divider sx={{ my: 3 }} />
 
