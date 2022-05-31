@@ -12,7 +12,7 @@ env:
   GKE_CLUSTER: ph-staging
   GAR_LOCATION: asia-south1
   DEPLOYMENT_NAME: ph-stage-admin-app
-  CONTAINER_NAME: ph-stage-admin-app
+  CONTAINER_NAME: app
   VITE_PUBLIC_APP_ENV: STAGE
 
 jobs:
