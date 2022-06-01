@@ -10,5 +10,6 @@ COPY . $APP_HOME
 RUN cd $APP_HOME && npm ci
 WORKDIR $APP_HOME
 RUN npm run build
-EXPOSE 3000
+EXPOSE 5000
+
 CMD ["npm", "run", "serve"]
