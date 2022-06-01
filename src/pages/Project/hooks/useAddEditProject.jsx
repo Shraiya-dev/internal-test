@@ -187,7 +187,7 @@ export const useAddEditProject = () => {
             pf: project?.benefits?.includes('PF') ?? '',
             esi: project?.benefits?.includes('ESI') ?? '',
             otf: project?.overTime?.rate ?? 'none',
-            accommodation: project?.benefits?.includes('ACCOMMODATION') ?? '',
+            accommodation: project?.benefits?.includes('ACCOMODATION') ?? '',
             food: project?.benefits?.includes('FOOD') ?? '',
             siteImages: project?.images?.site ?? [],
             accommodationImages: project?.images?.accommodations ?? [],
