@@ -1,8 +1,7 @@
 import { Search } from '@mui/icons-material'
-import { DesktopTimePicker } from '@mui/lab'
+import { DesktopTimePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { Button, Chip, Dialog, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useEditAttendanceDialog from './hooks/useEditAttendanceDialog'
@@ -11,7 +10,6 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
     const { form, searchWorkerForm, workerDetail, setWorkerDetail, isError, deleteAttendance, deleteOT } =
         useEditAttendanceDialog(data, onClose, field)
     const [sp] = useSearchParams()
-    // console.log(field)
     return (
         <Dialog
             open={open}
@@ -82,9 +80,9 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
                                 )}
                             </>
                         )}
-                        {field === 'ot' ? (
-                            <Stack direction={'row'} spacing={2}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            {field === 'ot' ? (
+                                <Stack direction={'row'} spacing={2}>
                                     <DesktopTimePicker
                                         disableOpenPicker
                                         label="OT Check In Time"
@@ -105,8 +103,6 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
                                             />
                                         )}
                                     />
-                                </LocalizationProvider>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DesktopTimePicker
                                         disableOpenPicker
                                         onError={() => {
@@ -127,11 +123,9 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
                                             />
                                         )}
                                     />
-                                </LocalizationProvider>
-                            </Stack>
-                        ) : (
-                            <Stack direction={'row'} spacing={2}>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                </Stack>
+                            ) : (
+                                <Stack direction={'row'} spacing={2}>
                                     <DesktopTimePicker
                                         disableOpenPicker
                                         label="Check In Time"
@@ -152,8 +146,6 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
                                             />
                                         )}
                                     />
-                                </LocalizationProvider>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DesktopTimePicker
                                         disableOpenPicker
                                         onError={() => {
@@ -174,9 +166,9 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
                                             />
                                         )}
                                     />
-                                </LocalizationProvider>
-                            </Stack>
-                        )}
+                                </Stack>
+                            )}
+                        </LocalizationProvider>
                         <Stack direction="row-reverse" justifyContent="space-between">
                             <Stack direction={'row'} justifyContent="end" spacing={1}>
                                 <Button

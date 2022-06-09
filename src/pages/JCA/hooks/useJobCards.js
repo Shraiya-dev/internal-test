@@ -22,6 +22,12 @@ export const useJobCards = () => {
             if (searchParams.get('workerPhone') && searchParams.get('workerPhone').length !== 10) return
 
             const nsp = new URLSearchParams(searchParams)
+            if (nsp.get('createdAtEndDate')) {
+                const date = new Date(nsp.get('createdAtEndDate'))
+                date.setDate(date.getDate() + 1)
+                console.log(date.toISOString(), date.getDate())
+                nsp.set('createdAtEndDate', date.toISOString())
+            }
             Number(searchParams.get('pageNumber')) > 1
                 ? nsp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
                 : nsp.delete('pageNumber')
@@ -54,12 +60,16 @@ export const useJobCards = () => {
         if (searchParams.get('workerPhone') && searchParams.get('workerPhone').length !== 10) return
         setIsDownloading(true)
         try {
-            const res = await axios.get(
-                `${SERVER_URL}/gateway/admin-api/job-cards/download?` + searchParams.toString(),
-                {
-                    responseType: 'blob',
-                }
-            )
+            const nsp = new URLSearchParams(searchParams)
+            if (nsp.get('createdAtEndDate')) {
+                const date = new Date(nsp.get('createdAtEndDate'))
+                date.setDate(date.getDate() + 1)
+                console.log(date.toISOString(), date.getDate())
+                nsp.set('createdAtEndDate', date.toISOString())
+            }
+            const res = await axios.get(`${SERVER_URL}/gateway/admin-api/job-cards/download?` + nsp.toString(), {
+                responseType: 'blob',
+            })
 
             const url = window.URL.createObjectURL(res.data)
             var a = document.createElement('a')

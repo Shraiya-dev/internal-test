@@ -6,7 +6,10 @@ import { useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 const SERVER_URL = getBackendUrl()
-
+function isValidDate(d) {
+    console.log(isValid(d))
+    return isValid(d)
+}
 const useEditAttendanceDialog = (data, onClose, field) => {
     const [sp, setSp] = useSearchParams()
     const { showSnackbar } = useSnackbar()
@@ -22,10 +25,10 @@ const useEditAttendanceDialog = (data, onClose, field) => {
                     attendanceType: 'clock_in',
                     checkInTime: values.checkedInTime ? format(values.checkedInTime, 'hh:mm a').toLowerCase() : null,
                     checkOutTime: values.checkedOutTime ? format(values.checkedOutTime, 'hh:mm a').toLowerCase() : null,
-                    otCheckInTime: values.otCheckedInTime
+                    otCheckInTime: isValidDate(values.otCheckedInTime)
                         ? format(values.otCheckedInTime, 'hh:mm a').toLowerCase()
                         : null,
-                    otCheckOutTime: values.otCheckedOutTime
+                    otCheckOutTime: isValidDate(values.otCheckedOutTime)
                         ? format(values.otCheckedOutTime, 'hh:mm a').toLowerCase()
                         : null,
                 })
@@ -36,6 +39,7 @@ const useEditAttendanceDialog = (data, onClose, field) => {
                 fh.resetForm()
                 onClose()
             } catch (error) {
+                console.log(error)
                 showSnackbar({
                     msg: error.response.data.developerInfo,
                     sev: 'error',
@@ -54,10 +58,10 @@ const useEditAttendanceDialog = (data, onClose, field) => {
                     date: sp.get('date'),
                     checkInTime: values.checkedInTime ? format(values.checkedInTime, 'hh:mm a').toLowerCase() : null,
                     checkOutTime: values.checkedOutTime ? format(values.checkedOutTime, 'hh:mm a').toLowerCase() : null,
-                    otCheckInTime: values.otCheckedInTime
+                    otCheckInTime: isValidDate(values.otCheckedInTime)
                         ? format(values.otCheckedInTime, 'hh:mm a').toLowerCase()
                         : null,
-                    otCheckOutTime: values.otCheckedOutTime
+                    otCheckOutTime: isValidDate(values.otCheckedOutTime)
                         ? format(values.otCheckedOutTime, 'hh:mm a').toLowerCase()
                         : null,
                 })
@@ -149,6 +153,8 @@ const useEditAttendanceDialog = (data, onClose, field) => {
 
     const validate = useCallback(
         (values) => {
+            console.log(values)
+
             const errors = {}
             if (!data && values.checkedOutTime - new Date() > 0) {
                 errors.checkedOutTime = 'Check out time cannot be of future'
