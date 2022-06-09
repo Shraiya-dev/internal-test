@@ -40,8 +40,8 @@ const Bookings = () => {
                                 startAdornment: <InputAdornment position="start">+91</InputAdornment>,
                             }}
                             placeholder="Enter Phone Number"
-                            name="customerNumber"
-                            error={searchParams.get('customerNumber') && searchParams.get('customerNumber').length < 10}
+                            name="customerPhone"
+                            error={searchParams.get('customerPhone') && searchParams.get('customerPhone').length < 10}
                         />
                         <QueryField
                             label="Project Id"
@@ -55,6 +55,15 @@ const Bookings = () => {
                             label="Booking Id"
                             placeholder="Enter Booking Id"
                             name="bookingId"
+                        />
+                        <QueryField
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="outlined"
+                            label="Organisation Id"
+                            name="organisationId"
+                            placeholder="Enter Customer Name"
                         />
                         <Button
                             onClick={() => getBookings(searchParams)}

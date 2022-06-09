@@ -48,6 +48,17 @@ const Project = () => {
                             placeholder="Enter Project name"
                         />
                     </Grid>
+                    <Grid item>
+                        <QueryField
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            variant="outlined"
+                            label="Organisation Id"
+                            name="organisationId"
+                            placeholder="Enter Customer Name"
+                        />
+                    </Grid>
                     <Grid item display="flex">
                         <Button variant="contained" onClick={() => getProjects(sp)}>
                             Search

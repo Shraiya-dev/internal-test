@@ -39,9 +39,9 @@ export const useJobCards = () => {
                     jobCards: [
                         ...data.payload.jobCards.map((item) => ({
                             ...item?.jobCard,
-                            id: item.jobCard.jobCardId,
-                            name: item.worker.name,
-                            phoneNumber: item.worker.phoneNumber,
+                            id: item?.jobCard?.jobCardId,
+                            name: item?.worker?.name,
+                            phoneNumber: item?.worker?.phoneNumber,
                         })),
                     ],
                     hasMore: data.payload.hasMore,

@@ -1,10 +1,14 @@
+// import { envs } from './env'
+
+// export const getBackendUrl = () => {
+//     return envs.SERVER_URL
+// }
 export const getBackendUrl = () => {
     if (import.meta.env.MODE === 'development' || !import.meta.env.MODE) {
         return import.meta.env.VITE_SERVER_URL_STAGING
     }
     return import.meta.env.VITE_SERVER_URL
 }
-
 const SERVER_URL = getBackendUrl()
 
 export const GET_JOB_TYPES_API = `${SERVER_URL}/job-type/formatted`

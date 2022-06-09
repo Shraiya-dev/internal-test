@@ -23,3 +23,6 @@ export const ADD_WORKER_IN_BOOKING_ROUTE = '/bookings/:bookingId/workers'
 export const CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE = '/customers/:customerId/bookings/create'
 export const ATTENDANCE_ROUTE = '/attendance'
 export const JCA_ROUTE = '/job-cards'
+
+export const CUSTOMER_ROUTE = '/customers'
+export const ORGANIZATION_ROUTE = '/organization'

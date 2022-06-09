@@ -30,7 +30,13 @@ export const useProject = () => {
                 }
                 sp.set('pageSize', 100)
                 const { status, data } = await axios.get(`${SERVER_URL}/gateway/admin-api/projects?${sp.toString()}`)
-                setProjects(data.payload.projects.map((item) => ({ ...item.project })))
+                setProjects(
+                    data.payload.projects.map((item) => ({
+                        ...item.project,
+                        bookingCount: item?.stats?.bookingCount,
+                        activeEmployees: item?.stats?.activeEmployees,
+                    }))
+                )
                 setHasMore(data.payload.hasMore)
             } catch (error) {
                 showSnackbar({
@@ -82,7 +88,13 @@ export const useProject = () => {
         {
             field: 'activeEmployees',
             headerName: 'Active Employees',
-            sortable: true,
+
+            width: 250,
+        },
+        {
+            field: 'bookingCount',
+            headerName: 'Booking Count',
+
             width: 250,
         },
     ]

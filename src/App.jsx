@@ -6,7 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './App.css'
 import { PrivateRoute } from './components'
-import { AllocatedWorkers, AttendanceComponent, CustomerBookings, Login, WorkerProfile } from './pages'
+import { AllocatedWorkers, AttendanceComponent, Customer, CustomerBookings, Login, WorkerProfile } from './pages'
 import Attendance from './pages/Attendance'
 import BookingById from './pages/Bookings/BookingById'
 import Bookings from './pages/Bookings/Bookings'
@@ -14,6 +14,7 @@ import CreateBookings from './pages/Bookings/CreateBookings'
 import Dashboard from './pages/Dashboard/Dashboard'
 import JCA from './pages/JCA/jobCards'
 import JobCards from './pages/jobCards/JobCards'
+import { Organisation } from './pages/Organization/Organization'
 import Partner from './pages/Partner/Partner'
 import Project from './pages/Project/Project'
 import ProjectById from './pages/Project/ProjectById'
@@ -36,9 +37,11 @@ import {
     BOOKING_BY_ID_ROUTE,
     BOOKING_ROUTE,
     CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE,
+    CUSTOMER_ROUTE,
     DASHBOARD_ROUTE,
     JCA_ROUTE,
     JOBCARDS_FOR_BOOKING_ROUTE,
+    ORGANIZATION_ROUTE,
     PROJECT_BY_ID_ROUTE,
     PROJECT_ROUTE,
     REWARD_PENALTIES_ROUTE,
@@ -297,6 +300,24 @@ function App() {
                                         </PrivateRoute>
                                     }
                                 />
+
+                                <Route
+                                    path={CUSTOMER_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <Customer />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={ORGANIZATION_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <Organisation />
+                                        </PrivateRoute>
+                                    }
+                                />
+
                                 <Route path="/login" element={<Login />} />
                             </Routes>
                             <ToastContainer style={{ width: '600px', maxWidth: '100%' }} />

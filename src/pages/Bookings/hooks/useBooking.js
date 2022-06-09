@@ -17,7 +17,7 @@ export const useBookings = () => {
 
     const getBookings = useCallback(
         debounce(async (searchParams) => {
-            if (searchParams.get('customerNumber') && searchParams.get('customerNumber').length !== 10) return
+            if (searchParams.get('customerPhone') && searchParams.get('customerPhone').length !== 10) return
             setIsLoading(true)
             try {
                 const nsp = new URLSearchParams(searchParams)
@@ -25,6 +25,7 @@ export const useBookings = () => {
                     ? nsp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
                     : nsp.delete('pageNumber')
                 nsp.set('pageSize', 20)
+                nsp.get('customerPhone') && nsp.set('customerPhone', '+91' + nsp.get('customerPhone'))
                 const { data, status } = await axios.get(`${SERVER_URL}/gateway/admin-api/bookings?${nsp.toString()}`)
                 setResponse(data.payload)
             } catch (error) {

@@ -6,16 +6,17 @@ import { getSelectOptions } from '../../utils/InputHelpers'
 import { useSnackbar } from '../../providers/SnackbarProvider'
 import { getBackendUrl } from '../../api'
 import { checkError } from '../../utils/formikValidate'
+import { is } from 'date-fns/locale'
 
 const SERVER_URL = getBackendUrl()
-export const CancelJobCardConfirmationDialog = ({ open, cancel, confirm, jobCardState, bookingState }) => {
+export const CancelJobCardConfirmationDialog = ({ open, cancel, confirm, jobCardState, bookingState, reset }) => {
     const { showSnackbar } = useSnackbar()
     const [churnTypes, setChurnTypes] = useState([])
     const [churnReasons, setChurnReasons] = useState([])
     const onSubmit = useCallback(
         (values, fh) => {
             confirm(values.churnType, values.churnReason, values.other)
-            fh.resetForm()
+            // fh.resetForm()
         },
         [confirm]
     )
@@ -41,17 +42,24 @@ export const CancelJobCardConfirmationDialog = ({ open, cancel, confirm, jobCard
         onSubmit: onSubmit,
     })
 
+    useEffect(() => {
+        if (reset) {
+            form.handleReset()
+            setChurnTypes([{ label: 'Select churn type', value: 'none' }])
+            setChurnReasons([{ label: 'Select churn reason', value: 'none' }])
+        }
+    }, [reset])
     const handelDialogClose = useCallback(() => {
         cancel()
-        form.handleReset()
-        setChurnTypes([{ label: 'Select churn type', value: 'none' }])
-        setChurnReasons([{ label: 'Select churn reason', value: 'none' }])
+        // form.handleReset()
+        // setChurnTypes([{ label: 'Select churn type', value: 'none' }])
+        // setChurnReasons([{ label: 'Select churn reason', value: 'none' }])
     }, [cancel])
 
     useEffect(async () => {
         if (!(bookingState || jobCardState)) {
-            setChurnTypes([{ label: 'Select churn type', value: 'none' }])
-            setChurnReasons([{ label: 'Select churn reason', value: 'none' }])
+            // setChurnTypes([{ label: 'Select churn type', value: 'none' }])
+            // setChurnReasons([{ label: 'Select churn reason', value: 'none' }])
         } else {
             try {
                 const urlParams = new URLSearchParams()

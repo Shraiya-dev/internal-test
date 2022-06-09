@@ -13,11 +13,23 @@ import {
     JCA_ROUTE,
     REWARD_PENALTIES_ROUTE,
     WORKER_INFO_ROUTE,
+    CUSTOMER_ROUTE,
+    ORGANIZATION_ROUTE,
 } from '../../routes'
 
 const drawerWidth = 250
 
 const DrawerList = [
+    {
+        label: 'Organization',
+        icon: <Face />,
+        link: ORGANIZATION_ROUTE,
+    },
+    {
+        label: 'Customer',
+        icon: <Face />,
+        link: CUSTOMER_ROUTE,
+    },
     {
         label: 'Projects',
         icon: <LibraryBooks />,
@@ -53,7 +65,15 @@ const DrawerList = [
         icon: <Face />,
         link: ATTENDANCE_ROUTE,
     },
-]
+].sort((left, right) => {
+    if (left.label < right.label) {
+        return -1
+    }
+    if (left.label > right.label) {
+        return 1
+    }
+    return 0
+})
 
 const DashboardLayout = ({ children }) => {
     const navigate = useNavigate()

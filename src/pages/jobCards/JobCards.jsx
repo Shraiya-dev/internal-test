@@ -56,6 +56,7 @@ const JobCards = () => {
         open: false,
         cancel: () => {},
         confirm: () => {},
+        reset: false,
         jobCardState: undefined,
         bookingState: undefined,
     })
@@ -87,7 +88,10 @@ const JobCards = () => {
                             value={selectedTab}
                             indicatorColor="primary"
                             textColor="primary"
-                            onChange={handelTabChange}
+                            onChange={(e, v) => {
+                                handelTabChange(e, v)
+                                setCancelJobCardConfirmationDialogProps((prev) => ({ ...prev, reset: true }))
+                            }}
                         >
                             {Object.keys(allowedTabs).map((tab) => {
                                 const [state] = bookingSummary.jobCardsStateCount.filter((obj) => obj.enumValue === tab)
@@ -170,6 +174,7 @@ const JobCards = () => {
                                                                                 onClick={() => {
                                                                                     setCancelJobCardConfirmationDialogProps(
                                                                                         {
+                                                                                            reset: false,
                                                                                             open: true,
                                                                                             content: (
                                                                                                 <>
