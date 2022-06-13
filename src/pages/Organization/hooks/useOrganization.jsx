@@ -67,7 +67,6 @@ export const useOrganization = () => {
                 field: 'GSTIN',
                 headerName: 'GSTIN',
                 width: 200,
-                editable: true,
             },
             {
                 field: 'domain',
