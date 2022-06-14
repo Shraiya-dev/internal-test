@@ -21,7 +21,7 @@ const BookingProvider = ({ children }) => {
     const { showSnackbar } = useSnackbar()
     const [timer, setTimer] = useState({})
     const [response, setResponse] = useState({})
-    const { booking, customer, project } = response
+    const { booking, customer, project, stats } = response
     const [selectedTab, setSelectedTab] = useState()
     const handelTabChange = (e, value) => {
         setSelectedTab(value)
@@ -274,6 +274,7 @@ const BookingProvider = ({ children }) => {
 
     const providerValue = useMemo(
         () => ({
+            stats: stats,
             booking: booking,
             project: project,
             customer: customer,
@@ -292,6 +293,7 @@ const BookingProvider = ({ children }) => {
             navigate: navigate,
         }),
         [
+            stats,
             booking,
             project,
             customer,

@@ -410,6 +410,7 @@ const BookingById = () => {
                                 height: 'calc( 100vh - 270px )',
                                 overflowY: 'auto',
                                 position: 'relative',
+                                padding: '16px 0',
                             }}
                         >
                             <JobCards />

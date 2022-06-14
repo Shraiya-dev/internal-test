@@ -1,50 +1,48 @@
-import { TabContext } from '@material-ui/lab'
+import { MoreVert } from '@mui/icons-material'
 import {
     Box,
     Button,
-    Paper,
+    CircularProgress,
+    IconButton,
+    Menu,
+    MenuItem,
+    Pagination,
     Stack,
     Tab,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
     Tabs,
     Typography,
 } from '@mui/material'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { DataGrid } from '@mui/x-data-grid'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import { useBooking } from '../../providers/BookingProvider'
 import { CTAMap } from '../../utils/ctaHelpers'
-import { capitalize } from '../../utils/stringHelpers'
 import AddWorkerDialog from '../jobCards/AddWorkerDialog'
 import { CancelJobCardConfirmationDialog } from './CancelJobCardCOnfirmationDialoag'
 import EmploymentCompleteDialog from './EmploymentCompleteDialog'
 import { useJobCards } from './hooks/useJobCards'
 
 const JobCards = () => {
-    const { booking, project } = useBooking()
+    const { booking, project, stats } = useBooking()
     const {
-        bookingSummary,
-        skillTypeSummary,
-        selectedTab,
-        handelTabChange,
         cancelWorkerJobCard,
         markWorkerJobCardAsRTD,
         deployWorkerJobCard,
         markJobCardAsAccepted,
         setReload,
+        bulkCancelWorkerJobCard,
+        setBulkSelectionOn,
+        bulkSelectionOn,
+        setBulkOperationList,
+        hasMore,
+        jobCards,
+        reload,
     } = useJobCards()
 
-    useEffect(() => {
-        setReload(true)
-    }, [booking])
     const [open, setOpen] = useState(false)
     const [employmentCompleteDialogProps, setEmploymentCompleteDialog] = useState()
-    const allowedTabs = useMemo(() => CTAMap[bookingSummary?.status?.enumValue]?.tabs, [bookingSummary])
+    const allowedTabs = useMemo(() => CTAMap[booking?.status]?.tabs, [booking])
 
     const [confirmDialogProps, setConfirmDialogProps] = useState({
         content: '',
@@ -66,12 +64,179 @@ const JobCards = () => {
         setConfirmDialogProps({})
         setCancelJobCardConfirmationDialogProps({ open: false })
     }, [])
+    const [sp, setSp] = useSearchParams()
 
+    const columns = useMemo(
+        () => [
+            {
+                field: 'name',
+                headerName: 'Name',
+                sortable: true,
+                width: 180,
+                valueGetter: (params) => params?.row?.worker?.name,
+            },
+            {
+                field: 'phoneNumber',
+                headerName: 'Phone Number',
+                sortable: true,
+                width: 150,
+                valueGetter: (params) => params?.row?.worker?.phoneNumber,
+            },
+            {
+                field: 'city',
+                headerName: 'City',
+                sortable: true,
+                width: 150,
+                valueGetter: (params) => params?.row?.worker?.city,
+            },
+            {
+                field: 'availability',
+                headerName: 'Availability',
+                sortable: true,
+                width: 250,
+                valueGetter: (params) => params?.row?.jobCard?.availability,
+            },
+
+            {
+                field: 'createdAt',
+                headerName: 'Created At',
+                sortable: true,
+                width: 250,
+                valueGetter: (params) => params?.row?.jobCard?.createdAt,
+            },
+
+            {
+                flex: 1,
+                field: 'Actions',
+                headerName: 'Actions',
+                renderCell: ({ row: workerCard }) => (
+                    <>
+                        {allowedTabs && !bulkSelectionOn && (
+                            <Box>
+                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.cancel && (
+                                    <Button
+                                        variant="outlined"
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            setCancelJobCardConfirmationDialogProps({
+                                                reset: false,
+                                                open: true,
+                                                content: (
+                                                    <>
+                                                        <strong>Remove Hero</strong>
+                                                        &nbsp;from this booking?
+                                                    </>
+                                                ),
+                                                cancel: closeDialog,
+                                                confirm: (churnType, churnReason, other) => {
+                                                    cancelWorkerJobCard(workerCard, churnType, churnReason, other)
+                                                    closeDialog()
+                                                },
+                                                jobCardState: sp.get('jobCardStates'),
+                                                bookingState: booking?.status,
+                                            })
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                )}
+                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.accept && (
+                                    <Button
+                                        sx={{
+                                            m: 1,
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            markJobCardAsAccepted(workerCard)
+                                        }}
+                                        variant="outlined"
+                                    >
+                                        Move To Accepted
+                                    </Button>
+                                )}
+                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.rtd && (
+                                    <Button
+                                        sx={{
+                                            m: 1,
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            markWorkerJobCardAsRTD(workerCard)
+                                        }}
+                                        variant="outlined"
+                                    >
+                                        Move To RTD
+                                    </Button>
+                                )}
+                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.deploy && (
+                                    <Button
+                                        sx={{
+                                            m: 1,
+                                        }}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            deployWorkerJobCard(workerCard)
+                                        }}
+                                        variant="outlined"
+                                    >
+                                        Move to Deployed
+                                    </Button>
+                                )}
+                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.manageEmployee && (
+                                    <Link
+                                        to={`/projects/${
+                                            project?._id
+                                        }?tab=employee&phoneNumber=${workerCard?.worker?.phoneNumber.replace(
+                                            '+91',
+                                            ''
+                                        )}`}
+                                    >
+                                        <Button variant="outlined">Manage Employee</Button>
+                                    </Link>
+                                )}
+                            </Box>
+                        )}
+                    </>
+                ),
+                minWidth: 500,
+            },
+        ],
+        [
+            allowedTabs,
+            deployWorkerJobCard,
+            markWorkerJobCardAsRTD,
+            markJobCardAsAccepted,
+            cancelWorkerJobCard,
+            closeDialog,
+            booking,
+            sp,
+            bulkSelectionOn,
+        ]
+    )
+    const [menuAnchor, setMenuAnchor] = useState()
+    useEffect(() => {
+        if (!allowedTabs) return
+        if (sp.get('jobCardStates') && sp.get('skillTypes')) return
+        const nsp = new URLSearchParams(sp)
+        nsp.set('jobCardStates', Object.keys(allowedTabs)[0])
+        nsp.set('skillTypes', 'HELPER')
+        setSp(nsp)
+    }, [booking, allowedTabs])
+    const skillTypeTab = useMemo(() => {
+        const obj = {
+            HELPER: 0,
+            TECHNICIAN: 0,
+            SUPERVISOR: 0,
+            ...stats?.jobCardCounts[sp.get('jobCardStates')],
+        }
+        return Object.keys(obj)?.map((tab) => ({ label: tab, value: tab, count: obj[tab] }))
+    }, [stats, sp, booking])
     return (
         <>
+            <ConfirmationDialog {...confirmDialogProps} />
             <EmploymentCompleteDialog {...employmentCompleteDialogProps} />
             <ConfirmationDialog {...confirmationDialogProps} />
-            {bookingSummary && setReload && (
+            {booking && setReload && (
                 <AddWorkerDialog
                     open={open}
                     setOpen={setOpen}
@@ -81,211 +246,180 @@ const JobCards = () => {
             )}
             <CancelJobCardConfirmationDialog {...cancelJobCardConfirmationDialogProps} />
 
-            <Paper>
+            <Stack>
                 {allowedTabs ? (
-                    <TabContext value={selectedTab}>
+                    <Stack>
                         <Tabs
-                            value={selectedTab}
+                            TabIndicatorProps={{
+                                hidden: true,
+                            }}
+                            value={sp.get('jobCardStates') ?? Object.keys(allowedTabs)[0]}
                             indicatorColor="primary"
-                            textColor="primary"
                             onChange={(e, v) => {
-                                handelTabChange(e, v)
+                                sp.set('jobCardStates', v)
+                                sp.delete('pageNumber')
+
+                                setSp(sp)
                                 setCancelJobCardConfirmationDialogProps((prev) => ({ ...prev, reset: true }))
                             }}
                         >
                             {Object.keys(allowedTabs).map((tab) => {
-                                const [state] = bookingSummary.jobCardsStateCount.filter((obj) => obj.enumValue === tab)
+                                const count =
+                                    stats?.jobCardCounts[tab] &&
+                                    Object.values(stats?.jobCardCounts[tab]).reduce((p, n) => p + n)
                                 return (
                                     <Tab
-                                        key={state?.enumValue}
-                                        label={`${state?.enumLabel} (${state?.count})`}
-                                        value={state?.enumValue}
+                                        key={tab}
+                                        sx={{
+                                            backgroundColor: tab === sp.get('jobCardStates') ? 'primary.main' : '',
+                                            color: tab === sp.get('jobCardStates') ? '#ffffff !important' : '',
+                                            borderRadius: '8px 8px 0 0',
+                                        }}
+                                        label={`${tab} (${count ?? 0})`}
+                                        value={tab}
+                                    />
+                                )
+                            })}
+                            <Stack direction="row" justifyContent="flex-end" spacing={2} ml="auto" alignItems="center">
+                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.addWorker && !bulkSelectionOn && (
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => {
+                                            setOpen(!open)
+                                        }}
+                                    >
+                                        Add Hero
+                                    </Button>
+                                )}
+                                <>
+                                    {bulkSelectionOn ? (
+                                        <>
+                                            <Button variant="outlined" onClick={(e) => setBulkSelectionOn(false)}>
+                                                Stop Bulk Select
+                                            </Button>
+                                            <Button
+                                                color="error"
+                                                variant="contained"
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    setCancelJobCardConfirmationDialogProps({
+                                                        reset: false,
+                                                        open: true,
+                                                        content: (
+                                                            <>
+                                                                <strong>Remove Hero</strong>
+                                                                &nbsp;from this booking?
+                                                            </>
+                                                        ),
+                                                        cancel: closeDialog,
+                                                        confirm: (churnType, churnReason, other) => {
+                                                            bulkCancelWorkerJobCard(churnType, churnReason, other)
+                                                            closeDialog()
+                                                            setBulkSelectionOn(false)
+                                                        },
+                                                        jobCardState: sp.get('jobCardStates'),
+                                                        bookingState: booking?.status,
+                                                    })
+                                                }}
+                                            >
+                                                Cancel Selected Job Cards
+                                            </Button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <IconButton
+                                                id="long-button"
+                                                onClick={(e) => setMenuAnchor(e.currentTarget)}
+                                            >
+                                                <MoreVert />
+                                            </IconButton>
+                                            <Menu
+                                                anchorEl={menuAnchor}
+                                                open={!!menuAnchor}
+                                                onClose={(e) => setMenuAnchor(undefined)}
+                                            >
+                                                <MenuItem
+                                                    onClick={(e) => {
+                                                        setBulkSelectionOn(true)
+                                                        setMenuAnchor(undefined)
+                                                    }}
+                                                >
+                                                    Bulk Select
+                                                </MenuItem>
+                                            </Menu>
+                                        </>
+                                    )}
+                                </>
+                            </Stack>
+                        </Tabs>
+                        <Tabs
+                            value={sp.get('skillTypes') ?? 'HELPER'}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            onChange={(e, v) => {
+                                sp.set('skillTypes', v)
+                                sp.delete('pageNumber')
+                                setSp(sp)
+                                setCancelJobCardConfirmationDialogProps((prev) => ({ ...prev, reset: true }))
+                            }}
+                        >
+                            {skillTypeTab?.map((tab) => {
+                                return (
+                                    <Tab
+                                        key={tab.value}
+                                        sx={{ alignItems: 'flex-end' }}
+                                        label={`${tab?.label} (${tab?.count})`}
+                                        value={tab?.value}
                                     />
                                 )
                             })}
                         </Tabs>
-                        {CTAMap[bookingSummary?.status.enumValue]?.tabs[selectedTab]?.addWorker && (
-                            <Stack direction="row" justifyContent="flex-end">
-                                <Button
-                                    sx={{ m: 1 }}
-                                    size="large"
-                                    variant="outlined"
-                                    onClick={() => {
-                                        setOpen(!open)
-                                    }}
-                                >
-                                    Add Hero
-                                </Button>
-                            </Stack>
-                        )}
-                        {skillTypeSummary &&
-                            Object.keys(skillTypeSummary)?.map((skillType) => {
-                                const workerCards = skillTypeSummary[skillType].workerCards
-                                return (
-                                    <Box p={2} key={skillType}>
-                                        <Typography style={{ marginBottom: '20px' }} variant="h5">
-                                            {skillType} ({workerCards.length})
-                                        </Typography>
-
-                                        <TableContainer component={Paper} variant="outlined">
-                                            <Table>
-                                                <TableHead>
-                                                    <TableRow
-                                                        sx={{
-                                                            '*': {
-                                                                fontWeight: '900 !important',
-                                                            },
-                                                        }}
-                                                    >
-                                                        <TableCell>Name</TableCell>
-                                                        <TableCell>Phone Number</TableCell>
-                                                        <TableCell>City</TableCell>
-                                                        <TableCell>Availability</TableCell>
-                                                        <TableCell>Created At</TableCell>
-                                                        <TableCell align="center"></TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {workerCards.map((workerCard) => (
-                                                        <TableRow key={workerCard.jobCardId}>
-                                                            <TableCell>{workerCard.name}</TableCell>
-                                                            <TableCell>{workerCard.phoneNumber}</TableCell>
-                                                            <TableCell>{workerCard.city}</TableCell>
-                                                            <TableCell>
-                                                                {workerCard.availability
-                                                                    ? capitalize(
-                                                                          workerCard.availability
-                                                                              .split('_')
-                                                                              .join(' ')
-                                                                              .toLowerCase()
-                                                                      )
-                                                                    : ''}
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                {workerCard.createdAt ? workerCard.createdAt : ''}
-                                                            </TableCell>
-                                                            <TableCell align="right">
-                                                                {allowedTabs && (
-                                                                    <Box>
-                                                                        {allowedTabs[selectedTab]?.jobCardActions
-                                                                            ?.cancel && (
-                                                                            <Button
-                                                                                variant="outlined"
-                                                                                onClick={() => {
-                                                                                    setCancelJobCardConfirmationDialogProps(
-                                                                                        {
-                                                                                            reset: false,
-                                                                                            open: true,
-                                                                                            content: (
-                                                                                                <>
-                                                                                                    <strong>
-                                                                                                        Remove Hero
-                                                                                                    </strong>
-                                                                                                    &nbsp;from this
-                                                                                                    booking?
-                                                                                                </>
-                                                                                            ),
-                                                                                            cancel: closeDialog,
-                                                                                            confirm: (
-                                                                                                churnType,
-                                                                                                churnReason,
-                                                                                                other
-                                                                                            ) => {
-                                                                                                cancelWorkerJobCard(
-                                                                                                    workerCard,
-                                                                                                    churnType,
-                                                                                                    churnReason,
-                                                                                                    other
-                                                                                                )
-                                                                                                closeDialog()
-                                                                                            },
-                                                                                            jobCardState: selectedTab,
-                                                                                            bookingState:
-                                                                                                bookingSummary.status
-                                                                                                    .enumValue,
-                                                                                        }
-                                                                                    )
-                                                                                }}
-                                                                            >
-                                                                                Cancel
-                                                                            </Button>
-                                                                        )}
-                                                                        {allowedTabs[selectedTab]?.jobCardActions
-                                                                            ?.accept && (
-                                                                            <Button
-                                                                                sx={{
-                                                                                    m: 1,
-                                                                                }}
-                                                                                onClick={() =>
-                                                                                    markJobCardAsAccepted(workerCard)
-                                                                                }
-                                                                                variant="outlined"
-                                                                            >
-                                                                                Move To Accepted
-                                                                            </Button>
-                                                                        )}
-                                                                        {allowedTabs[selectedTab]?.jobCardActions
-                                                                            ?.rtd && (
-                                                                            <Button
-                                                                                sx={{
-                                                                                    m: 1,
-                                                                                }}
-                                                                                onClick={() =>
-                                                                                    markWorkerJobCardAsRTD(workerCard)
-                                                                                }
-                                                                                variant="outlined"
-                                                                            >
-                                                                                Move To RTD
-                                                                            </Button>
-                                                                        )}
-                                                                        {allowedTabs[selectedTab]?.jobCardActions
-                                                                            ?.deploy && (
-                                                                            <Button
-                                                                                sx={{
-                                                                                    m: 1,
-                                                                                }}
-                                                                                onClick={() => {
-                                                                                    deployWorkerJobCard(workerCard)
-                                                                                }}
-                                                                                variant="outlined"
-                                                                            >
-                                                                                Move to Deployed
-                                                                            </Button>
-                                                                        )}
-                                                                        {allowedTabs[selectedTab]?.jobCardActions
-                                                                            ?.manageEmployee && (
-                                                                            <Link
-                                                                                to={`/projects/${
-                                                                                    project?._id
-                                                                                }?tab=employee&phoneNumber=${workerCard?.phoneNumber.replace(
-                                                                                    '+91',
-                                                                                    ''
-                                                                                )}`}
-                                                                            >
-                                                                                <Button variant="outlined">
-                                                                                    Manage Employee
-                                                                                </Button>
-                                                                            </Link>
-                                                                        )}
-                                                                    </Box>
-                                                                )}
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-                                    </Box>
-                                )
-                            })}
-                    </TabContext>
+                        <DataGrid
+                            sx={{ minHeight: 'calc(100vh - 400px)' }}
+                            disableColumnMenu
+                            disableColumnFilter
+                            disableSelectionOnClick
+                            disableColumnSelector
+                            checkboxSelection={bulkSelectionOn}
+                            columns={columns}
+                            onSelectionModelChange={(selectedJobCardIds) => setBulkOperationList(selectedJobCardIds)}
+                            rows={jobCards ?? []}
+                            loading={reload}
+                            getRowId={(row) => row?.jobCard?.jobCardId}
+                            components={{
+                                Pagination: () => (
+                                    <>
+                                        <Stack direction="row" alignItems="center" spacing={2}>
+                                            <Typography> Job Cards: {jobCards.length}</Typography>
+                                            <Pagination
+                                                page={sp.get('pageNumber') ? Number(sp.get('pageNumber')) : 1}
+                                                hidePrevButton={
+                                                    !Number(sp.get('pageNumber')) || Number(sp.get('pageNumber')) === 1
+                                                }
+                                                hideNextButton={!hasMore}
+                                                count={hasMore ? 10000 : Number(sp.get('pageNumber'))}
+                                                siblingCount={0}
+                                                disabled={reload}
+                                                boundaryCount={0}
+                                                showFirstButton={false}
+                                                showLastButton={false}
+                                                color="primary"
+                                                onChange={(e, page) => {
+                                                    sp.set('pageNumber', page)
+                                                    setSp(sp)
+                                                    document.querySelector('.MuiDataGrid-virtualScroller').scrollTop = 0
+                                                }}
+                                            />
+                                        </Stack>
+                                    </>
+                                ),
+                            }}
+                        />
+                    </Stack>
                 ) : (
-                    <Typography align="center" variant="h5" color="#aeaeae" m={30}>
-                        Heroes allocation has not started yet
-                    </Typography>
+                    <CircularProgress />
                 )}
-            </Paper>
-            <ConfirmationDialog {...confirmDialogProps} />
+            </Stack>
         </>
     )
 }

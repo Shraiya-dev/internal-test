@@ -55,7 +55,7 @@ const CancelBookingConfirmationDialog = ({ open = false, cancel, confirm }) => {
             const { status, data } = await axios.get(`${SERVER_URL}/gateway/metadata/bookings/cancellation-reasons`)
 
             setCancellationReason([
-                { label: 'Select Completion code', value: 'none' },
+                { label: 'Select Cancellation code', value: 'none' },
                 ...data?.payload.cancellationReasons,
             ])
         } catch (error) {
