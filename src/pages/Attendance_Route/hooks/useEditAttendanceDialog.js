@@ -55,6 +55,7 @@ const useEditAttendanceDialog = (data, onClose, field) => {
             try {
                 const res = await axios.post(`${SERVER_URL}/admin/attendance`, {
                     workerId: workerDetail?.workerId,
+                    employeeId: workerDetail?.employeeId,
                     date: sp.get('date'),
                     checkInTime: values.checkedInTime ? format(values.checkedInTime, 'hh:mm a').toLowerCase() : null,
                     checkOutTime: values.checkedOutTime ? format(values.checkedOutTime, 'hh:mm a').toLowerCase() : null,
@@ -111,6 +112,7 @@ const useEditAttendanceDialog = (data, onClose, field) => {
         try {
             const payload = {
                 projectId: data?.projectId,
+                employeeId: data?.employeeId,
                 workerId: data?.workerId,
                 date: sp.get('date'),
             }

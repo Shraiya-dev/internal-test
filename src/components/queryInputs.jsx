@@ -23,6 +23,7 @@ export const QueryField = ({ name, validation, ...rest }) => {
                     replace: true,
                 })
             }}
+            InputLabelProps={{ shrink: true }}
             {...rest}
         />
     )

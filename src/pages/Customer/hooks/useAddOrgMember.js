@@ -7,17 +7,17 @@ import { useSearchCustomer } from './useSearchCustomer'
 
 const SERVER_URL = getBackendUrl()
 export const useAddOrgMember = (organisation, onClose) => {
-    const { form: searchForm, result } = useSearchCustomer()
+    const { form: searchForm, result, resultNotFound } = useSearchCustomer()
     const { showSnackbar } = useSnackbar()
     const onSubmit = useCallback(
         async (values, fh) => {
+            console.log(organisation)
             try {
                 const { status, data } = await axios.post(
-                    `${SERVER_URL}/gateway/admin-api/organisations/${organisation._id}/members`,
+                    `${SERVER_URL}/gateway/admin-api/organisations/${organisation.organisationId}/members`,
                     {
-                        customerId: result?.customerId,
+                        customerId: result?.customer?.customerId,
                         roles: values?.role,
-                        designation: values?.designation,
                     }
                 )
                 showSnackbar({
@@ -39,19 +39,19 @@ export const useAddOrgMember = (organisation, onClose) => {
     const form = useFormik({
         initialValues: {
             role: 'none',
-            designation: 'none',
+            // designation: 'none',
         },
         validate: (values) => {
             const errors = {}
             if (values.role === 'none') {
                 errors.role = true
             }
-            if (values.designation === 'none') {
-                errors.designation = true
-            }
+            // if (values.designation === 'none') {
+            //     errors.designation = true
+            // }
             return errors
         },
         onSubmit: onSubmit,
     })
-    return { form, searchForm, result }
+    return { form, searchForm, result, resultNotFound }
 }

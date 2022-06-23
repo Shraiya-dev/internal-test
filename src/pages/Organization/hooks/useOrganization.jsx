@@ -107,31 +107,31 @@ export const useOrganization = () => {
                 sortable: true,
                 width: 220,
             },
-            // {
-            //     field: 'AddMember',
-            //     headerName: 'Add Member',
-            //     renderCell: (params) => (
-            //         <Button
-            //             onClick={() => {
-            //                 setAddOrgMemberProps({
-            //                     open: true,
-            //                     onClose: () => {
-            //                         getOrganizations(searchParams)
-            //                         setAddOrgMemberProps({
-            //                             open: false,
-            //                         })
-            //                     },
-            //                     organisation: params?.row,
-            //                 })
-            //             }}
-            //             variant="outlined"
-            //         >
-            //             Add Member
-            //         </Button>
-            //     ),
-            //     sortable: true,
-            //     width: 220,
-            // },
+            {
+                field: 'AddMember',
+                headerName: 'Add Member',
+                renderCell: (params) => (
+                    <Button
+                        onClick={() => {
+                            setAddOrgMemberProps({
+                                open: true,
+                                onClose: () => {
+                                    getOrganizations(searchParams)
+                                    setAddOrgMemberProps({
+                                        open: false,
+                                    })
+                                },
+                                organisation: params?.row,
+                            })
+                        }}
+                        variant="outlined"
+                    >
+                        Add Member
+                    </Button>
+                ),
+                sortable: true,
+                width: 220,
+            },
         ],
         [searchParams, getOrganizations]
     )

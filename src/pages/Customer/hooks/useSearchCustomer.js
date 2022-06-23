@@ -6,6 +6,7 @@ import { useSnackbar } from '../../../providers/SnackbarProvider'
 const SERVER_URL = getBackendUrl()
 export const useSearchCustomer = () => {
     const [result, setResult] = useState()
+    const [resultNotFound, setResultNotFound] = useState(false)
     const { showSnackbar } = useSnackbar()
     const form = useFormik({
         initialValues: {
@@ -16,11 +17,15 @@ export const useSearchCustomer = () => {
         },
         onSubmit: async (values) => {
             try {
+                setResultNotFound(false)
                 const { status, data } = await axios.get(
                     `${SERVER_URL}/gateway/admin-api/customers/?customerPhone=${values.customerPhone}`
                 )
                 if (status === 200) {
-                    setResult(data.payload.customers[0]?.customer)
+                    if (!(data.payload.customers.length > 0)) {
+                        setResultNotFound(true)
+                    }
+                    setResult(data.payload.customers[0])
                 }
             } catch (error) {
                 showSnackbar({
@@ -29,5 +34,5 @@ export const useSearchCustomer = () => {
             }
         },
     })
-    return { result, form }
+    return { result, form, resultNotFound }
 }

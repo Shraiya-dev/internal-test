@@ -1,16 +1,14 @@
 import { TextField } from '@material-ui/core'
 import { Search } from '@mui/icons-material'
-import { Button, Dialog, InputAdornment, InputLabel, Paper, Select, Stack, Typography } from '@mui/material'
+import { Button, Chip, Dialog, InputAdornment, InputLabel, Paper, Select, Stack, Typography } from '@mui/material'
 import { useCallback } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import { DesignationOptions, RoleOptions } from '../../constant/customers'
+import { RoleOptions } from '../../constant/customers'
 import { useFormikProps } from '../../hooks/useFormikProps'
 import { getSelectOptions } from '../../utils/InputHelpers'
 import { useAddOrgMember } from './hooks/useAddOrgMember'
-import { useSearchCustomer } from './hooks/useSearchCustomer'
 
 export const AddOrgMember = ({ open, onClose, organisation }) => {
-    const { form, searchForm, result } = useAddOrgMember(organisation, onClose)
+    const { form, searchForm, result, resultNotFound } = useAddOrgMember(organisation, onClose)
     const formikProps = useFormikProps(form)
     const handelClose = useCallback(() => {
         onClose()
@@ -31,9 +29,9 @@ export const AddOrgMember = ({ open, onClose, organisation }) => {
                             name="customerPhone"
                             value={searchForm.values.customerPhone}
                             onChange={(e) => {
-                                const val = e.target.value
+                                const val = e.target.value.trim()
                                 if (val.length <= 10 && !isNaN(Number(val))) {
-                                    searchForm.handleChange(e)
+                                    searchForm.setFieldValue('customerPhone', val)
                                 }
                             }}
                             placeholder="Enter Phone Number"
@@ -43,23 +41,57 @@ export const AddOrgMember = ({ open, onClose, organisation }) => {
                         </Button>
                     </Stack>
                 </form>
+
                 {result && (
                     <Paper variant="outlined">
                         <Stack direction="row" p={2} flexWrap={'wrap'}>
                             <Typography variant="h6" mr={2}>
                                 <strong>Name:</strong>&nbsp;
-                                {result?.name}
+                                {result?.customer?.name}
                             </Typography>
                             <Typography variant="h6" mr={2}>
                                 <strong>Phone:</strong>&nbsp;
-                                {result?.phoneNumber}
+                                {result?.customer?.phoneNumber}
                             </Typography>
                             <Typography variant="h6">
                                 <strong>Email:</strong>&nbsp;
-                                {result?.email}
+                                {result?.customer?.email}
                             </Typography>
                         </Stack>
+                        {result?.organisation && (
+                            <Stack direction="row" p={2} flexWrap={'wrap'}>
+                                <Typography variant="h6" mr={2}>
+                                    <strong>ORG Id:</strong>&nbsp;
+                                    {result?.organisation?.organisationId}
+                                </Typography>
+                                <Typography variant="h6" mr={2}>
+                                    <strong>Company Name:</strong>&nbsp;
+                                    {result?.organisation?.companyName}
+                                </Typography>
+                                <Typography variant="h6">
+                                    <strong>Role</strong>&nbsp;
+                                    {result?.customer?.linkedOrganisation?.role}
+                                </Typography>
+                                <Typography variant="h6" mr={2}>
+                                    <strong>Status:</strong>&nbsp;
+                                    {!result?.customer?.linkedOrganisation?.isDeleted ? (
+                                        <Chip color="success" label="Active" />
+                                    ) : (
+                                        <Chip color="error" label="Deactivated" />
+                                    )}
+                                </Typography>
+                            </Stack>
+                        )}
                     </Paper>
+                )}
+                {resultNotFound && (
+                    <>
+                        <Stack>
+                            <Typography color={'grey.A700'} variant={'h5'} textAlign="center">
+                                Not such contractor found
+                            </Typography>
+                        </Stack>
+                    </>
                 )}
                 {result && (
                     <form onSubmit={form.handleSubmit}>
@@ -71,7 +103,7 @@ export const AddOrgMember = ({ open, onClose, organisation }) => {
                                         {getSelectOptions([{ label: 'Select Role', value: 'none' }, ...RoleOptions])}
                                     </Select>
                                 </Stack>
-                                <Stack>
+                                {/* <Stack>
                                     <InputLabel>Designation</InputLabel>
                                     <Select fullWidth {...formikProps('designation')} helperText={undefined}>
                                         {getSelectOptions([
@@ -79,7 +111,7 @@ export const AddOrgMember = ({ open, onClose, organisation }) => {
                                             ...DesignationOptions,
                                         ])}
                                     </Select>
-                                </Stack>
+                                </Stack> */}
                             </Stack>
                             <Stack direction="row" spacing={2}>
                                 <Button fullWidth variant="contained" onClick={handelClose}>
