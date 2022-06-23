@@ -4,7 +4,7 @@ import { envs } from './env'
 //     return envs.SERVER_URL
 // }
 
-!old env arch bellow
+// !old env arch bellow
 export const getBackendUrl = () => {
     if (import.meta.env.MODE === 'development' || !import.meta.env.MODE) {
         return import.meta.env.VITE_SERVER_URL_STAGING
