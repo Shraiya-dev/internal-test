@@ -37,9 +37,27 @@ export const CTAMap = {
             },
             READY_TO_DEPLOY: {
                 addWorker: true,
+                filters: {
+                    pdrc: true,
+                    drc: true,
+                },
                 jobCardActions: {
                     cancel: true,
+                    deploy: true,
                 },
+            },
+            DEPLOYMENT_COMPLETE: {
+                jobCardActions: {
+                    // cancel: true,
+                },
+            },
+            DEPLOYMENT_COMPLETE: {
+                jobCardActions: {
+                    manageEmployee: true,
+                },
+            },
+            COMPLETED: {
+                jobCardActions: {},
             },
         },
         actions: {
@@ -65,21 +83,10 @@ export const CTAMap = {
             },
             READY_TO_DEPLOY: {
                 addWorker: true,
-                jobCardActions: {
-                    cancel: true,
+                filters: {
+                    pdrc: true,
+                    drc: true,
                 },
-            },
-        },
-        actions: {
-            view: true,
-            jobCards: true,
-            rtd: true,
-            duplicate: true,
-        },
-    },
-    READY_TO_DEPLOY: {
-        tabs: {
-            READY_TO_DEPLOY: {
                 jobCardActions: {
                     cancel: true,
                     deploy: true,
@@ -90,7 +97,44 @@ export const CTAMap = {
                     // cancel: true,
                 },
             },
+            DEPLOYMENT_COMPLETE: {
+                jobCardActions: {
+                    manageEmployee: true,
+                },
+            },
+            COMPLETED: {
+                jobCardActions: {},
+            },
         },
+        actions: {
+            view: true,
+            jobCards: true,
+            deploy: true,
+            duplicate: true,
+        },
+    },
+    READY_TO_DEPLOY: {
+        tabs: {
+            READY_TO_DEPLOY: {
+                filters: {
+                    pdrc: true,
+                    drc: true,
+                },
+                jobCardActions: {
+                    cancel: true,
+                    deploy: true,
+                },
+            },
+            DEPLOYMENT_COMPLETE: {
+                jobCardActions: {
+                    manageEmployee: true,
+                },
+            },
+            COMPLETED: {
+                jobCardActions: {},
+            },
+        },
+
         actions: {
             view: true,
             jobCards: true,

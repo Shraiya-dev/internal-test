@@ -222,6 +222,44 @@ export const useJobCards = () => {
         }
         showLoader(false)
     }, [])
+    const markDRCDoneForJobCard = useCallback(async (workerCard) => {
+        showLoader(true)
+        try {
+            const { status, data } = await axios.put(
+                `${SERVER_URL}/admin/job-cards/${workerCard.jobCard.jobCardId}/drc`
+            )
+            setReload(true)
+            showSnackbar({
+                msg: 'Worker Marked as DRC done',
+                sev: 'success',
+            })
+        } catch (error) {
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
+        }
+        showLoader(false)
+    }, [])
+    const markPDRCDoneForJobCard = useCallback(async (workerCard) => {
+        showLoader(true)
+        try {
+            const { status, data } = await axios.put(
+                `${SERVER_URL}/admin/job-cards/${workerCard.jobCard.jobCardId}/pdrc`
+            )
+            setReload(true)
+            showSnackbar({
+                msg: 'Worker Marked as PDRC DONE',
+                sev: 'success',
+            })
+        } catch (error) {
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
+        }
+        showLoader(false)
+    }, [])
 
     // const handelTabChange = useCallback(
     //     (e, state) => {
@@ -251,6 +289,8 @@ export const useJobCards = () => {
             bulkSelectionOn,
             setBulkOperationList,
             bulkCancelWorkerJobCard,
+            markDRCDoneForJobCard,
+            markPDRCDoneForJobCard,
         }
     }, [
         response,
@@ -265,5 +305,7 @@ export const useJobCards = () => {
         cancelWorkerJobCard,
         deployWorkerJobCard,
         markJobCardAsAccepted,
+        markDRCDoneForJobCard,
+        markPDRCDoneForJobCard,
     ])
 }

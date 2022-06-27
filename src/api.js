@@ -1,16 +1,12 @@
 import { envs } from './env'
+const VITE_PUBLIC_APP_ENV = import.meta.env.VITE_PUBLIC_APP_ENV ?? 'PROD'
 
 export const getBackendUrl = () => {
+    if (VITE_PUBLIC_APP_ENV === 'PROD') {
+        return import.meta.env.VITE_SERVER_URL
+    }
     return envs.SERVER_URL
 }
-
-// !old env arch bellow
-// export const getBackendUrl = () => {
-//     if (import.meta.env.MODE === 'development' || !import.meta.env.MODE) {
-//         return import.meta.env.VITE_SERVER_URL_STAGING
-//     }
-//     return import.meta.env.VITE_SERVER_URL
-// }
 const SERVER_URL = getBackendUrl()
 
 export const GET_JOB_TYPES_API = `${SERVER_URL}/job-type/formatted`
