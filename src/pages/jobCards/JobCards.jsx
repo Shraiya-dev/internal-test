@@ -110,19 +110,19 @@ const JobCards = () => {
             },
             {
                 field: 'isPDRCDone',
-                headerName: 'PDRC done',
+                headerName: 'PDRC',
                 sortable: true,
-                width: 100,
+                width: 120,
                 hide: sp.get('jobCardStates') !== 'READY_TO_DEPLOY',
-                valueGetter: (params) => params?.row?.jobCard?.isPDRCDone,
+                valueGetter: (params) => (params?.row?.jobCard?.isPDRCDone ? 'Yes' : 'No'),
             },
             {
                 field: 'isDRCDone',
-                headerName: 'DRC done',
+                headerName: 'DRC',
                 sortable: true,
-                width: 100,
+                width: 120,
                 hide: sp.get('jobCardStates') !== 'READY_TO_DEPLOY',
-                valueGetter: (params) => params?.row?.jobCard?.isDRCDone,
+                valueGetter: (params) => (params?.row?.jobCard?.isDRCDone ? 'Yes' : 'No'),
             },
 
             {
