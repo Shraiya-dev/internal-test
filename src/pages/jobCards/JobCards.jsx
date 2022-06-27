@@ -340,40 +340,6 @@ const JobCards = () => {
                                 )
                             })}
                             <Stack direction="row" justifyContent="flex-end" spacing={2} ml="auto" alignItems="center">
-                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.pdrc && (
-                                    <FormControlLabel
-                                        checked={sp.get('isPDRCDone') === 'true'}
-                                        onChange={(e, checked) => {
-                                            e.stopPropagation()
-                                            const nsp = new URLSearchParams(sp)
-                                            if (checked) {
-                                                nsp.set('isPDRCDone', true)
-                                            } else {
-                                                nsp.delete('isPDRCDone')
-                                            }
-                                            setSp(nsp)
-                                        }}
-                                        control={<Checkbox />}
-                                        label="PDRC"
-                                    />
-                                )}
-                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.drc && (
-                                    <FormControlLabel
-                                        checked={sp.get('isDRCDone') === 'true'}
-                                        onChange={(e, checked) => {
-                                            e.stopPropagation()
-                                            const nsp = new URLSearchParams(sp)
-                                            if (checked) {
-                                                nsp.set('isDRCDone', true)
-                                            } else {
-                                                nsp.delete('isDRCDone')
-                                            }
-                                            setSp(nsp)
-                                        }}
-                                        control={<Checkbox />}
-                                        label="DRC"
-                                    />
-                                )}
                                 {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.addWorker && !bulkSelectionOn && (
                                     <Button
                                         variant="outlined"
@@ -456,6 +422,7 @@ const JobCards = () => {
                                 setCancelJobCardConfirmationDialogProps((prev) => ({ ...prev, reset: true }))
                             }}
                         >
+                            {' '}
                             {skillTypeTab?.map((tab) => {
                                 return (
                                     <Tab
@@ -466,6 +433,42 @@ const JobCards = () => {
                                     />
                                 )
                             })}
+                            <Stack direction={'row'} spacing={2} ml="auto" mr={3}>
+                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.pdrc && (
+                                    <FormControlLabel
+                                        checked={sp.get('isPDRCDone') === 'true'}
+                                        onChange={(e, checked) => {
+                                            e.stopPropagation()
+                                            const nsp = new URLSearchParams(sp)
+                                            if (checked) {
+                                                nsp.set('isPDRCDone', true)
+                                            } else {
+                                                nsp.delete('isPDRCDone')
+                                            }
+                                            setSp(nsp)
+                                        }}
+                                        control={<Checkbox />}
+                                        label="PDRC"
+                                    />
+                                )}
+                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.drc && (
+                                    <FormControlLabel
+                                        checked={sp.get('isDRCDone') === 'true'}
+                                        onChange={(e, checked) => {
+                                            e.stopPropagation()
+                                            const nsp = new URLSearchParams(sp)
+                                            if (checked) {
+                                                nsp.set('isDRCDone', true)
+                                            } else {
+                                                nsp.delete('isDRCDone')
+                                            }
+                                            setSp(nsp)
+                                        }}
+                                        control={<Checkbox />}
+                                        label="DRC"
+                                    />
+                                )}
+                            </Stack>
                         </Tabs>
                         <DataGrid
                             sx={{ minHeight: 'calc(100vh - 400px)' }}
