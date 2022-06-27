@@ -58,8 +58,8 @@ const BookingCard = ({ bookingData }) => {
                                     key={item}
                                     sx={(theme) => ({
                                         backgroundColor: theme.palette.grey[100],
-                                        p: 2,
-                                        m: 1,
+                                        p: 0.5,
+                                        m: 0.5,
                                         cursor: 'pointer',
                                     })}
                                 >
@@ -72,6 +72,7 @@ const BookingCard = ({ bookingData }) => {
                                         sx={(theme) => ({
                                             color: theme.palette.grey[700],
                                         })}
+                                        fontSize={12}
                                         align="center"
                                     >
                                         {formatEnum(item)}
