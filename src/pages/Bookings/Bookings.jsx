@@ -128,7 +128,7 @@ const Bookings = () => {
                                         style={{ display: 'flex' }}
                                         key={bookingData?.booking?.bookingId}
                                         item
-                                        lg={4}
+                                        lg={6}
                                         md={6}
                                     >
                                         <BookingCard bookingData={bookingData} />
