@@ -513,7 +513,11 @@ const JobCards = () => {
                         />
                     </Stack>
                 ) : (
-                    <CircularProgress />
+                    <Stack justifyContent={'center'} direction="row" my={10}>
+                        <Typography variant="h4" color="grey.A400">
+                            Allocation has not started yet
+                        </Typography>
+                    </Stack>
                 )}
             </Stack>
         </>
