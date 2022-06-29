@@ -2,7 +2,9 @@ import { MoreVert } from '@mui/icons-material'
 import {
     Box,
     Button,
+    Checkbox,
     CircularProgress,
+    FormControlLabel,
     IconButton,
     Menu,
     MenuItem,
@@ -33,6 +35,8 @@ const JobCards = () => {
         setReload,
         bulkCancelWorkerJobCard,
         setBulkSelectionOn,
+        markDRCDoneForJobCard,
+        markPDRCDoneForJobCard,
         bulkSelectionOn,
         setBulkOperationList,
         hasMore,
@@ -104,6 +108,22 @@ const JobCards = () => {
                 width: 250,
                 valueGetter: (params) => params?.row?.jobCard?.createdAt,
             },
+            {
+                field: 'isPDRCDone',
+                headerName: 'PDRC',
+                sortable: true,
+                width: 120,
+                hide: sp.get('jobCardStates') !== 'READY_TO_DEPLOY',
+                valueGetter: (params) => (params?.row?.jobCard?.isPDRCDone ? 'Yes' : 'No'),
+            },
+            {
+                field: 'isDRCDone',
+                headerName: 'DRC',
+                sortable: true,
+                width: 120,
+                hide: sp.get('jobCardStates') !== 'READY_TO_DEPLOY',
+                valueGetter: (params) => (params?.row?.jobCard?.isDRCDone ? 'Yes' : 'No'),
+            },
 
             {
                 flex: 1,
@@ -168,20 +188,54 @@ const JobCards = () => {
                                         Move To RTD
                                     </Button>
                                 )}
-                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.deploy && (
-                                    <Button
-                                        sx={{
-                                            m: 1,
-                                        }}
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            deployWorkerJobCard(workerCard)
-                                        }}
-                                        variant="outlined"
-                                    >
-                                        Move to Deployed
-                                    </Button>
-                                )}
+                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.deploy &&
+                                    !workerCard?.jobCard?.isPDRCDone && (
+                                        <Button
+                                            sx={{
+                                                m: 1,
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                markPDRCDoneForJobCard(workerCard)
+                                            }}
+                                            variant="outlined"
+                                        >
+                                            Mark PDRC Done
+                                        </Button>
+                                    )}
+
+                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.deploy &&
+                                    workerCard?.jobCard?.isPDRCDone &&
+                                    !workerCard?.jobCard?.isDRCDone && (
+                                        <Button
+                                            sx={{
+                                                m: 1,
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                markDRCDoneForJobCard(workerCard)
+                                            }}
+                                            variant="outlined"
+                                        >
+                                            Mark DRC Done
+                                        </Button>
+                                    )}
+                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.deploy &&
+                                    workerCard?.jobCard?.isPDRCDone &&
+                                    workerCard?.jobCard?.isDRCDone && (
+                                        <Button
+                                            sx={{
+                                                m: 1,
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                deployWorkerJobCard(workerCard)
+                                            }}
+                                            variant="outlined"
+                                        >
+                                            Move to Deployed
+                                        </Button>
+                                    )}
                                 {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.manageEmployee && (
                                     <Link
                                         to={`/projects/${
@@ -208,6 +262,8 @@ const JobCards = () => {
             markJobCardAsAccepted,
             cancelWorkerJobCard,
             closeDialog,
+            markDRCDoneForJobCard,
+            markPDRCDoneForJobCard,
             booking,
             sp,
             bulkSelectionOn,
@@ -216,12 +272,13 @@ const JobCards = () => {
     const [menuAnchor, setMenuAnchor] = useState()
     useEffect(() => {
         if (!allowedTabs) return
-        if (sp.get('jobCardStates') && sp.get('skillTypes')) return
+        if (Object.keys(allowedTabs).includes(sp.get('jobCardStates')) && sp.get('skillTypes')) return
         const nsp = new URLSearchParams(sp)
         nsp.set('jobCardStates', Object.keys(allowedTabs)[0])
         nsp.set('skillTypes', 'HELPER')
-        setSp(nsp)
+        setSp(nsp, { replace: true })
     }, [booking, allowedTabs])
+
     const skillTypeTab = useMemo(() => {
         const obj = {
             HELPER: 0,
@@ -258,8 +315,10 @@ const JobCards = () => {
                             onChange={(e, v) => {
                                 sp.set('jobCardStates', v)
                                 sp.delete('pageNumber')
+                                sp.delete('isPDRCDone')
+                                sp.delete('isDRCDone')
 
-                                setSp(sp)
+                                setSp(sp, { replace: true })
                                 setCancelJobCardConfirmationDialogProps((prev) => ({ ...prev, reset: true }))
                             }}
                         >
@@ -363,6 +422,7 @@ const JobCards = () => {
                                 setCancelJobCardConfirmationDialogProps((prev) => ({ ...prev, reset: true }))
                             }}
                         >
+                            {' '}
                             {skillTypeTab?.map((tab) => {
                                 return (
                                     <Tab
@@ -373,6 +433,42 @@ const JobCards = () => {
                                     />
                                 )
                             })}
+                            <Stack direction={'row'} spacing={2} ml="auto" mr={3}>
+                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.pdrc && (
+                                    <FormControlLabel
+                                        checked={sp.get('isPDRCDone') === 'true'}
+                                        onChange={(e, checked) => {
+                                            e.stopPropagation()
+                                            const nsp = new URLSearchParams(sp)
+                                            if (checked) {
+                                                nsp.set('isPDRCDone', true)
+                                            } else {
+                                                nsp.delete('isPDRCDone')
+                                            }
+                                            setSp(nsp, { replace: true })
+                                        }}
+                                        control={<Checkbox />}
+                                        label="PDRC"
+                                    />
+                                )}
+                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.drc && (
+                                    <FormControlLabel
+                                        checked={sp.get('isDRCDone') === 'true'}
+                                        onChange={(e, checked) => {
+                                            e.stopPropagation()
+                                            const nsp = new URLSearchParams(sp)
+                                            if (checked) {
+                                                nsp.set('isDRCDone', true)
+                                            } else {
+                                                nsp.delete('isDRCDone')
+                                            }
+                                            setSp(nsp, { replace: true })
+                                        }}
+                                        control={<Checkbox />}
+                                        label="DRC"
+                                    />
+                                )}
+                            </Stack>
                         </Tabs>
                         <DataGrid
                             sx={{ minHeight: 'calc(100vh - 400px)' }}
@@ -417,7 +513,11 @@ const JobCards = () => {
                         />
                     </Stack>
                 ) : (
-                    <CircularProgress />
+                    <Stack justifyContent={'center'} direction="row" my={10}>
+                        <Typography variant="h4" color="grey.A400">
+                            Allocation has not started yet
+                        </Typography>
+                    </Stack>
                 )}
             </Stack>
         </>

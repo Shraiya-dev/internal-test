@@ -265,6 +265,7 @@ const BookingProvider = ({ children }) => {
 
     useEffect(getBooking, [getBooking])
     useEffect(() => {
+        if (selectedTab === 'allocation' || selectedTab === 'info') return
         if (bookingStates.includes(booking?.status)) {
             handelTabChange(undefined, 'allocation')
         } else {

@@ -50,7 +50,7 @@ const BookingCard = ({ bookingData }) => {
                 </Box>
 
                 {allowedTabs && stats?.jobCardCounts && (
-                    <Stack direction="row" spacing={2}>
+                    <Stack direction="row" flexWrap="wrap">
                         {Object.keys(allowedTabs).map((item) => {
                             const state = stats?.jobCardCounts[item]
                             return (
@@ -58,7 +58,8 @@ const BookingCard = ({ bookingData }) => {
                                     key={item}
                                     sx={(theme) => ({
                                         backgroundColor: theme.palette.grey[100],
-                                        p: 2,
+                                        p: 0.5,
+                                        m: 0.5,
                                         cursor: 'pointer',
                                     })}
                                 >
@@ -71,6 +72,7 @@ const BookingCard = ({ bookingData }) => {
                                         sx={(theme) => ({
                                             color: theme.palette.grey[700],
                                         })}
+                                        fontSize={12}
                                         align="center"
                                     >
                                         {formatEnum(item)}

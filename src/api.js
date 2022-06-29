@@ -1,14 +1,11 @@
 import { envs } from './env'
-
-// export const getBackendUrl = () => {
-//     return envs.SERVER_URL
-// }
+const VITE_PUBLIC_APP_ENV = import.meta.env.VITE_PUBLIC_APP_ENV ?? 'PROD'
 
 export const getBackendUrl = () => {
-    if (import.meta.env.MODE === 'development' || !import.meta.env.MODE) {
-        return import.meta.env.VITE_SERVER_URL_STAGING
+    if (VITE_PUBLIC_APP_ENV === 'PROD') {
+        return import.meta.env.VITE_SERVER_URL
     }
-    return import.meta.env.VITE_SERVER_URL
+    return envs.SERVER_URL
 }
 const SERVER_URL = getBackendUrl()
 
