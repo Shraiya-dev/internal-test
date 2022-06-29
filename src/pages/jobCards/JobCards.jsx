@@ -276,7 +276,7 @@ const JobCards = () => {
         const nsp = new URLSearchParams(sp)
         nsp.set('jobCardStates', Object.keys(allowedTabs)[0])
         nsp.set('skillTypes', 'HELPER')
-        setSp(nsp)
+        setSp(nsp, { replace: true })
     }, [booking, allowedTabs])
 
     const skillTypeTab = useMemo(() => {
@@ -445,7 +445,7 @@ const JobCards = () => {
                                             } else {
                                                 nsp.delete('isPDRCDone')
                                             }
-                                            setSp(nsp)
+                                            setSp(nsp, { replace: true })
                                         }}
                                         control={<Checkbox />}
                                         label="PDRC"
@@ -462,7 +462,7 @@ const JobCards = () => {
                                             } else {
                                                 nsp.delete('isDRCDone')
                                             }
-                                            setSp(nsp)
+                                            setSp(nsp, { replace: true })
                                         }}
                                         control={<Checkbox />}
                                         label="DRC"

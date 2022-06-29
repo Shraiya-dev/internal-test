@@ -265,7 +265,7 @@ export const useJobCards = () => {
     //     (e, state) => {
     //         const nsp = new URLSearchParams(sp)
     //         nsp.set('tab', state)
-    //         setSp(nsp)
+    //         setSp(nsp,{replace:true})
     //     },
     //     [sp]
     // )

@@ -116,7 +116,7 @@ export const QueryReset = ({ children, except, ...props }) => {
                     sp.get(item) && nsp.set(item, sp.get(item))
                 })
 
-                setSp(nsp)
+                setSp(nsp, { replace: true })
             }}
             {...props}
         >
