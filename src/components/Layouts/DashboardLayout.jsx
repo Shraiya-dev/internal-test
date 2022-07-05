@@ -1,9 +1,22 @@
 import { Face, LibraryBooks, Person, Redeem } from '@mui/icons-material'
-import { AppBar, Box, Button, Drawer, IconButton, List, ListItem, Menu, MenuItem, Toolbar } from '@mui/material'
+import {
+    AppBar,
+    Box,
+    Button,
+    Drawer,
+    IconButton,
+    List,
+    ListItem,
+    Menu,
+    MenuItem,
+    Toolbar,
+    Typography,
+} from '@mui/material'
 import { format } from 'date-fns'
 import React, { useCallback, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import projectHeroLogo from '../../assets/brand-logo.svg'
+import { VITE_PUBLIC_APP_ENV } from '../../env'
 import { useAuth } from '../../providers/AuthProvider'
 import {
     ADD_PARTNER_ROUTE,
@@ -124,6 +137,9 @@ const DashboardLayout = ({ children }) => {
                     }}
                 >
                     <img style={{ height: '40px' }} src={projectHeroLogo} alt="project hero" />
+                    <Typography variant="h4" color="common.black">
+                        {VITE_PUBLIC_APP_ENV === 'DEV' || (VITE_PUBLIC_APP_ENV === 'STAGE' && VITE_PUBLIC_APP_ENV)}
+                    </Typography>
                     <IconButton color="primary" ref={menuBtnRef} onClick={handelOpen}>
                         <Person />
                     </IconButton>
