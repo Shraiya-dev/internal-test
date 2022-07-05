@@ -136,6 +136,7 @@ const useEditAttendanceDialog = (data, onClose, field) => {
         try {
             const payload = {
                 projectId: data?.projectId,
+                employeeId: data?.employeeId,
                 workerId: data?.workerId,
                 date: sp.get('date'),
             }
