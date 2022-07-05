@@ -433,7 +433,7 @@ const JobCards = () => {
                                     />
                                 )
                             })}
-                            <Stack direction={'row'} spacing={2} ml="auto" mr={3}>
+                            <Stack direction={'row'} spacing={2} ml="auto" mr={3} alignItems="center">
                                 {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.pdrc && (
                                     <FormControlLabel
                                         checked={sp.get('isPDRCDone') === 'true'}
@@ -468,6 +468,24 @@ const JobCards = () => {
                                         label="DRC"
                                     />
                                 )}
+                                {
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        startIcon={sp.get('workerPhone') ? '1' : undefined}
+                                        onClick={() => {
+                                            sp.delete('workerPhone')
+                                            setSp(sp)
+                                        }}
+                                    >
+                                        clear Filters
+                                    </Button>
+                                }
+                                {/* {
+                                    <Button variant="contained" startIcon={1} size="small">
+                                        Filters
+                                    </Button>
+                                } */}
                             </Stack>
                         </Tabs>
                         <DataGrid
