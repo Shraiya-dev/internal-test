@@ -1,7 +1,7 @@
 import { Button, Checkbox, Hidden, ListItemText, MenuItem, Select, TextField } from '@mui/material'
 import { useSearchParams } from 'react-router-dom'
 
-export const QueryField = ({ name, validation, ...rest }) => {
+export const QueryField = ({ name, validation, trim = true, ...rest }) => {
     const [sp, setSp] = useSearchParams()
     return (
         <TextField
@@ -10,10 +10,10 @@ export const QueryField = ({ name, validation, ...rest }) => {
                 const nsp = new URLSearchParams(sp)
                 if (validation) {
                     if (validation(e.target.value)) {
-                        nsp.set(name, e.target.value.trim())
+                        nsp.set(name, trim ? e.target.value.trim() : e.target.value)
                     }
                 } else {
-                    nsp.set(name, e.target.value.trim())
+                    nsp.set(name, trim ? e.target.value.trim() : e.target.value)
                 }
                 if (e.target.value === '') {
                     nsp.delete(name)
