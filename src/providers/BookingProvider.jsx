@@ -22,7 +22,7 @@ const BookingProvider = ({ children }) => {
     const [timer, setTimer] = useState({})
     const [response, setResponse] = useState({})
     const { booking, customer, project, stats } = response
-    const [selectedTab, setSelectedTab] = useState()
+    const [selectedTab, setSelectedTab] = useState('info')
     const handelTabChange = (e, value) => {
         setSelectedTab(value)
     }
@@ -265,11 +265,8 @@ const BookingProvider = ({ children }) => {
 
     useEffect(getBooking, [getBooking])
     useEffect(() => {
-        if (selectedTab === 'allocation' || selectedTab === 'info') return
-        if (bookingStates.includes(booking?.status)) {
+        if (selectedTab === 'info' && bookingStates.includes(booking?.status)) {
             handelTabChange(undefined, 'allocation')
-        } else {
-            handelTabChange(undefined, 'info')
         }
     }, [booking])
 

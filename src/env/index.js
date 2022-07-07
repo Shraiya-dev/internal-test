@@ -2,7 +2,8 @@ import { DevEnvConfig } from './dev'
 import { ProdEnvConfig } from './prod'
 import { StageEnvConfig } from './stage'
 
-const VITE_PUBLIC_APP_ENV = import.meta.env.VITE_PUBLIC_APP_ENV ?? 'DEV'
+//removing default value until migrating to new GKE cluster
+export const VITE_PUBLIC_APP_ENV = import.meta.env.VITE_PUBLIC_APP_ENV
 
 const AppEnvConfig = {
     DEV: DevEnvConfig,

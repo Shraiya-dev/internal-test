@@ -42,6 +42,7 @@ const Project = () => {
                     </Grid>
                     <Grid item>
                         <QueryField
+                            trim={false}
                             variant="outlined"
                             label="Project Name"
                             name="name"
@@ -56,7 +57,7 @@ const Project = () => {
                             variant="outlined"
                             label="Organisation Id"
                             name="organisationId"
-                            placeholder="Enter Customer Name"
+                            placeholder="Enter Org Id"
                         />
                     </Grid>
                     <Grid item display="flex">

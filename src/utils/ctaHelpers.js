@@ -59,6 +59,11 @@ export const CTAMap = {
             COMPLETED: {
                 jobCardActions: {},
             },
+            CANCELLED: {
+                jobCardActions: {
+                    accept: true,
+                },
+            },
         },
         actions: {
             view: true,
@@ -105,6 +110,11 @@ export const CTAMap = {
             COMPLETED: {
                 jobCardActions: {},
             },
+            CANCELLED: {
+                jobCardActions: {
+                    accept: true,
+                },
+            },
         },
         actions: {
             view: true,
@@ -133,6 +143,9 @@ export const CTAMap = {
             COMPLETED: {
                 jobCardActions: {},
             },
+            CANCELLED: {
+                jobCardActions: {},
+            },
         },
 
         actions: {
@@ -150,6 +163,9 @@ export const CTAMap = {
                 },
             },
             COMPLETED: {
+                jobCardActions: {},
+            },
+            CANCELLED: {
                 jobCardActions: {},
             },
         },

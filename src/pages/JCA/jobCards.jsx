@@ -60,7 +60,9 @@ export default function JCA() {
                         textDecoration: 'underline',
                         color: '#244CB3',
                     }}
-                    to={`/bookings/${params?.row.bookingId}?tab=${params.row?.jobCardState}`}
+                    to={`/bookings/${params?.row.bookingId}?jobCardStates=${params.row?.jobCardState}&skillTypes=${
+                        params.row?.skillType
+                    }&workerPhone=${params.row?.phoneNumber.replace('+91', '')}`}
                 >
                     {params?.row?.bookingId}
                 </Link>

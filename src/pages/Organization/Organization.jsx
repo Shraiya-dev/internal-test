@@ -42,6 +42,7 @@ export const Organisation = () => {
                         </Grid>
                         <Grid item>
                             <QueryField
+                                trim={false}
                                 variant="outlined"
                                 label="Company Name"
                                 name="companyName"
