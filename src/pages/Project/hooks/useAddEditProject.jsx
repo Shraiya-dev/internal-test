@@ -88,7 +88,7 @@ export const useAddEditProject = () => {
                 },
                 benefits: [
                     values.pf ? 'PF' : '',
-                    values.esi ? 'ESI' : '',
+                    values.esi ? 'INSURANCE' : '',
                     values.accommodation ? 'ACCOMODATION' : '',
                     values.food ? 'FOOD' : '',
                 ].filter((item) => item !== ''),
@@ -185,7 +185,7 @@ export const useAddEditProject = () => {
             city: project?.city ?? 'none',
             pincode: project?.pincode ?? '',
             pf: project?.benefits?.includes('PF') ?? '',
-            esi: project?.benefits?.includes('ESI') ?? '',
+            esi: project?.benefits?.includes('INSURANCE') ?? '',
             otf: project?.overTime?.rate ?? 'none',
             accommodation: project?.benefits?.includes('ACCOMODATION') ?? '',
             food: project?.benefits?.includes('FOOD') ?? '',

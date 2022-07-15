@@ -181,7 +181,7 @@ const AddEditProject = () => {
                     </Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={6}>
-                            <FormControl error={formikProps('pf').error} disabled={true}>
+                            <FormControl error={formikProps('pf').error} disabled={disabled}>
                                 <FormLabel>Provident Fund (PF) available?</FormLabel>
                                 <RadioGroup
                                     {...formikProps('pf')}
@@ -197,7 +197,7 @@ const AddEditProject = () => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <FormControl error={formikProps('esi').error} disabled={true}>
+                            <FormControl error={formikProps('esi').error} disabled={disabled}>
                                 <FormLabel>Employee State Insurance (ESI) provided?</FormLabel>
                                 <RadioGroup
                                     {...formikProps('esi')}
@@ -213,7 +213,7 @@ const AddEditProject = () => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <FormControl error={formikProps('accommodation').error} disabled={true}>
+                            <FormControl error={formikProps('accommodation').error} disabled={disabled}>
                                 <FormLabel>Accommodation provided?</FormLabel>
                                 <RadioGroup
                                     {...formikProps('accommodation')}
@@ -229,7 +229,7 @@ const AddEditProject = () => {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <FormControl error={formikProps('food').error} disabled={true}>
+                            <FormControl error={formikProps('food').error} disabled={disabled}>
                                 <FormLabel>Food provided?</FormLabel>
                                 <RadioGroup
                                     {...formikProps('food')}

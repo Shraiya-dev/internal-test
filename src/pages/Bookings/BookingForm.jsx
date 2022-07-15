@@ -431,7 +431,7 @@ const BookingForm = () => {
 
                     <Grid item xs={12}>
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="Getting Accommodation"
                             name="accomodation"
@@ -440,7 +440,7 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="Paid Travels "
                             name="travelAllowance"
@@ -449,7 +449,7 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="Getting Food"
                             name="food"
@@ -458,7 +458,7 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="PF"
                             name="pf"
@@ -467,7 +467,7 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="ESI"
                             name="esi"

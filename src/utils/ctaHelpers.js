@@ -10,7 +10,9 @@ export const CTAMap = {
     },
     CONFIRMED: {
         actions: {
+            edit: true,
             view: true,
+            cancel: true,
             startAllocation: true,
             duplicate: true,
         },
@@ -66,6 +68,7 @@ export const CTAMap = {
             },
         },
         actions: {
+            edit: true,
             view: true,
             jobCards: true,
             closeAllocation: true,
@@ -117,6 +120,8 @@ export const CTAMap = {
             },
         },
         actions: {
+            cancel: true,
+            edit: true,
             view: true,
             jobCards: true,
             deploy: true,
@@ -150,6 +155,7 @@ export const CTAMap = {
 
         actions: {
             view: true,
+            edit: true,
             jobCards: true,
             deploy: true,
             duplicate: true,
