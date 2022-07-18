@@ -130,6 +130,12 @@ export const CTAMap = {
     },
     READY_TO_DEPLOY: {
         tabs: {
+            WORKER_APPLIED: {
+                jobCardActions: {
+                    cancel: true,
+                    accept: true,
+                },
+            },
             READY_TO_DEPLOY: {
                 filters: {
                     pdrc: true,
@@ -163,6 +169,12 @@ export const CTAMap = {
     },
     DEPLOYED: {
         tabs: {
+            WORKER_APPLIED: {
+                jobCardActions: {
+                    cancel: true,
+                    accept: true,
+                },
+            },
             DEPLOYMENT_COMPLETE: {
                 jobCardActions: {
                     manageEmployee: true,
