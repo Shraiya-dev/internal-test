@@ -115,6 +115,18 @@ const BookingCard = ({ bookingData }) => {
                             )}
                         </>
                     )}
+                    {booking?.status === 'CANCELLED' && (
+                        <Stack flex={1}>
+                            <Typography flex={1} textAlign="left">
+                                <strong>Cancelation Reason: </strong>
+                                {booking?.cancellationReason?.cancelReason ?? 'NA'}
+                            </Typography>
+                            <Typography flex={1} textAlign="left">
+                                <strong>Cancelation Details: </strong>
+                                {booking?.cancellationReason?.details ?? 'NA'}
+                            </Typography>
+                        </Stack>
+                    )}
                 </Box>
             </Paper>
         </>

@@ -19,8 +19,9 @@ import {
     Typography,
 } from '@mui/material'
 import { format } from 'date-fns'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import ConfirmationDialog from '../../components/ConfirmationDialog'
 import { BookingDurations, JobTypeOptions } from '../../constant/booking'
 import { useSnackbar } from '../../providers/SnackbarProvider'
 import { CTAMap } from '../../utils/ctaHelpers'
@@ -32,8 +33,24 @@ import { useBookingForm } from './hooks/useBookingForm'
 const BookingForm = () => {
     const { booking, project, customer, checkError, form, formDisabled, editForm, getBooking } = useBookingForm()
     const { showSnackbar } = useSnackbar()
+    const [confirmationDialogProps, setConfirmationDialogProps] = useState({
+        open: false,
+    })
+
     return (
         <>
+            <ConfirmationDialog
+                content="Update the booking?"
+                cancel={() => {
+                    setConfirmationDialogProps({ open: false })
+                }}
+                confirm={() => {
+                    form.handleSubmit()
+                    setConfirmationDialogProps({ open: false })
+                }}
+                open={confirmationDialogProps.open}
+            />
+
             {CTAMap[booking?.status]?.actions?.edit && (
                 <Stack
                     direction="row"
@@ -68,7 +85,9 @@ const BookingForm = () => {
                                             sev: 'error',
                                         })
                                     }
-                                    form.handleSubmit()
+                                    setConfirmationDialogProps({
+                                        open: true,
+                                    })
                                 }}
                             >
                                 Save
