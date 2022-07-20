@@ -100,6 +100,13 @@ const JobCards = () => {
                 width: 250,
                 valueGetter: (params) => params?.row?.jobCard?.availability,
             },
+            {
+                field: 'wagePerDay',
+                headerName: 'Wage Per Day',
+                sortable: true,
+                width: 150,
+                valueGetter: (params) => params?.row?.jobCard?.wagePerDay,
+            },
 
             {
                 field: 'createdAt',
@@ -396,6 +403,14 @@ const JobCards = () => {
                                                 anchorEl={menuAnchor}
                                                 open={!!menuAnchor}
                                                 onClose={(e) => setMenuAnchor(undefined)}
+                                                anchorOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'right',
+                                                }}
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'right',
+                                                }}
                                             >
                                                 <MenuItem
                                                     onClick={(e) => {

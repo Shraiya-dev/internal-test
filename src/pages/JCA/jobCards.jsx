@@ -133,6 +133,11 @@ export default function JCA() {
             },
         },
         {
+            field: 'wagePerDay',
+            headerName: 'Wage Per Day',
+            width: 150,
+        },
+        {
             field: 'jobType',
             headerName: 'Job Type',
             width: 200,
