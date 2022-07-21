@@ -71,7 +71,7 @@ export const useJobCards = () => {
             }
             setReload(false)
         },
-        [sp]
+        [sp, booking]
     )
     useEffect(() => {
         setReload(true)

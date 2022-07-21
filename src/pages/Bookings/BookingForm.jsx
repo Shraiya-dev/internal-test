@@ -47,7 +47,7 @@ const BookingForm = () => {
                             <Typography component="span" color="error">
                                 <strong> Disclaimer:</strong>
                             </Typography>{' '}
-                            Changes made to a Booking such as Wage and Benefits will only be propagaed to Non-Deployed
+                            Changes made to a Booking such as Wage and Benefits will only be propagated to Non-Deployed
                             JobCards. JobCards in DEPLOYMENT_COMPLETE state and already created Employees will continue
                             to have older attributes.
                         </Typography>
@@ -96,6 +96,7 @@ const BookingForm = () => {
                                             msg: 'Some Field are invalid!',
                                             sev: 'error',
                                         })
+                                        return
                                     }
                                     setConfirmationDialogProps({
                                         open: true,
