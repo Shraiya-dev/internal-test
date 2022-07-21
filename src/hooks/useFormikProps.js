@@ -9,10 +9,10 @@ export function useFormikProps(form, initialValues) {
             return {
                 name: name,
                 value: form.values[name],
-                error: !!(errors[name] ? errors[name] : null),
+                error: !!(touched[name] && errors[name] ? errors[name] : null),
                 onChange: form.handleChange,
                 onBlur: form.handleBlur,
-                helperText: errors[name] ? errors[name] : null,
+                helperText: touched[name] && errors[name] ? errors[name] : null,
                 ...initialValues,
             }
         },
