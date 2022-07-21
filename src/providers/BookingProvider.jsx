@@ -270,7 +270,6 @@ const BookingProvider = ({ children }) => {
     useEffect(() => {
         if (sp.get('tab')) return
         if (!allowedTabs) return
-
         if (Object.keys(allowedTabs).length !== 0) {
             handelTabChange(null, 'allocation')
         }

@@ -19,6 +19,7 @@ import React, { useCallback } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert } from '../../components/Snackbar'
+import { useFormikProps } from '../../hooks/useFormikProps'
 import { useLocationMetadata } from '../../hooks/useLocationMetadata'
 import { getSelectOptions } from '../../utils/InputHelpers'
 import { JobTypeOptions } from '../../utils/optionHelpers'
@@ -49,17 +50,8 @@ const AddEditWorkerProfile = () => {
         snackbarProps,
         fetchWorker,
     } = useAddEditWorkerProfile(workerId)
-    const formikProps = useCallback(
-        (key) => ({
-            name: key,
-            id: key,
-            value: form.values[key],
-            onChange: form.handleChange,
-            onBlur: form.handleBlur,
-            disabled: disableForm,
-        }),
-        [form, disableForm]
-    )
+    const formikProps = useFormikProps(form, { disabled: disableForm })
+
     return (
         <>
             <DashboardLayout>
@@ -159,6 +151,13 @@ const AddEditWorkerProfile = () => {
                                         fullWidth
                                         label="Full Name"
                                         {...formikProps('name')}
+                                        onChange={(e) => {
+                                            if (e.target.value.trim().length > 0) {
+                                                form.setFieldValue('name', e.target.value)
+                                            } else {
+                                                form.setFieldValue('name', e.target.value.trim())
+                                            }
+                                        }}
                                         error={isError('name')}
                                     />
                                 </Grid>
