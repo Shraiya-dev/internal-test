@@ -4,13 +4,8 @@ import React from 'react'
 
 const ConfirmationDialog = ({ content, open = false, cancel, confirm }) => {
     return (
-        <Dialog maxWidth="xs" fullWidth open={open}>
-            <DialogContent sx={{ p: 4, display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <HelpOutlineOutlined color="primary" fontSize="large" />
-                <Typography align="left" variant="h5">
-                    {content}
-                </Typography>
-            </DialogContent>
+        <Dialog open={open}>
+            <DialogContent sx={{ p: 4 }}>{content}</DialogContent>
             <DialogActions
                 sx={{
                     p: 4,

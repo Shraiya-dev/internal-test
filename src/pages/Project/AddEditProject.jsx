@@ -37,7 +37,18 @@ const AddEditProject = () => {
     return (
         <>
             <ConfirmationDialog
-                content="Update the Project?"
+                content={
+                    <>
+                        <Typography variant="h5">Save Changes ?</Typography>
+                        <Typography pt={3}>
+                            <Typography component="span" color="error">
+                                <strong> Disclaimer:</strong>
+                            </Typography>{' '}
+                            Project Details are template values used for new bookings. Changes made to Project Details
+                            will not be propagated to existing Bookings, JobCards and Employees.
+                        </Typography>
+                    </>
+                }
                 cancel={() => {
                     setConfirmationDialogProps({ open: false })
                 }}

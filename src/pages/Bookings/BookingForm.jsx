@@ -40,7 +40,19 @@ const BookingForm = () => {
     return (
         <>
             <ConfirmationDialog
-                content="Update the booking?"
+                content={
+                    <>
+                        <Typography variant="h5">Save Changes ?</Typography>
+                        <Typography pt={3}>
+                            <Typography component="span" color="error">
+                                <strong> Disclaimer:</strong>
+                            </Typography>{' '}
+                            Changes made to a Booking such as Wage and Benefits will only be propagaed to Non-Deployed
+                            JobCards. JobCards in DEPLOYMENT_COMPLETE state and already created Employees will continue
+                            to have older attributes.
+                        </Typography>
+                    </>
+                }
                 cancel={() => {
                     setConfirmationDialogProps({ open: false })
                 }}
