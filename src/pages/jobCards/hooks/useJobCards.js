@@ -1,11 +1,10 @@
 import axios from 'axios'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { useBooking } from '../../../providers/BookingProvider'
 import { useLoader } from '../../../providers/LoaderProvider'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
-import { CTAMap } from '../../../utils/ctaHelpers'
 const SERVER_URL = getBackendUrl()
 export const useJobCards = () => {
     const [reload, setReload] = useState(false)
@@ -13,7 +12,7 @@ export const useJobCards = () => {
     const [bulkSelectionOn, setBulkSelectionOn] = useState(false)
     const [bulkOperationList, setBulkOperationList] = useState([])
     const { booking, getBooking } = useBooking()
-
+    const { bookingId } = useParams()
     const { showSnackbar } = useSnackbar()
     const { showLoader } = useLoader()
     const [response, setResponse] = useState({ jobCards: [], hasMore: false })
@@ -52,7 +51,7 @@ export const useJobCards = () => {
         async (searchParams) => {
             try {
                 const nsp = new URLSearchParams(searchParams)
-                nsp.set('bookingId', booking?.bookingId)
+                nsp.set('bookingId', bookingId)
                 nsp.set('pageNumber', Number(nsp.get('pageNumber') ?? 1) - 1)
                 nsp.set('pageSize', 50)
 
@@ -71,7 +70,7 @@ export const useJobCards = () => {
             }
             setReload(false)
         },
-        [sp, booking]
+        [sp, bookingId]
     )
     useEffect(() => {
         setReload(true)
