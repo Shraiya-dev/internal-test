@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { add, differenceInHours, differenceInMinutes } from 'date-fns'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../api'
+import { CTAMap } from '../utils/ctaHelpers'
 import { useLoader } from './LoaderProvider'
 import { useSnackbar } from './SnackbarProvider'
 const SERVER_URL = getBackendUrl()
@@ -22,10 +23,12 @@ const BookingProvider = ({ children }) => {
     const [timer, setTimer] = useState({})
     const [response, setResponse] = useState({})
     const { booking, customer, project, stats } = response
-    const [selectedTab, setSelectedTab] = useState('info')
-    const handelTabChange = (e, value) => {
-        setSelectedTab(value)
-    }
+    const [sp, setSp] = useSearchParams()
+    const handelTabChange = useCallback(async (e, value) => {
+        setSp(new URLSearchParams({ ...sp, tab: value }))
+    }, [])
+    const allowedTabs = useMemo(() => CTAMap[booking?.status]?.tabs, [booking])
+
     const { showLoader } = useLoader()
     const getBooking = useCallback(async () => {
         try {
@@ -265,11 +268,12 @@ const BookingProvider = ({ children }) => {
 
     useEffect(getBooking, [getBooking])
     useEffect(() => {
-        if (selectedTab === 'info' && bookingStates.includes(booking?.status)) {
-            handelTabChange(undefined, 'allocation')
+        if (sp.get('tab')) return
+        if (!allowedTabs) return
+        if (Object.keys(allowedTabs).length !== 0) {
+            handelTabChange(null, 'allocation')
         }
-    }, [booking])
-
+    }, [allowedTabs])
     const providerValue = useMemo(
         () => ({
             stats: stats,
@@ -277,7 +281,6 @@ const BookingProvider = ({ children }) => {
             project: project,
             customer: customer,
             handelTabChange: handelTabChange,
-            selectedTab: selectedTab,
             getBooking: getBooking,
             confirmBooking: confirmBooking,
             startAllocation: startAllocation,
@@ -296,7 +299,6 @@ const BookingProvider = ({ children }) => {
             project,
             customer,
             handelTabChange,
-            selectedTab,
             getBooking,
             confirmBooking,
             startAllocation,

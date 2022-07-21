@@ -19,8 +19,9 @@ import {
     Typography,
 } from '@mui/material'
 import { format } from 'date-fns'
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import ConfirmationDialog from '../../components/ConfirmationDialog'
 import { BookingDurations, JobTypeOptions } from '../../constant/booking'
 import { useSnackbar } from '../../providers/SnackbarProvider'
 import { CTAMap } from '../../utils/ctaHelpers'
@@ -32,8 +33,36 @@ import { useBookingForm } from './hooks/useBookingForm'
 const BookingForm = () => {
     const { booking, project, customer, checkError, form, formDisabled, editForm, getBooking } = useBookingForm()
     const { showSnackbar } = useSnackbar()
+    const [confirmationDialogProps, setConfirmationDialogProps] = useState({
+        open: false,
+    })
+
     return (
         <>
+            <ConfirmationDialog
+                content={
+                    <>
+                        <Typography variant="h5">Save Changes ?</Typography>
+                        <Typography pt={3}>
+                            <Typography component="span" color="error">
+                                <strong> Disclaimer:</strong>
+                            </Typography>{' '}
+                            Changes made to a Booking such as Wage and Benefits will only be propagaed to Non-Deployed
+                            JobCards. JobCards in DEPLOYMENT_COMPLETE state and already created Employees will continue
+                            to have older attributes.
+                        </Typography>
+                    </>
+                }
+                cancel={() => {
+                    setConfirmationDialogProps({ open: false })
+                }}
+                confirm={() => {
+                    form.handleSubmit()
+                    setConfirmationDialogProps({ open: false })
+                }}
+                open={confirmationDialogProps.open}
+            />
+
             {CTAMap[booking?.status]?.actions?.edit && (
                 <Stack
                     direction="row"
@@ -68,7 +97,9 @@ const BookingForm = () => {
                                             sev: 'error',
                                         })
                                     }
-                                    form.handleSubmit()
+                                    setConfirmationDialogProps({
+                                        open: true,
+                                    })
                                 }}
                             >
                                 Save
@@ -431,7 +462,7 @@ const BookingForm = () => {
 
                     <Grid item xs={12}>
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="Getting Accommodation"
                             name="accomodation"
@@ -440,7 +471,7 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="Paid Travels "
                             name="travelAllowance"
@@ -449,7 +480,7 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="Getting Food"
                             name="food"
@@ -458,7 +489,7 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="PF"
                             name="pf"
@@ -467,7 +498,7 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={true}
+                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="ESI"
                             name="esi"

@@ -41,6 +41,12 @@ export const useBookingForm = () => {
                         wage: Number(values.wageTechnition),
                     },
                 },
+                benefits: [
+                    values.pf ? 'PF' : '',
+                    values.esi ? 'INSURANCE' : '',
+                    values.accommodation ? 'ACCOMODATION' : '',
+                    values.food ? 'FOOD' : '',
+                ].filter((item) => item !== ''),
                 startDate: values.startDate,
 
                 shiftTime: `${values.shiftStartTime}-${values.shiftEndTime}`,
