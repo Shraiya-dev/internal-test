@@ -8,7 +8,7 @@ import { checkError } from '../../../utils/formikValidate'
 const BACKEND_URL = getBackendUrl()
 const parseBodyPayload = (values) => {
     return {
-        name: values.name,
+        name: values.name.trim(),
         state: values.state.toUpperCase(),
         city: values.city.toUpperCase(),
         phoneNumber: '+91' + values.phoneNumber,
@@ -49,6 +49,7 @@ const regexPatterns = {
     pan: /^[A-Z]{5}\d{4}[A-Z]$/,
     uan: /^\d{12}$/,
     isNum: /^\d*$/,
+    specialChar: /^[A-Za-z ]+$/,
 }
 export const useAddEditWorkerProfile = (workerId) => {
     const { states, districts, setStateId } = useLocationMetadata()
@@ -166,6 +167,9 @@ export const useAddEditWorkerProfile = (workerId) => {
             const errors = {}
             if (values.name === '') {
                 errors.name = true
+            }
+            if (values.name.length > 0 && !regexPatterns.specialChar.test(values.name)) {
+                errors.name = 'You can not enter the special Character'
             }
             if (values.state === 'none') {
                 errors.state = true

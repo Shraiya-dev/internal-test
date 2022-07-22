@@ -1,15 +1,12 @@
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { KeyboardBackspace } from '@mui/icons-material'
 import { Button, Chip, IconButton, Paper, Stack, Tab, Tabs, Typography } from '@mui/material'
-import { add, getUnixTime } from 'date-fns'
 import { useCallback, useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useTimer } from 'react-timer-hook'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import CancelBookingConfirmationDialog from '../../components/CancelBookingConfirmationDialog'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useBooking } from '../../providers/BookingProvider'
-import { capitalize } from '../../utils'
 import { CTAMap } from '../../utils/ctaHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 import JobCards from '../jobCards/JobCards'
@@ -18,7 +15,6 @@ import BookingForm from './BookingForm'
 const BookingById = () => {
     const {
         handelTabChange,
-        selectedTab,
         booking,
         project,
         customer,
@@ -48,11 +44,13 @@ const BookingById = () => {
         setConfirmDialogProps({})
         setCancelBookingConfirmationDialogProps({})
     }, [])
+    const [sp, setSp] = useSearchParams()
     const navigate = useNavigate()
 
     return (
         <>
             <CancelBookingConfirmationDialog {...cancelBookingConfirmationDialogProps} />
+
             <DashboardLayout>
                 <Paper sx={{ p: 2 }}>
                     <Stack direction="row" alignItems="stretch" justifyContent="space-between">
@@ -369,14 +367,14 @@ const BookingById = () => {
                             )}
                         </Stack>
                     </Stack>
-                    <TabContext value={selectedTab}>
+                    <TabContext value={sp.get('tab') ?? 'info'}>
                         <Tabs
                             TabIndicatorProps={{
                                 style: {
                                     height: '3px',
                                 },
                             }}
-                            value={selectedTab}
+                            value={sp.get('tab') ?? 'info'}
                             onChange={handelTabChange}
                         >
                             <Tab

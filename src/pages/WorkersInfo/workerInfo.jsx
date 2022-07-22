@@ -44,6 +44,10 @@ const statusValue = [
         value: 'REGISTERED',
         label: 'Registered',
     },
+    {
+        value: 'CONFIRMED',
+        label: 'Confirmed',
+    },
 ]
 
 const skillType = [
