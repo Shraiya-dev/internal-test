@@ -90,6 +90,8 @@ export const useAddEditProject = () => {
                     values.pf ? 'PF' : '',
                     values.esi ? 'INSURANCE' : '',
                     values.accommodation ? 'ACCOMODATION' : '',
+                    values.travelAllowance ? 'PAID_TRAVEL' : '',
+
                     values.food ? 'FOOD' : '',
                 ].filter((item) => item !== ''),
                 images: {
