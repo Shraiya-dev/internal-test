@@ -44,7 +44,8 @@ export const useBookingForm = () => {
                 benefits: [
                     values.pf ? 'PF' : '',
                     values.esi ? 'INSURANCE' : '',
-                    values.accommodation ? 'ACCOMODATION' : '',
+                    values.accomodation ? 'ACCOMODATION' : '',
+                    values.travelAllowance ? 'PAID_TRAVEL' : '',
                     values.food ? 'FOOD' : '',
                 ].filter((item) => item !== ''),
                 startDate: values.startDate,
