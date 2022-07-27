@@ -1,4 +1,4 @@
-import { Button, Grid, LinearProgress, Pagination, Paper, Stack, Typography } from '@mui/material'
+import { Button, Dialog, Grid, LinearProgress, Pagination, Paper, Stack, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import React from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -6,6 +6,7 @@ import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { QueryField } from '../../components/queryInputs'
 import { useOrganization } from './hooks/useOrganization'
 import { AddOrgMember } from '../Customer/AddOrgMember'
+import { GSTINModal } from '../../components'
 export const Organisation = () => {
     const {
         columns,
@@ -14,6 +15,8 @@ export const Organisation = () => {
         hasMore,
         getOrganizations,
         addOrgMemberProps,
+        openGSTINModal,
+        modalHandler,
     } = useOrganization()
     const [sp, setSp] = useSearchParams()
     return (
@@ -113,6 +116,7 @@ export const Organisation = () => {
                         }}
                     />
                 </Paper>
+                {openGSTINModal?.open && <GSTINModal modalHandler={modalHandler} openGSTINModal={openGSTINModal} />}
             </DashboardLayout>
         </>
     )
