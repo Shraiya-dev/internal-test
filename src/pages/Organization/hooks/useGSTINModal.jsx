@@ -11,6 +11,7 @@ export const useGSTINModal = ({ openGSTINModal }) => {
     const { showSnackbar } = useSnackbar()
     const [gstDetail, setGstDetail] = useState()
     const [isLoading, setIsLoading] = useState(true)
+    const [networkMessage, setNetworkMessgae] = useState('')
 
     const getData = async () => {
         try {
@@ -26,6 +27,7 @@ export const useGSTINModal = ({ openGSTINModal }) => {
                 msg: error.response.data.messageToUser,
                 sev: 'error',
             })
+            setNetworkMessgae(error.response.data.messageToUser)
         }
     }
 
@@ -37,7 +39,8 @@ export const useGSTINModal = ({ openGSTINModal }) => {
         () => ({
             gstDetail,
             isLoading,
+            networkMessage,
         }),
-        [gstDetail, isLoading]
+        [gstDetail, isLoading, networkMessage]
     )
 }

@@ -23,11 +23,15 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { useState } from 'react'
 
 export const GSTINModal = ({ modalHandler, openGSTINModal }) => {
-    const { gstDetail, isLoading } = useGSTINModal({ openGSTINModal })
+    const { gstDetail, isLoading, networkMessage } = useGSTINModal({ openGSTINModal })
     const [collapseOpen, setCollapseOpen] = useState(false)
     return (
         <Dialog fullWidth onClose={modalHandler} open={openGSTINModal?.open}>
-            <Box>
+            <Box
+                sx={{
+                    maxHeight: '710px',
+                }}
+            >
                 <DialogTitle>
                     <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
                         <Typography>
@@ -94,7 +98,7 @@ export const GSTINModal = ({ modalHandler, openGSTINModal }) => {
                                                     size="small"
                                                     onClick={() => setCollapseOpen(!collapseOpen)}
                                                 >
-                                                    {gstDetail?.bzgddtls instanceof Object ? (
+                                                    {!collapseOpen ? (
                                                         <KeyboardArrowDownIcon />
                                                     ) : (
                                                         <KeyboardArrowUpIcon />
@@ -108,9 +112,6 @@ export const GSTINModal = ({ modalHandler, openGSTINModal }) => {
                                     <TableRow sx={{ maxHeight: '200px', overflowY: 'scroll' }}>
                                         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                                             <Collapse in={collapseOpen} timeout="auto" unmountOnExit>
-                                                {/* <Typography variant="h6" gutterBottom component="div">
-                                                    bzgddtls
-                                                </Typography> */}
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell sx={{ fontWeight: '900' }}>gdes</TableCell>
@@ -170,7 +171,11 @@ export const GSTINModal = ({ modalHandler, openGSTINModal }) => {
                             alignItems: 'center',
                         }}
                     >
-                        <CircularProgress />
+                        {!networkMessage.length > 0 ? (
+                            <CircularProgress />
+                        ) : (
+                            <Typography color="red">{networkMessage}</Typography>
+                        )}
                     </DialogContent>
                 )}
             </Box>
