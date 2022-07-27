@@ -15,16 +15,14 @@ import {
     TextField,
     Typography,
 } from '@mui/material'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { PopAlert } from '../../components/Snackbar'
 import { useFormikProps } from '../../hooks/useFormikProps'
-import { useLocationMetadata } from '../../hooks/useLocationMetadata'
 import { getSelectOptions } from '../../utils/InputHelpers'
 import { JobTypeOptions } from '../../utils/optionHelpers'
 import {
-    currentlyOperationalCities,
     genderOptions,
     languageOptions,
     phoneTypeOptions,
@@ -34,6 +32,7 @@ import {
     yoeOptions,
 } from './helper'
 import useAddEditWorkerProfile from './hooks/useAddEditWorkerProfile'
+import { PaymentDetails } from './PaymentDetails'
 
 const AddEditWorkerProfile = () => {
     const { workerId } = useParams()
@@ -416,7 +415,12 @@ const AddEditWorkerProfile = () => {
                             </FormControl>
                         </Container>
                     </Paper>
-                    <Paper sx={{ p: 2, m: 2 }}>
+                    {workerId && (
+                        <Paper sx={{ p: 2, m: 2 }}>
+                            <PaymentDetails />
+                        </Paper>
+                    )}
+                    {/* <Paper sx={{ p: 2, m: 2 }}>
                         <Container>
                             <h3>Bank Information</h3>
                             <h5>Do they have bank account</h5>
@@ -475,7 +479,7 @@ const AddEditWorkerProfile = () => {
                                 </Paper>
                             )}
                         </Container>
-                    </Paper>
+                    </Paper> */}
                 </Stack>
             </DashboardLayout>
             <PopAlert {...snackbarProps} />
