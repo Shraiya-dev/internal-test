@@ -22,9 +22,100 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { useState } from 'react'
 
+const initialGstData = [
+    {
+        key: 'tradeNam',
+        name: 'Trade Name',
+        value: '',
+        isCollapsibleData: false,
+        collapsibleData: [],
+        collapsibleDataKeys: [],
+    },
+    {
+        key: 'sts',
+        name: 'Status',
+        value: '',
+        isCollapsibleData: false,
+        collapsibleData: [],
+        collapsibleDataKeys: [],
+    },
+    {
+        key: 'pradr',
+        name: 'Present Business Address',
+        subKey: 'adr',
+        value: '',
+        isCollapsibleData: false,
+        collapsibleData: [],
+        collapsibleDataKeys: [],
+    },
+    {
+        key: 'ctb',
+        name: 'Constitution of Business',
+        value: '',
+        isCollapsibleData: false,
+        collapsibleData: [],
+        collapsibleDataKeys: [],
+    },
+    {
+        key: 'bzgddtls',
+        name: 'HSN details for Goods',
+        value: '',
+        isCollapsibleData: false,
+        collapsibleData: [],
+        collapsibleDataKeys: [],
+    },
+    {
+        key: 'aggreTurnOver',
+        name: 'Aggregated Annual Turnover Slab',
+        value: '',
+        isCollapsibleData: false,
+        collapsibleData: [],
+        collapsibleDataKeys: [],
+    },
+    {
+        key: 'aggreTurnOverFY',
+        name: 'aggreTurnOverFY',
+        value: '',
+        isCollapsibleData: false,
+        collapsibleData: [],
+        collapsibleDataKeys: [],
+    },
+    {
+        key: 'gti',
+        name: 'Gross Total Income (Income-tax returns)',
+        value: '',
+        isCollapsibleData: false,
+        collapsibleData: [],
+        collapsibleDataKeys: [],
+    },
+    {
+        key: 'gtiFY',
+        name: 'gtiFY',
+        value: '',
+        isCollapsibleData: false,
+        collapsibleData: [],
+        collapsibleDataKeys: [],
+    },
+]
+
 export const GSTINModal = ({ modalHandler, openGSTINModal }) => {
     const { gstDetail, isLoading, networkMessage } = useGSTINModal({ openGSTINModal })
-    const [collapseOpen, setCollapseOpen] = useState(false)
+    const [collapseOpen, setCollapseOpen] = useState({ key: false })
+    const [gstData, setGstData] = useState([...initialGstData])
+
+    useEffect(() => {
+        setGstData([
+            ...initialGstData.map((val, index) => ({
+                name: val.name,
+                key: val.key,
+                value: val.subKey ? gstDetail?.[val?.key]?.[val?.subKey] : gstDetail?.[val?.key],
+                isCollapsibleData: gstDetail?.[val?.key] instanceof Object ? gstDetail?.[val?.key]?.length > 0 : false,
+                collapsibleData: gstDetail?.[val?.key] instanceof Object ? gstDetail?.[val?.key] : [],
+                collapsibleDataKeys:
+                    gstDetail?.[val?.key]?.[0] instanceof Object ? Object.keys(gstDetail?.[val?.key]?.[0]) : [],
+            })),
+        ])
+    }, [gstDetail])
 
     return (
         <Dialog fullWidth onClose={modalHandler} open={openGSTINModal?.open}>
@@ -67,109 +158,96 @@ export const GSTINModal = ({ modalHandler, openGSTINModal }) => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>Trade Name</TableCell>
-                                        <TableCell>{!gstDetail?.tradeNam ? '-' : gstDetail?.tradeNam} </TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>Status</TableCell>
-                                        <TableCell>{!gstDetail?.sts ? '-' : gstDetail?.sts}</TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}> Present Business Address</TableCell>
-                                        <TableCell>{!gstDetail?.pradr?.adr ? '-' : gstDetail?.pradr?.adr}</TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>Constitution of Business</TableCell>
-                                        <TableCell>{!gstDetail?.ctb ? '-' : gstDetail?.ctb}</TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>HSN details for Goods</TableCell>
-                                        <TableCell>
-                                            {gstDetail?.bzgddtls instanceof Object ? 'Click to view details' : '-'}
-                                        </TableCell>
-                                        <TableCell>
-                                            {gstDetail?.bzgddtls instanceof Object ? (
-                                                <IconButton
-                                                    aria-label="expand row"
-                                                    size="small"
-                                                    onClick={() => setCollapseOpen(!collapseOpen)}
-                                                >
-                                                    {!collapseOpen ? (
-                                                        <KeyboardArrowDownIcon />
-                                                    ) : (
-                                                        <KeyboardArrowUpIcon />
-                                                    )}
-                                                </IconButton>
-                                            ) : (
-                                                ''
-                                            )}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow sx={{ maxHeight: '200px', overflowY: 'scroll' }}>
-                                        {gstDetail?.bzgddtls?.length > 0 && (
-                                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                                                <Collapse in={collapseOpen} timeout="auto" unmountOnExit>
-                                                    <TableHead>
-                                                        <TableRow>
-                                                            <TableCell sx={{ fontWeight: '900' }}>
-                                                                Description
-                                                            </TableCell>
-                                                            <TableCell sx={{ fontWeight: '900' }}>HSN Code</TableCell>
-                                                            <TableCell sx={{ fontWeight: '900' }}>Industry</TableCell>
-                                                            <TableCell sx={{ fontWeight: '900' }}>
-                                                                Sub-Industry
+                                    {gstData &&
+                                        gstData?.map((val, index) => {
+                                            return (
+                                                <>
+                                                    <TableRow key={index}>
+                                                        <TableCell sx={{ fontWeight: '900' }}>{val?.name}</TableCell>
+                                                        <TableCell>
+                                                            {!val?.value
+                                                                ? '-'
+                                                                : val?.value instanceof Object
+                                                                ? 'Click to view Details'
+                                                                : val?.value}{' '}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {!val?.value ? (
+                                                                ''
+                                                            ) : val?.value instanceof Object ? (
+                                                                <IconButton
+                                                                    aria-label="expand row"
+                                                                    size="small"
+                                                                    onClick={() =>
+                                                                        setCollapseOpen({
+                                                                            ...collapseOpen,
+                                                                            [val.name]: !collapseOpen[val.name],
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    {!collapseOpen[val?.name] ? (
+                                                                        <KeyboardArrowDownIcon />
+                                                                    ) : (
+                                                                        <KeyboardArrowUpIcon />
+                                                                    )}
+                                                                </IconButton>
+                                                            ) : (
+                                                                ''
+                                                            )}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                    {val?.isCollapsibleData && (
+                                                        <TableRow sx={{ maxHeight: '200px', overflowY: 'scroll' }}>
+                                                            <TableCell
+                                                                style={{ paddingBottom: 0, paddingTop: 0 }}
+                                                                colSpan={6}
+                                                            >
+                                                                <Collapse
+                                                                    in={collapseOpen[val?.name]}
+                                                                    timeout="auto"
+                                                                    unmountOnExit
+                                                                >
+                                                                    <TableHead>
+                                                                        <TableRow>
+                                                                            {Object?.keys(val?.collapsibleData[0])?.map(
+                                                                                (x) => {
+                                                                                    return (
+                                                                                        <TableCell
+                                                                                            sx={{
+                                                                                                fontWeight: '900',
+                                                                                            }}
+                                                                                        >
+                                                                                            {x}
+                                                                                        </TableCell>
+                                                                                    )
+                                                                                }
+                                                                            )}
+                                                                        </TableRow>
+                                                                    </TableHead>
+                                                                    <TableBody>
+                                                                        {val?.collapsibleData?.map((x, idx) => {
+                                                                            return (
+                                                                                <TableRow>
+                                                                                    {val?.collapsibleDataKeys?.map(
+                                                                                        (data, index) => {
+                                                                                            return (
+                                                                                                <TableCell key={index}>
+                                                                                                    {x?.[data] ?? '-'}
+                                                                                                </TableCell>
+                                                                                            )
+                                                                                        }
+                                                                                    )}
+                                                                                </TableRow>
+                                                                            )
+                                                                        })}
+                                                                    </TableBody>
+                                                                </Collapse>
                                                             </TableCell>
                                                         </TableRow>
-                                                    </TableHead>
-                                                    <TableBody>
-                                                        {gstDetail?.bzgddtls?.map((val, index) => {
-                                                            return (
-                                                                <TableRow key={index}>
-                                                                    <TableCell>{val?.gdes ?? '-'}</TableCell>
-                                                                    <TableCell>{val?.hsncd ?? '-'}</TableCell>
-                                                                    <TableCell>{val?.industry ?? '-'} </TableCell>
-                                                                    <TableCell>{val?.subIndustry ?? '-'} </TableCell>
-                                                                </TableRow>
-                                                            )
-                                                        })}
-                                                    </TableBody>
-                                                </Collapse>
-                                            </TableCell>
-                                        )}
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>
-                                            Aggregated Annual Turnover Slab
-                                        </TableCell>
-                                        <TableCell>
-                                            {!gstDetail?.aggreTurnOver ? '-' : gstDetail?.aggreTurnOver}
-                                        </TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>aggreTurnOverFY</TableCell>
-                                        <TableCell>
-                                            {!gstDetail?.aggreTurnOverFY ? '-' : gstDetail?.aggreTurnOverFY}
-                                        </TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>
-                                            Gross Total Income (Income-tax returns)
-                                        </TableCell>
-                                        <TableCell>{!gstDetail?.gti ? '-' : gstDetail?.gti}</TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>gtiFY</TableCell>
-                                        <TableCell>{!gstDetail?.gtiFY ? '-' : gstDetail?.gtiFY}</TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
+                                                    )}
+                                                </>
+                                            )
+                                        })}
                                 </TableBody>
                             </Table>
                         </TableContainer>
