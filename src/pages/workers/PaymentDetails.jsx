@@ -1,13 +1,13 @@
 import { LoadingButton } from '@mui/lab'
 import { Grid, Stack, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import { AddEditPaymentDetailsDialog } from './AddEditPaymentDetailsDialog'
 import { usePaymentDetails } from './hooks/usePaymentDetails'
 
 export const PaymentDetails = () => {
     const { workerId } = useParams()
-    const { paymentDetails, form, refresh, closeDialog, dialogOpen } = usePaymentDetails(workerId)
+    const { paymentDetails, form, closeDialog, dialogOpen } = usePaymentDetails(workerId)
 
     return (
         <>
@@ -71,14 +71,7 @@ export const PaymentDetails = () => {
                     </Typography>
                 )}
             </Stack>
-            <AddEditPaymentDetailsDialog
-                form={form}
-                open={dialogOpen}
-                cancel={async () => {
-                    await refresh()
-                    closeDialog()
-                }}
-            />
+            <AddEditPaymentDetailsDialog form={form} open={dialogOpen} cancel={closeDialog} />
         </>
     )
 }

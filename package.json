@@ -25,7 +25,6 @@
         "date-fns": "^2.28.0",
         "file-saver": "^2.0.5",
         "formik": "^2.2.9",
-        "i": "^0.3.7",
         "install": "^0.13.0",
         "jwt-decode": "^3.1.2",
         "npm": "^8.12.1",
@@ -36,7 +35,8 @@
         "react-router-dom": "6",
         "react-timer-hook": "^3.0.5",
         "react-toastify": "^8.1.0",
-        "xlsx": "^0.18.0"
+        "xlsx": "^0.18.0",
+        "yup": "^0.32.11"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^1.0.0",

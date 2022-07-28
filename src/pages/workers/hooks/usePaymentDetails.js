@@ -1,10 +1,11 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { useCallback, useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 const BACKEND_URL = getBackendUrl()
+import * as Yup from 'yup'
+import { regexPatterns } from '../../Registration/utils/constants/regexPatterns'
 
 export const usePaymentDetails = (workerId) => {
     const [paymentDetails, setPaymentDetails] = useState()
@@ -21,6 +22,10 @@ export const usePaymentDetails = (workerId) => {
             // showSnackbar({ msg: error.response.data.developerInfo, sev: 'error' })
         }
     }, [workerId])
+    const closeDialog = useCallback(() => {
+        setOpen((open) => !open)
+        getPaymentDetails()
+    })
     const createPaymentDetails = useCallback(
         async (values) => {
             const payload = {
@@ -29,11 +34,11 @@ export const usePaymentDetails = (workerId) => {
                 details:
                     values.type === 'BANK_ACCOUNT'
                         ? {
-                              name: values.name,
-                              accountNumber: values.accountNumber,
-                              ifsc: values.ifsc,
+                              name: values.name.trim(),
+                              accountNumber: values.accountNumber.trim().trim(),
+                              ifsc: values.ifsc.trim(),
                           }
-                        : { vpa: values.vpa },
+                        : { vpa: values.vpa.trim() },
             }
             try {
                 const { status, data } = await axios.post(
@@ -41,14 +46,14 @@ export const usePaymentDetails = (workerId) => {
                     payload
                 )
                 showSnackbar({ msg: values.type + ' Added successfully', sev: 'success' })
-                setOpen(false)
+                closeDialog()
             } catch (error) {
                 showSnackbar({ msg: error.response.data.developerInfo, sev: 'error' })
             }
-            getPaymentDetails()
         },
-        [workerId]
+        [workerId, closeDialog]
     )
+
     const form = useFormik({
         initialValues: {
             type: 'BANK_ACCOUNT',
@@ -57,22 +62,25 @@ export const usePaymentDetails = (workerId) => {
             ifsc: '',
             vpa: '',
         },
-        validate: (values) => {
-            console.log(values)
-            const errors = {}
-            if (values.type === 'none') {
-                errors.type = 'Required('
-            }
-            if (values.type === 'BANK_ACCOUNT') {
-                if (values.accountNumber === '') errors.accountNumber = 'Required*'
-                if (values.ifsc === '') errors.ifsc = 'Required*'
-                if (values.name === '') errors.name = 'Required*'
-            }
-            if (values.type === 'UPI') {
-                if (values.vpa === '') errors.vpa = 'Required*'
-            }
-            return errors
-        },
+        validationSchema: Yup.object().shape({
+            type: Yup.string().required(),
+            name: Yup.string().when('type', {
+                is: 'BANK_ACCOUNT',
+                then: Yup.string().required('required*').matches(regexPatterns.alphabetsOrSpace, 'Invalid Name'),
+            }),
+            accountNumber: Yup.string().when('type', {
+                is: 'BANK_ACCOUNT',
+                then: Yup.string().required('required*').matches(regexPatterns.bankAccount, 'Invalid Account Number'),
+            }),
+            ifsc: Yup.string().when('type', {
+                is: 'BANK_ACCOUNT',
+                then: Yup.string().required('required*').matches(regexPatterns.ifsc, 'Invalid IFSC Code'),
+            }),
+            vpa: Yup.string().when('type', {
+                is: 'UPI',
+                then: Yup.string().required('required*').matches(regexPatterns.upiVpa, 'Invalid Upi Id Code'),
+            }),
+        }),
         onSubmit: createPaymentDetails,
     })
     useEffect(() => {
@@ -92,10 +100,7 @@ export const usePaymentDetails = (workerId) => {
     return {
         paymentDetails,
         form,
-        refresh: getPaymentDetails,
         dialogOpen,
-        closeDialog: () => {
-            setOpen((p) => !p)
-        },
+        closeDialog: closeDialog,
     }
 }
