@@ -15,7 +15,7 @@ import {
     TableRow,
     Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import CancelIcon from '@mui/icons-material/Cancel'
 import { useGSTINModal } from '../pages/Organization/hooks/useGSTINModal'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
@@ -25,6 +25,7 @@ import { useState } from 'react'
 export const GSTINModal = ({ modalHandler, openGSTINModal }) => {
     const { gstDetail, isLoading, networkMessage } = useGSTINModal({ openGSTINModal })
     const [collapseOpen, setCollapseOpen] = useState(false)
+
     return (
         <Dialog fullWidth onClose={modalHandler} open={openGSTINModal?.open}>
             <Box
@@ -67,27 +68,27 @@ export const GSTINModal = ({ modalHandler, openGSTINModal }) => {
                                 </TableHead>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>TradeNam</TableCell>
-                                        <TableCell>{gstDetail?.tradeNam ?? '-'}</TableCell>
+                                        <TableCell sx={{ fontWeight: '900' }}>Trade Name</TableCell>
+                                        <TableCell>{!gstDetail?.tradeNam ? '-' : gstDetail?.tradeNam} </TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>sts</TableCell>
-                                        <TableCell>{gstDetail?.sts ?? '-'}</TableCell>
+                                        <TableCell sx={{ fontWeight: '900' }}>Status</TableCell>
+                                        <TableCell>{!gstDetail?.sts ? '-' : gstDetail?.sts}</TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>pradr.adr</TableCell>
-                                        <TableCell>{gstDetail?.pradr?.adr ?? '-'}</TableCell>
+                                        <TableCell sx={{ fontWeight: '900' }}> Present Business Address</TableCell>
+                                        <TableCell>{!gstDetail?.pradr?.adr ? '-' : gstDetail?.pradr?.adr}</TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>ctb</TableCell>
-                                        <TableCell>{gstDetail?.ctb ?? '-'}</TableCell>
+                                        <TableCell sx={{ fontWeight: '900' }}>Constitution of Business</TableCell>
+                                        <TableCell>{!gstDetail?.ctb ? '-' : gstDetail?.ctb}</TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>bzgddtls</TableCell>
+                                        <TableCell sx={{ fontWeight: '900' }}>HSN details for Goods</TableCell>
                                         <TableCell>
                                             {gstDetail?.bzgddtls instanceof Object ? 'Click to view details' : '-'}
                                         </TableCell>
@@ -110,53 +111,63 @@ export const GSTINModal = ({ modalHandler, openGSTINModal }) => {
                                         </TableCell>
                                     </TableRow>
                                     <TableRow sx={{ maxHeight: '200px', overflowY: 'scroll' }}>
-                                        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                                            <Collapse in={collapseOpen} timeout="auto" unmountOnExit>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell sx={{ fontWeight: '900' }}>gdes</TableCell>
-                                                        <TableCell sx={{ fontWeight: '900' }}>hsncd</TableCell>
-                                                        <TableCell sx={{ fontWeight: '900' }} align="right">
-                                                            industry
-                                                        </TableCell>
-                                                        <TableCell sx={{ fontWeight: '900' }} align="right">
-                                                            subIndustry
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {gstDetail?.bzgddtls?.map((val, index) => {
-                                                        return (
-                                                            <TableRow key={index}>
-                                                                <TableCell>{val?.gdes}</TableCell>
-                                                                <TableCell>{val?.hsncd}</TableCell>
-                                                                <TableCell>{val?.industry} </TableCell>
-                                                                <TableCell>{val?.subIndustry} </TableCell>
-                                                            </TableRow>
-                                                        )
-                                                    })}
-                                                </TableBody>
-                                            </Collapse>
-                                        </TableCell>
+                                        {gstDetail?.bzgddtls?.length > 0 && (
+                                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                                                <Collapse in={collapseOpen} timeout="auto" unmountOnExit>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell sx={{ fontWeight: '900' }}>
+                                                                Description
+                                                            </TableCell>
+                                                            <TableCell sx={{ fontWeight: '900' }}>HSN Code</TableCell>
+                                                            <TableCell sx={{ fontWeight: '900' }}>Industry</TableCell>
+                                                            <TableCell sx={{ fontWeight: '900' }}>
+                                                                Sub-Industry
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {gstDetail?.bzgddtls?.map((val, index) => {
+                                                            return (
+                                                                <TableRow key={index}>
+                                                                    <TableCell>{val?.gdes ?? '-'}</TableCell>
+                                                                    <TableCell>{val?.hsncd ?? '-'}</TableCell>
+                                                                    <TableCell>{val?.industry ?? '-'} </TableCell>
+                                                                    <TableCell>{val?.subIndustry ?? '-'} </TableCell>
+                                                                </TableRow>
+                                                            )
+                                                        })}
+                                                    </TableBody>
+                                                </Collapse>
+                                            </TableCell>
+                                        )}
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>aggreTurnOver</TableCell>
-                                        <TableCell>{gstDetail?.aggreTurnOver ?? '-'}</TableCell>
+                                        <TableCell sx={{ fontWeight: '900' }}>
+                                            Aggregated Annual Turnover Slab
+                                        </TableCell>
+                                        <TableCell>
+                                            {!gstDetail?.aggreTurnOver ? '-' : gstDetail?.aggreTurnOver}
+                                        </TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell sx={{ fontWeight: '900' }}>aggreTurnOverFY</TableCell>
-                                        <TableCell>{gstDetail?.aggreTurnOverFY ?? '-'}</TableCell>
+                                        <TableCell>
+                                            {!gstDetail?.aggreTurnOverFY ? '-' : gstDetail?.aggreTurnOverFY}
+                                        </TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                     <TableRow>
-                                        <TableCell sx={{ fontWeight: '900' }}>gti</TableCell>
-                                        <TableCell>{gstDetail?.gti ?? '-'}</TableCell>
+                                        <TableCell sx={{ fontWeight: '900' }}>
+                                            Gross Total Income (Income-tax returns)
+                                        </TableCell>
+                                        <TableCell>{!gstDetail?.gti ? '-' : gstDetail?.gti}</TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell sx={{ fontWeight: '900' }}>gtiFY</TableCell>
-                                        <TableCell>{gstDetail?.gtiFY ?? '-'}</TableCell>
+                                        <TableCell>{!gstDetail?.gtiFY ? '-' : gstDetail?.gtiFY}</TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                 </TableBody>
