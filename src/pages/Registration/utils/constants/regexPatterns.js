@@ -5,5 +5,9 @@ export const regexPatterns = {
     bankAccount: /^\d{9,18}$/,
     pan: /^[A-Z]{5}\d{4}[A-Z]{1}$/,
     uan: /^\d{12}$/,
+    ifsc: /^[A-Z]{4}0[A-Z0-9]{6}$/,
     isNum: /^\d*$/,
+    alphabetsOrSpace: /^[a-zA-Z ]*$/,
+    alphabets: /^[a-zA-Z]*$/,
+    upiVpa: /^[\w.-]+@[\w.-]+$/,
 }

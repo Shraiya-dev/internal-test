@@ -18,6 +18,8 @@ export const useOrganization = () => {
         organisation: undefined,
     })
 
+    const [openGSTINModal, setOpenGSTINModal] = useState({ GSTINid: '', open: false })
+
     const getOrganizations = useCallback(
         debounce(async (searchParams) => {
             setIsLoading(true)
@@ -46,6 +48,10 @@ export const useOrganization = () => {
         getOrganizations(searchParams)
     }, [searchParams])
 
+    const GSTINModalHandler = useCallback((GSTINValue) => {
+        setOpenGSTINModal((value) => ({ ...value, GSTINid: `${GSTINValue}`, open: !value?.open }))
+    }, [])
+
     // dataGrid column
 
     const columns = useMemo(
@@ -67,6 +73,16 @@ export const useOrganization = () => {
                 field: 'GSTIN',
                 headerName: 'GSTIN',
                 width: 200,
+                renderCell: (params) => (
+                    <Button
+                        variant="text"
+                        onClick={() => {
+                            GSTINModalHandler(params.row?.GSTIN)
+                        }}
+                    >
+                        {params.row?.GSTIN}
+                    </Button>
+                ),
             },
             {
                 field: 'domain',
@@ -144,7 +160,18 @@ export const useOrganization = () => {
             isLoading,
             addOrgMemberProps: addOrgMemberProps,
             getOrganizations: getOrganizations,
+            openGSTINModal,
+            modalHandler: GSTINModalHandler,
         }),
-        [columns, organisation, hasMore, isLoading, getOrganizations, addOrgMemberProps]
+        [
+            columns,
+            organisation,
+            hasMore,
+            isLoading,
+            getOrganizations,
+            addOrgMemberProps,
+            openGSTINModal,
+            GSTINModalHandler,
+        ]
     )
 }
