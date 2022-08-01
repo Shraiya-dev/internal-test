@@ -417,7 +417,7 @@ const AddEditWorkerProfile = () => {
                     </Paper>
                     {workerId && (
                         <Paper sx={{ p: 2, m: 2 }}>
-                            <PaymentDetails />
+                            <PaymentDetails uid={workerId} userType="worker" />
                         </Paper>
                     )}
                     {/* <Paper sx={{ p: 2, m: 2 }}>

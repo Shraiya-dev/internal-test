@@ -1,5 +1,4 @@
 import {
-    Box,
     Button,
     Chip,
     Dialog,
@@ -15,7 +14,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../api'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useSnackbar } from '../../providers/SnackbarProvider'
@@ -95,6 +94,13 @@ const Partner = () => {
             field: 'userName',
             headerName: <h4>Name</h4>,
             width: 450,
+            renderCell: (params) => (
+                <Link to={`/partners/${params?.row?.partnerId}`}>
+                    <Typography color="primary.main" sx={{ textDecoration: 'underline' }}>
+                        {params?.row.userName || 'No name'}
+                    </Typography>
+                </Link>
+            ),
         },
         {
             field: 'phoneNumber',

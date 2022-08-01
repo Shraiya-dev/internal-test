@@ -1,15 +1,5 @@
 import { LoadingButton } from '@mui/lab'
-import {
-    Button,
-    Dialog,
-    FormControlLabel,
-    Radio,
-    RadioGroup,
-    setRef,
-    Stack,
-    TextField,
-    Typography,
-} from '@mui/material'
+import { Button, Dialog, FormControlLabel, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material'
 import { useFormikProps } from '../../hooks/useFormikProps'
 
 export const AddEditPaymentDetailsDialog = ({ cancel, confirm, open, form }) => {
