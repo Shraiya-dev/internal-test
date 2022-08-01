@@ -19,13 +19,11 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import React from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
+import { useLocationMetadata } from '../../hooks/useLocationMetadata'
 import { ADD_WORKER_ROUTE } from '../../routes'
-import { cities, states } from '../../utils/data'
 import { getSelectOptions } from '../../utils/InputHelpers'
 import { JobTypeOptions } from '../../utils/optionHelpers'
 import { useWorkerInfo } from './hooks/useWorkerInfo'
-import { currentlyOperationalCities } from '../workers/helper'
-import { useLocationMetadata } from '../../hooks/useLocationMetadata'
 const statusValue = [
     {
         value: 'none',

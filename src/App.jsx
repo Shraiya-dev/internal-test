@@ -15,6 +15,7 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import JCA from './pages/JCA/jobCards'
 import JobCards from './pages/jobCards/JobCards'
 import { Organisation } from './pages/Organization/Organization'
+import { AddEditPartner } from './pages/Partner/EditPartner'
 import Partner from './pages/Partner/Partner'
 import Project from './pages/Project/Project'
 import ProjectById from './pages/Project/ProjectById'
@@ -42,6 +43,7 @@ import {
     JCA_ROUTE,
     JOBCARDS_FOR_BOOKING_ROUTE,
     ORGANIZATION_ROUTE,
+    PARTNER_DETAIL_VIEW,
     PROJECT_BY_ID_ROUTE,
     PROJECT_ROUTE,
     REWARD_PENALTIES_ROUTE,
@@ -162,6 +164,14 @@ function App() {
                                     }
                                 />
                                 <Route
+                                    path={PARTNER_DETAIL_VIEW}
+                                    element={
+                                        <PrivateRoute>
+                                            <AddEditPartner />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
                                     path={PROJECT_BY_ID_ROUTE}
                                     element={
                                         <PrivateRoute>
@@ -231,6 +241,7 @@ function App() {
                                         </PrivateRoute>
                                     }
                                 />
+
                                 <Route
                                     path={DASHBOARD_ROUTE}
                                     element={

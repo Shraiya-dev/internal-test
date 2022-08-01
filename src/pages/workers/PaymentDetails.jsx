@@ -1,13 +1,11 @@
 import { LoadingButton } from '@mui/lab'
 import { Grid, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import { AddEditPaymentDetailsDialog } from './AddEditPaymentDetailsDialog'
 import { usePaymentDetails } from './hooks/usePaymentDetails'
 
-export const PaymentDetails = () => {
-    const { workerId } = useParams()
-    const { paymentDetails, form, closeDialog, dialogOpen } = usePaymentDetails(workerId)
+export const PaymentDetails = ({ uid, userType }) => {
+    const { paymentDetails, form, closeDialog, dialogOpen } = usePaymentDetails(uid, userType)
 
     return (
         <>

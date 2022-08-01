@@ -7,7 +7,7 @@ const BACKEND_URL = getBackendUrl()
 import * as Yup from 'yup'
 import { regexPatterns } from '../../Registration/utils/constants/regexPatterns'
 
-export const usePaymentDetails = (workerId) => {
+export const usePaymentDetails = (uid, userType) => {
     const [paymentDetails, setPaymentDetails] = useState()
     const { showSnackbar } = useSnackbar()
     const [dialogOpen, setOpen] = useState(false)
@@ -15,13 +15,13 @@ export const usePaymentDetails = (workerId) => {
     const getPaymentDetails = useCallback(async () => {
         try {
             const { status, data } = await axios.get(
-                BACKEND_URL + '/gateway/admin-api/payment-instruments?' + new URLSearchParams({ workerId: workerId })
+                BACKEND_URL + '/gateway/admin-api/payment-instruments?' + new URLSearchParams({ uid, userType })
             )
             setPaymentDetails(data?.payload?.paymentInstruments[0])
         } catch (error) {
             // showSnackbar({ msg: error.response.data.developerInfo, sev: 'error' })
         }
-    }, [workerId])
+    }, [uid])
     const closeDialog = useCallback(() => {
         setOpen((open) => !open)
         getPaymentDetails()
@@ -29,7 +29,8 @@ export const usePaymentDetails = (workerId) => {
     const createPaymentDetails = useCallback(
         async (values) => {
             const payload = {
-                workerId: workerId,
+                uid: uid,
+                userType: userType,
                 type: values.type,
                 details:
                     values.type === 'BANK_ACCOUNT'
@@ -51,7 +52,7 @@ export const usePaymentDetails = (workerId) => {
                 showSnackbar({ msg: error.response.data.developerInfo, sev: 'error' })
             }
         },
-        [workerId, closeDialog]
+        [uid, userType, closeDialog]
     )
 
     const form = useFormik({
@@ -94,9 +95,9 @@ export const usePaymentDetails = (workerId) => {
     }, [paymentDetails])
 
     useEffect(() => {
-        if (!workerId) return
+        if (!uid) return
         getPaymentDetails()
-    }, [workerId])
+    }, [uid])
     return {
         paymentDetails,
         form,
