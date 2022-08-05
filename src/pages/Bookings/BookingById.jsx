@@ -75,6 +75,14 @@ const BookingById = () => {
                             <Stack>
                                 <Typography variant="h4" fontWeight={600}>
                                     {formatEnum(booking?.jobType)}
+                                    <Chip
+                                        sx={(theme) => ({
+                                            backgroundColor: booking?.bookingType === 'LIMITED_DISCOVERY' ? theme.palette.grey[500] : theme.palette.primary.light,
+                                            color: theme.palette.primary.contrastText,
+                                            ml: 2,
+                                        })}
+                                        label={booking?.bookingType || 'FPH'}
+                                    />
                                     <Chip sx={{ ml: 2 }} label={booking?.status} />
                                     {booking?.parentBookingId && (
                                         <Chip

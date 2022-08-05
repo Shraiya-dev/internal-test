@@ -33,6 +33,14 @@ const BookingCard = ({ bookingData }) => {
                         </Typography>
                         <Chip
                             sx={(theme) => ({
+                                backgroundColor: booking?.bookingType === 'LIMITED_DISCOVERY' ? theme.palette.grey[500] : theme.palette.primary.light,
+                                color: theme.palette.primary.contrastText,
+                                height: '24px',
+                            })}
+                            label={booking?.bookingType || 'FPH'}
+                        />
+                        <Chip
+                            sx={(theme) => ({
                                 backgroundColor: theme.palette.grey[200],
                                 height: '24px',
                             })}
