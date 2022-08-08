@@ -37,7 +37,7 @@ const BookingCard = ({ bookingData }) => {
                                 color: theme.palette.primary.contrastText,
                                 height: '24px',
                             })}
-                            label={booking?.bookingType || 'FPH'}
+                            label={booking?.bookingType === 'LIMITED_DISCOVERY' ? 'Limited' : 'FPH'}
                         />
                         <Chip
                             sx={(theme) => ({
