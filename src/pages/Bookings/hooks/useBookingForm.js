@@ -188,7 +188,7 @@ export const useBookingForm = () => {
                 wageTechnition: booking?.rateCard?.TECHNICIAN ?? 0,
                 wageHelper: booking?.rateCard?.HELPER ?? 0,
                 shiftStartTime: booking?.schedule?.shiftTime?.split('-')[0] ?? 'none',
-                shiftEndTime: booking?.schedule?.shiftTime.split('-')[1] ?? 'none',
+                shiftEndTime: booking?.schedule?.shiftTime?.split('-')[1] ?? 'none',
                 overTimeRate: booking?.overTime?.rate ?? 'none',
                 overTimeBuffer: booking?.overTime?.buffer ?? 30,
                 overTimeBufferType: booking?.overTime?.bufferType ?? 'minutes',
