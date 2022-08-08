@@ -3,7 +3,7 @@ import { add, differenceInHours, differenceInMinutes } from 'date-fns'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../api'
-import { CTAMap } from '../utils/ctaHelpers'
+import { CTAMapByBookingType } from '../utils/ctaHelpers'
 import { useLoader } from './LoaderProvider'
 import { useSnackbar } from './SnackbarProvider'
 const SERVER_URL = getBackendUrl()
@@ -27,7 +27,7 @@ const BookingProvider = ({ children }) => {
     const handelTabChange = useCallback(async (e, value) => {
         setSp(new URLSearchParams({ ...sp, tab: value }))
     }, [])
-    const allowedTabs = useMemo(() => CTAMap[booking?.status]?.tabs, [booking])
+    const allowedTabs = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs, [booking])
 
     const { showLoader } = useLoader()
     const getBooking = useCallback(async () => {

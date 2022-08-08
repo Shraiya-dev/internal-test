@@ -7,7 +7,7 @@ import CancelBookingConfirmationDialog from '../../components/CancelBookingConfi
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useBooking } from '../../providers/BookingProvider'
-import { CTAMap } from '../../utils/ctaHelpers'
+import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 import JobCards from '../jobCards/JobCards'
 import BookingForm from './BookingForm'
@@ -34,7 +34,7 @@ const BookingById = () => {
         cancel: () => {},
         confirm: () => {},
     })
-    const allowedActions = useMemo(() => CTAMap[booking?.status]?.actions, [booking])
+    const allowedActions = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions, [booking])
     const [cancelBookingConfirmationDialogProps, setCancelBookingConfirmationDialogProps] = useState({
         open: false,
         cancel: () => {},
