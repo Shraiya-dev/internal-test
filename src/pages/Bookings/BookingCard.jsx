@@ -1,13 +1,13 @@
 import { Box, Button, Chip, Divider, Paper, Stack, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { CTAMap } from '../../utils/ctaHelpers'
+import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 
 const BookingCard = ({ bookingData }) => {
     const { booking, project, customer, stats } = bookingData
-    const allowedActions = useMemo(() => CTAMap[booking?.status]?.actions, [booking])
-    const allowedTabs = useMemo(() => CTAMap[booking?.status]?.tabs, [booking])
+    const allowedActions = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions, [booking])
+    const allowedTabs = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs, [booking])
     const totalPeopleRequired = useMemo(
         () => Object.values(booking?.peopleRequired)?.reduce((prev, next) => Number(prev) + Number(next)),
         [booking]

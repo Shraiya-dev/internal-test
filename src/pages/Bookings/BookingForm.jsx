@@ -24,7 +24,7 @@ import { Link } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import { BookingDurations, JobTypeOptions } from '../../constant/booking'
 import { useSnackbar } from '../../providers/SnackbarProvider'
-import { CTAMap } from '../../utils/ctaHelpers'
+import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { getSelectOptions } from '../../utils/InputHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 import { getTimeOptions } from '../../utils/timeOptions'
@@ -63,7 +63,7 @@ const BookingForm = () => {
                 open={confirmationDialogProps.open}
             />
 
-            {CTAMap[booking?.status]?.actions?.edit && (
+            {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions?.edit && (
                 <Stack
                     direction="row"
                     justifyContent="flex-start"
@@ -123,7 +123,7 @@ const BookingForm = () => {
 
             <Paper
                 sx={{
-                    mt: CTAMap[booking?.status]?.actions?.edit ? 8 : 0,
+                    mt: CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions?.edit ? 8 : 0,
                 }}
             >
                 <Typography variant="h5" sx={{ mb: 2 }}>
