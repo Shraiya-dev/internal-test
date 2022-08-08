@@ -73,7 +73,7 @@ const BookingById = () => {
                                 />
                             </IconButton>
                             <Stack>
-                                <Typography variant="h4" fontWeight={600}>
+                                <Typography variant="h5" fontWeight={600}>
                                     {formatEnum(booking?.jobType)}
                                     <Chip
                                         sx={(theme) => ({
