@@ -1,13 +1,14 @@
-import { Box, Button, Chip, Divider, Paper, Stack, Typography } from '@mui/material'
+import { Badge, Box, Button, Chip, Divider, Paper, Stack, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { CTAMap } from '../../utils/ctaHelpers'
+import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 
 const BookingCard = ({ bookingData }) => {
-    const { booking, project, customer, stats } = bookingData
-    const allowedActions = useMemo(() => CTAMap[booking?.status]?.actions, [booking])
-    const allowedTabs = useMemo(() => CTAMap[booking?.status]?.tabs, [booking])
+    const { booking, project, customer, stats, jobs } = bookingData
+    console.log('Jobs: ' + JSON.stringify(jobs));
+    const allowedActions = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions, [booking])
+    const allowedTabs = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs, [booking])
     const totalPeopleRequired = useMemo(
         () => Object.values(booking?.peopleRequired)?.reduce((prev, next) => Number(prev) + Number(next)),
         [booking]
@@ -31,6 +32,14 @@ const BookingCard = ({ bookingData }) => {
                         <Typography variant="h6" fontWeight={600}>
                             {formatEnum(booking?.jobType)} ({totalPeopleRequired})
                         </Typography>
+                        <Chip
+                            sx={(theme) => ({
+                                backgroundColor: booking?.bookingType === 'LIMITED_DISCOVERY' ? theme.palette.grey[500] : theme.palette.primary.light,
+                                color: theme.palette.primary.contrastText,
+                                height: '24px',
+                            })}
+                            label={booking?.bookingType === 'LIMITED_DISCOVERY' ? 'Limited' : 'FPH'}
+                        />
                         <Chip
                             sx={(theme) => ({
                                 backgroundColor: theme.palette.grey[200],
@@ -87,7 +96,9 @@ const BookingCard = ({ bookingData }) => {
                         {Object.keys(booking?.peopleRequired).map((item) => {
                             return (
                                 <Box pb={1} pt={1} display="flex" alignItems="center" key={item}>
-                                    {formatEnum(item)}: {booking?.peopleRequired[item]}
+                                    <Badge color="success" variant="dot" invisible={!jobs?.[item]?.isVisible}>
+                                        {formatEnum(item)}: {booking?.peopleRequired[item]}
+                                    </Badge>
                                 </Box>
                             )
                         })}

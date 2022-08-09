@@ -19,7 +19,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import { useBooking } from '../../providers/BookingProvider'
-import { CTAMap } from '../../utils/ctaHelpers'
+import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import AddWorkerDialog from '../jobCards/AddWorkerDialog'
 import { CancelJobCardConfirmationDialog } from './CancelJobCardCOnfirmationDialoag'
 import EmploymentCompleteDialog from './EmploymentCompleteDialog'
@@ -46,7 +46,7 @@ const JobCards = () => {
 
     const [open, setOpen] = useState(false)
     const [employmentCompleteDialogProps, setEmploymentCompleteDialog] = useState()
-    const allowedTabs = useMemo(() => CTAMap[booking?.status]?.tabs, [booking])
+    const allowedTabs = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs, [booking])
 
     const [confirmDialogProps, setConfirmDialogProps] = useState({
         content: '',
@@ -347,7 +347,7 @@ const JobCards = () => {
                                 )
                             })}
                             <Stack direction="row" justifyContent="flex-end" spacing={2} ml="auto" alignItems="center">
-                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.addWorker && !bulkSelectionOn && (
+                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[sp.get('jobCardStates')]?.addWorker && !bulkSelectionOn && (
                                     <Button
                                         variant="outlined"
                                         onClick={() => {
@@ -449,7 +449,7 @@ const JobCards = () => {
                                 )
                             })}
                             <Stack direction={'row'} spacing={2} ml="auto" mr={3} alignItems="center">
-                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.pdrc && (
+                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.pdrc && (
                                     <FormControlLabel
                                         checked={sp.get('isPDRCDone') === 'true'}
                                         onChange={(e, checked) => {
@@ -466,7 +466,7 @@ const JobCards = () => {
                                         label="PDRC"
                                     />
                                 )}
-                                {CTAMap[booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.drc && (
+                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.drc && (
                                     <FormControlLabel
                                         checked={sp.get('isDRCDone') === 'true'}
                                         onChange={(e, checked) => {

@@ -1,4 +1,107 @@
-export const CTAMap = {
+const LimitedDiscoveryCTAMap = {
+    RECEIVED: {
+        actions: {
+            view: true,
+            edit: true,
+            cancel: true,
+            confirm: false,
+            duplicate: false,
+        },
+    },
+    CONFIRMED: {
+        actions: {
+            edit: true,
+            view: true,
+            cancel: true,
+            startAllocation: false,
+            duplicate: false,
+        },
+    },
+    ALLOCATION_PENDING: {
+        actions: {
+            view: true,
+            duplicate: false,
+        },
+    },
+    ALLOCATION_IN_PROGRESS: {
+        tabs: {
+            WORKER_APPLIED: {
+                jobCardActions: {
+                    cancel: true,
+                },
+            },
+            CANCELLED: {
+                jobCardActions: {
+                },
+            },
+        },
+        actions: {
+            edit: true,
+            view: true,
+            jobCards: true,
+            duplicate: false,
+        },
+    },
+    ALLOCATION_CLOSED: {
+        tabs: {
+            WORKER_APPLIED: {
+                jobCardActions: {
+                    cancel: true,
+                },
+            },
+            CANCELLED: {
+                jobCardActions: {
+                },
+            },
+        },
+        actions: {
+            cancel: true,
+            edit: true,
+            view: true,
+            jobCards: true,
+            duplicate: false,
+        },
+    },
+    DEPLOYED: {
+        tabs: {
+            WORKER_APPLIED: {
+                jobCardActions: {
+                    cancel: true,
+                },
+            },
+            CANCELLED: {
+                jobCardActions: {},
+            },
+        },
+        actions: {
+            view: true,
+            attendance: false,
+            startProject: false,
+            duplicate: false,
+        },
+    },
+    CANCELLED: {
+        tabs: {
+            WORKER_APPLIED: {
+                jobCardActions: {
+                    cancel: true,
+                },
+            },
+            CANCELLED: {
+                jobCardActions: {},
+            },
+        },
+        actions: {
+            view: true,
+            attendance: false,
+            startProject: false,
+            duplicate: false,
+        },
+    },
+}
+
+
+const CTAMap = {
     RECEIVED: {
         actions: {
             view: true,
@@ -195,4 +298,9 @@ export const CTAMap = {
             manageEmployees: true,
         },
     },
+}
+
+export const CTAMapByBookingType = {
+    LIMITED_DISCOVERY: LimitedDiscoveryCTAMap,
+    FPH: CTAMap,
 }

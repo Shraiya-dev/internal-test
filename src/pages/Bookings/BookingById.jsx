@@ -7,7 +7,7 @@ import CancelBookingConfirmationDialog from '../../components/CancelBookingConfi
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useBooking } from '../../providers/BookingProvider'
-import { CTAMap } from '../../utils/ctaHelpers'
+import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 import JobCards from '../jobCards/JobCards'
 import BookingForm from './BookingForm'
@@ -34,7 +34,7 @@ const BookingById = () => {
         cancel: () => {},
         confirm: () => {},
     })
-    const allowedActions = useMemo(() => CTAMap[booking?.status]?.actions, [booking])
+    const allowedActions = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions, [booking])
     const [cancelBookingConfirmationDialogProps, setCancelBookingConfirmationDialogProps] = useState({
         open: false,
         cancel: () => {},
@@ -73,8 +73,16 @@ const BookingById = () => {
                                 />
                             </IconButton>
                             <Stack>
-                                <Typography variant="h4" fontWeight={600}>
+                                <Typography variant="h5" fontWeight={600}>
                                     {formatEnum(booking?.jobType)}
+                                    <Chip
+                                        sx={(theme) => ({
+                                            backgroundColor: booking?.bookingType === 'LIMITED_DISCOVERY' ? theme.palette.grey[500] : theme.palette.primary.light,
+                                            color: theme.palette.primary.contrastText,
+                                            ml: 2,
+                                        })}
+                                        label={booking?.bookingType || 'FPH'}
+                                    />
                                     <Chip sx={{ ml: 2 }} label={booking?.status} />
                                     {booking?.parentBookingId && (
                                         <Chip
