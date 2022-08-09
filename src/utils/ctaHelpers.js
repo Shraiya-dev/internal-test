@@ -31,14 +31,14 @@ const LimitedDiscoveryCTAMap = {
                 },
             },
             CANCELLED: {
-                jobCardActions: {
-                },
+                jobCardActions: {},
             },
         },
         actions: {
             edit: true,
             view: true,
             jobCards: true,
+            cancel: true,
             duplicate: false,
         },
     },
@@ -50,8 +50,7 @@ const LimitedDiscoveryCTAMap = {
                 },
             },
             CANCELLED: {
-                jobCardActions: {
-                },
+                jobCardActions: {},
             },
         },
         actions: {
@@ -99,7 +98,6 @@ const LimitedDiscoveryCTAMap = {
         },
     },
 }
-
 
 const CTAMap = {
     RECEIVED: {
