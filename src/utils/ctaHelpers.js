@@ -37,6 +37,7 @@ const LimitedDiscoveryCTAMap = {
         actions: {
             edit: true,
             view: true,
+            closeAllocation: true,
             jobCards: true,
             cancel: true,
             duplicate: false,
