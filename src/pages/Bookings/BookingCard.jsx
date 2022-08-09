@@ -1,11 +1,12 @@
-import { Box, Button, Chip, Divider, Paper, Stack, Typography } from '@mui/material'
+import { Badge, Box, Button, Chip, Divider, Paper, Stack, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 
 const BookingCard = ({ bookingData }) => {
-    const { booking, project, customer, stats } = bookingData
+    const { booking, project, customer, stats, jobs } = bookingData
+    console.log('Jobs: ' + JSON.stringify(jobs));
     const allowedActions = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions, [booking])
     const allowedTabs = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs, [booking])
     const totalPeopleRequired = useMemo(
@@ -95,7 +96,9 @@ const BookingCard = ({ bookingData }) => {
                         {Object.keys(booking?.peopleRequired).map((item) => {
                             return (
                                 <Box pb={1} pt={1} display="flex" alignItems="center" key={item}>
-                                    {formatEnum(item)}: {booking?.peopleRequired[item]}
+                                    <Badge color="success" variant="dot" invisible={!jobs?.[item]?.isVisible}>
+                                        {formatEnum(item)}: {booking?.peopleRequired[item]}
+                                    </Badge>
                                 </Box>
                             )
                         })}
