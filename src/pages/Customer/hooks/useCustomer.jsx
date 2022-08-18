@@ -129,7 +129,7 @@ export const useCustomer = () => {
                 field: 'bookings',
                 headerName: 'Bookings',
                 renderCell: (params) => (
-                    <Link to={`/bookings?organisationId=${params?.row?.linkedOrganisation?.organisationId}`}>
+                    <Link to={params?.row?.linkedOrganisation?.organisationId ? `/bookings?organisationId=${params?.row?.linkedOrganisation?.organisationId}` : `/bookings?customerPhone=${params?.row?.phoneNumber}`}>
                         <Button variant="outlined"> View Bookings </Button>
                     </Link>
                 ),

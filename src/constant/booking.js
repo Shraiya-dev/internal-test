@@ -17,7 +17,7 @@ export const OverTimeFactor = [
     { label: '2', value: 2 },
 ]
 export const JobTypeOptions = [
-    { label: 'Select Job Type', value: 'none' },
+    { label: 'Job Type', value: 'none' },
     { label: 'Gypsum', value: 'GYPSUM' },
     { label: 'Painter', value: 'PAINTER' },
     { label: 'Carpenter', value: 'CARPENTER' },
@@ -31,6 +31,12 @@ export const JobTypeOptions = [
     { label: 'Plumbing', value: 'PLUMBING' },
     { label: 'Aluminium Fabricator', value: 'ALUMINIUM_FABRICATOR' },
     { label: 'Stone Tile Marble Layer', value: 'STONE_TILE_MARBLE_LAYER' },
+]
+
+export const BookingTypeOptions = [
+    { label: 'Booking Type', value: 'none' },
+    { label: 'Discovery', value: 'LIMITED_DISCOVERY' },
+    { label: 'FPH', value: 'FPH' },
 ]
 
 export const BookingDurations = [
