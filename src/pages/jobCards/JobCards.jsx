@@ -113,7 +113,7 @@ const JobCards = () => {
                 headerName: 'Created At',
                 sortable: true,
                 width: 250,
-                valueGetter: (params) => params?.row?.jobCard?.createdAt,
+                valueGetter: (params) => new Date(params?.row?.jobCard?.createdAt).toLocaleString(),
             },
             {
                 field: 'isPDRCDone',

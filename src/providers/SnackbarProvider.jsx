@@ -31,7 +31,7 @@ const SnackbarProvider = ({ children }) => {
             {children}
 
             <Snackbar
-                autoHideDuration={6000}
+                autoHideDuration={snackbarProps.autoHideDuration ?? 6000}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={snackbarProps.open}
                 onClose={handelClose}

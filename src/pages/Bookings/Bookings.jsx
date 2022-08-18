@@ -15,7 +15,7 @@ import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { QueryField, QueryMultiSelect, QueryReset, QuerySelect } from '../../components/queryInputs'
-import { BookingStates, JobTypeOptions } from '../../constant/booking'
+import { BookingStates, BookingTypeOptions, JobTypeOptions } from '../../constant/booking'
 import { getSelectOptions } from '../../utils/InputHelpers'
 import { StatusCard } from '../CustomerBookings/components/StatusCard'
 import BookingCard from './BookingCard'
@@ -31,6 +31,7 @@ const Bookings = () => {
                     <Stack p={2} direction="row" spacing={2}>
                         <QueryMultiSelect sx={{ width: 200 }} name="status" options={BookingStates} />
                         <QueryMultiSelect sx={{ width: 200 }} name="jobType" options={JobTypeOptions} />
+                        <QueryMultiSelect sx={{ width: 200 }} name="bookingType" options={BookingTypeOptions} />
 
                         <QueryField
                             label="Customer Phone"
@@ -63,7 +64,7 @@ const Bookings = () => {
                             variant="outlined"
                             label="Organisation Id"
                             name="organisationId"
-                            placeholder="Enter Customer Name"
+                            placeholder="Customer OrganisationId"
                         />
                         <Button
                             onClick={() => getBookings(searchParams)}

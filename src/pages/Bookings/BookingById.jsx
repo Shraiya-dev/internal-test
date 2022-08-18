@@ -1,5 +1,5 @@
 import { TabContext, TabPanel } from '@material-ui/lab'
-import { KeyboardBackspace } from '@mui/icons-material'
+import { CopyAll, KeyboardBackspace } from '@mui/icons-material'
 import { Button, Chip, IconButton, Paper, Stack, Tab, Tabs, Typography } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -7,10 +7,12 @@ import CancelBookingConfirmationDialog from '../../components/CancelBookingConfi
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useBooking } from '../../providers/BookingProvider'
+import { useSnackbar } from '../../providers/SnackbarProvider'
 import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 import JobCards from '../jobCards/JobCards'
 import BookingForm from './BookingForm'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const BookingById = () => {
     const {
@@ -46,6 +48,7 @@ const BookingById = () => {
     }, [])
     const [sp, setSp] = useSearchParams()
     const navigate = useNavigate()
+    const { showSnackbar } = useSnackbar()
 
     return (
         <>
@@ -109,6 +112,9 @@ const BookingById = () => {
                                 </Typography>
                                 <Typography variant="caption" fontWeight={400}>
                                     ID: {booking?._id}
+                                    <CopyToClipboard text={booking?._id} onCopy={() => showSnackbar({ msg: 'Copied!', sev: 'success', autoHideDuration: '500' })}>
+                                        <CopyAll fontSize='small'/>
+                                    </CopyToClipboard>
                                 </Typography>
                             </Stack>
                         </Stack>
