@@ -97,6 +97,15 @@ export const useCustomer = () => {
                 width: 180,
             },
             {
+                field: 'gstin',
+                headerName: 'GSTIN',
+                sortable: true,
+                width: 180,
+                valueGetter: (params) => {
+                    return params?.row?.GSTIN
+                },
+            },
+            {
                 field: 'role',
                 headerName: 'Role',
                 sortable: true,
