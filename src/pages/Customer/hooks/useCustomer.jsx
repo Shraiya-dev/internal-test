@@ -97,6 +97,15 @@ export const useCustomer = () => {
                 width: 180,
             },
             {
+                field: 'gstin',
+                headerName: 'GSTIN',
+                sortable: true,
+                width: 180,
+                valueGetter: (params) => {
+                    return params?.row?.GSTIN
+                },
+            },
+            {
                 field: 'role',
                 headerName: 'Role',
                 sortable: true,
@@ -129,7 +138,7 @@ export const useCustomer = () => {
                 field: 'bookings',
                 headerName: 'Bookings',
                 renderCell: (params) => (
-                    <Link to={`/bookings?organisationId=${params?.row?.linkedOrganisation?.organisationId}`}>
+                    <Link to={params?.row?.linkedOrganisation?.organisationId ? `/bookings?organisationId=${params?.row?.linkedOrganisation?.organisationId}` : `/bookings?customerPhone=${params?.row?.phoneNumber}`}>
                         <Button variant="outlined"> View Bookings </Button>
                     </Link>
                 ),
