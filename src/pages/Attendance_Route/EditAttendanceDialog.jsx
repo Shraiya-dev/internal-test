@@ -1,18 +1,41 @@
 import { Search } from '@mui/icons-material'
 import { DesktopTimePicker, LocalizationProvider } from '@mui/x-date-pickers'
-import { Button, Chip, Dialog, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material'
+import {
+    Button,
+    Chip,
+    Dialog,
+    InputAdornment,
+    MenuItem,
+    Paper,
+    Select,
+    Stack,
+    TextField,
+    Typography,
+} from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useEditAttendanceDialog from './hooks/useEditAttendanceDialog'
 
 const EditAttendanceDialog = ({ open, data, onClose, field }) => {
-    const { form, searchWorkerForm, workerDetail, setWorkerDetail, isError, deleteAttendance, deleteOT } =
-        useEditAttendanceDialog(data, onClose, field)
+    const {
+        form,
+        searchWorkerForm,
+        workerDetail,
+        setWorkerDetail,
+        isError,
+        deleteAttendance,
+        deleteOT,
+        dailyProductivityTypeValue,
+    } = useEditAttendanceDialog(data, onClose, field)
+
     const [sp] = useSearchParams()
+    console.log(data)
     return (
         <Dialog
             open={open}
+            fullWidth={true}
+            maxWidth={'xs'}
             onClose={() => {
                 searchWorkerForm.resetForm()
                 setWorkerDetail()
@@ -83,7 +106,7 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             {field === 'ot' ? (
                                 <Stack direction={'row'} spacing={2}>
-                                    <DesktopTimePicker
+                                    {/* <DesktopTimePicker
                                         disableOpenPicker
                                         label="OT Check In Time"
                                         value={form.values.otCheckedInTime}
@@ -122,7 +145,20 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
                                                 helperText={isError('otCheckedOutTime')}
                                             />
                                         )}
-                                    />
+                                    /> */}
+                                    <Select
+                                        fullWidth
+                                        value={form.values.dailyProductivityType}
+                                        onChange={(e) => {
+                                            form.setFieldValue('dailyProductivityType', e.target.value)
+                                        }}
+                                    >
+                                        {dailyProductivityTypeValue?.map((value, index) => (
+                                            <MenuItem key={index} value={value.value}>
+                                                {value.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
                                 </Stack>
                             ) : (
                                 <Stack direction={'row'} spacing={2}>
