@@ -2,7 +2,19 @@ import { Search } from '@material-ui/icons'
 import { Edit } from '@mui/icons-material'
 import DownloadIcon from '@mui/icons-material/Download'
 import { LoadingButton } from '@mui/lab'
-import { Box, Button, IconButton, InputAdornment, Pagination, Paper, Stack, TextField, Typography } from '@mui/material'
+import {
+    Box,
+    Button,
+    IconButton,
+    InputAdornment,
+    MenuItem,
+    Pagination,
+    Paper,
+    Select,
+    Stack,
+    TextField,
+    Typography,
+} from '@mui/material'
 import LinearProgress from '@mui/material/LinearProgress'
 import { DataGrid } from '@mui/x-data-grid'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
@@ -10,6 +22,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { isEqual, isSameDay, parse } from 'date-fns'
 import React, { useState } from 'react'
+import { useCallback } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { isANumber } from '../../utils'
@@ -107,13 +120,14 @@ export const AttendanceComponent = () => {
         },
         {
             field: 'ot',
-            headerName: <h4> OT Check In / OT Check Out</h4>,
+            headerName: <h4>Daily Productivity</h4>,
             width: 280,
             renderCell: (params) => {
                 return (
                     <Stack sx={{ width: '100%' }} direction="row" justifyContent="space-between" alignItems={'center'}>
                         <Typography>
-                            {params.row.otCheckInTime ?? 'NA'} / {params.row.otCheckOutTime ?? 'NA'}
+                            {/* {params.row.otCheckInTime ?? 'NA'} / {params.row.otCheckOutTime ?? 'NA'} */}
+                            {params.row.dailyProductivityType ?? 'NA'}
                         </Typography>
                         <IconButton
                             size="small"
