@@ -1,18 +1,14 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useCallback, useMemo, useState } from 'react'
 import { getBackendUrl } from '../../../api'
 import { BookingDurations } from '../../../constant/booking'
-import { useBooking } from '../../../providers/BookingProvider'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 import { checkError } from '../../../utils/formikValidate'
-const SERVER_URL = getBackendUrl()
-export const useBookingForm = () => {
-    const { bookingId } = useParams()
-    const { getBooking, booking, project, customer } = useBooking()
+import { useProjectDetails } from '../../Project/provider/ProjectProvider'
+export const useCreateBookingForm = () => {
+    const { project, customer, createBookingInProject } = useProjectDetails()
 
-    const [formDisabled, setFormDisabled] = useState(true)
     const [siteImages, setSiteImages] = useState([])
     const [accomoImages, setAccomoImages] = useState([])
 
@@ -26,7 +22,7 @@ export const useBookingForm = () => {
     }, [])
     const updateBooking = useCallback(
         async (values) => {
-            const updateBookingData = {
+            const createBookingData = {
                 requirements: {
                     SUPERVISOR: {
                         count: Number(values.qtySupervisor),
@@ -58,10 +54,10 @@ export const useBookingForm = () => {
             }
 
             try {
-                const { status, data } = await axios.put(
-                    `${SERVER_URL}/gateway/admin-api/bookings/${booking?.bookingId}`,
-                    updateBookingData
-                )
+                // const { status, data } = await axios.put(
+                //     `${SERVER_URL}/gateway/admin-api/bookings/${booking?.bookingId}`,
+                //     createBookingData
+                // )
                 showSnackbar({
                     msg: 'Booking Updated Successfully',
                     sev: 'success',
@@ -169,52 +165,6 @@ export const useBookingForm = () => {
         },
         [form]
     )
-
-    useEffect(() => {
-        if (booking || customer || project) {
-            form.setValues({
-                jobType: booking?.jobType ?? '',
-                tags: [...booking?.tags],
-                otherJobType: booking?.otherJobType ?? '',
-                startDate: booking?.schedule?.startDate ? new Date(booking?.schedule?.startDate) : new Date(),
-                shiftTime: booking?.shiftTimings?.split('-')[0] ?? 'none',
-                durationType: booking?.schedule?.bookingDuration ?? BookingDurations[0],
-                state: project?.state ?? 'none',
-                city: project?.city ?? 'none',
-                siteAddress: project?.siteAddress ?? '',
-                qtyHelper: booking?.peopleRequired.HELPER ?? 0,
-                qtyTechnician: booking?.peopleRequired.TECHNICIAN ?? 0,
-                qtySupervisor: booking?.peopleRequired.SUPERVISOR ?? 0,
-                cmpName: customer?.companyName ?? '',
-                name: customer?.name ?? '',
-                email: customer?.email ?? '',
-                phoneNumber: customer?.phoneNumber ?? '',
-                wageSupervisor: booking?.rateCard?.SUPERVISOR ?? 0,
-                wageTechnician: booking?.rateCard?.TECHNICIAN ?? 0,
-                wageHelper: booking?.rateCard?.HELPER ?? 0,
-                dtHelper: 0,
-                dtSupervisor: 0,
-                dtTechnician: 0,
-                pduHelper: '',
-                pduSupervisor: '',
-                pduTechnician: '',
-                shiftStartTime: booking?.schedule?.shiftTime?.split('-')[0] ?? 'none',
-                shiftEndTime: booking?.schedule?.shiftTime?.split('-')[1] ?? 'none',
-                overTimeRate: booking?.overTime?.rate ?? 'none',
-                overTimeBuffer: booking?.overTime?.buffer ?? 30,
-                overTimeBufferType: booking?.overTime?.bufferType ?? 'minutes',
-                holidayDays: booking?.holidayDays ?? [],
-                siteImages: project?.images?.site ?? [],
-                accomodationImages: project?.images?.accommodations ?? [],
-                isHolidayPaid: booking?.isHolidayPaid ?? booking?.isHolidayPaid ?? false,
-                accomodation: booking?.benefits?.includes('ACCOMODATION') ?? false,
-                travelAllowance: booking?.benefits?.includes('PAID_TRAVEL') ?? false,
-                pf: booking?.benefits?.includes('PF') ?? false,
-                esi: booking?.benefits?.includes('INSURANCE') ?? false,
-                food: booking?.benefits?.includes('FOOD') ?? false,
-            })
-        }
-    }, [booking, customer, project])
 
     const uploadImages = useCallback(
         async (type, files) => {

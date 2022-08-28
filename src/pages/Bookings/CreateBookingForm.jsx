@@ -1,6 +1,5 @@
 import {
     Box,
-    Button,
     Checkbox,
     Chip,
     Divider,
@@ -28,10 +27,10 @@ import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { getSelectOptions } from '../../utils/InputHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 import { getTimeOptions } from '../../utils/timeOptions'
-import { useBookingForm } from './hooks/useBookingForm'
+import { useCreateBookingForm } from './hooks/userCreateBookingForm'
 
-const BookingForm = () => {
-    const { booking, project, customer, checkError, form, formDisabled, editForm, getBooking } = useBookingForm()
+const CreateBookingForm = () => {
+    const { booking, project, customer, checkError, form, formDisabled, editForm, getBooking } = useCreateBookingForm()
     const { showSnackbar } = useSnackbar()
     const [confirmationDialogProps, setConfirmationDialogProps] = useState({
         open: false,
@@ -62,64 +61,6 @@ const BookingForm = () => {
                 }}
                 open={confirmationDialogProps.open}
             />
-
-            {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions?.edit && (
-                <Stack
-                    direction="row"
-                    justifyContent="flex-start"
-                    sx={{
-                        position: 'fixed',
-                        width: 'calc(100vw - 350px)',
-                        margin: '-24px -24px',
-                        background: '#efefef',
-                        p: 2,
-                        zIndex: 10,
-                    }}
-                >
-                    {!formDisabled ? (
-                        <>
-                            <Button
-                                sx={{ mr: 2 }}
-                                variant="outlined"
-                                onClick={() => {
-                                    getBooking()
-                                    editForm(false)
-                                }}
-                            >
-                                cancel
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                onClick={() => {
-                                    if (!form.isValid) {
-                                        showSnackbar({
-                                            msg: 'Some Field are invalid!',
-                                            sev: 'error',
-                                        })
-                                        return
-                                    }
-                                    setConfirmationDialogProps({
-                                        open: true,
-                                    })
-                                }}
-                            >
-                                Save
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Button
-                                variant="outlined"
-                                onClick={() => {
-                                    editForm(true)
-                                }}
-                            >
-                                Edit Details
-                            </Button>
-                        </>
-                    )}
-                </Stack>
-            )}
 
             <Paper
                 sx={{
@@ -633,4 +574,4 @@ const BookingForm = () => {
     )
 }
 
-export default BookingForm
+export default CreateBookingForm

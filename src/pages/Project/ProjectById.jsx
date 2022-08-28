@@ -194,6 +194,26 @@ const ProjectById = () => {
                                 }}
                                 variant="contained"
                             >
+                                create Booking
+                            </Button>
+                        </Grid>
+                        <Grid display="flex" item>
+                            <Button
+                                fullWidth
+                                onClick={() => {
+                                    setAddEmployeeProps({
+                                        open: true,
+                                        onClose: () => {
+                                            setAddEmployeeProps({ open: false })
+                                        },
+                                        onConfirm: async (values) => {
+                                            await addEmployeeToProject(values)
+                                            refreshList()
+                                        },
+                                    })
+                                }}
+                                variant="contained"
+                            >
                                 Add Employee
                             </Button>
                         </Grid>
