@@ -9,8 +9,8 @@ import { PrivateRoute } from './components'
 import { AllocatedWorkers, AttendanceComponent, Customer, CustomerBookings, Login, WorkerProfile } from './pages'
 import Attendance from './pages/Attendance'
 import BookingById from './pages/Bookings/BookingById'
-import BookingForm from './pages/Bookings/BookingForm'
 import Bookings from './pages/Bookings/Bookings'
+import CreateBookingForm from './pages/Bookings/CreateBookingForm'
 import CreateBookings from './pages/Bookings/CreateBookings'
 import Dashboard from './pages/Dashboard/Dashboard'
 import JCA from './pages/JCA/jobCards'
@@ -245,7 +245,7 @@ function App() {
                                     element={
                                         <PrivateRoute>
                                             <ProjectProvider>
-                                                <BookingForm />
+                                                <CreateBookingForm />
                                             </ProjectProvider>
                                         </PrivateRoute>
                                     }

@@ -17,9 +17,7 @@ export const useCreateBookingForm = () => {
         site: false,
         accomodation: false,
     })
-    const editForm = useCallback((val) => {
-        setFormDisabled(!val)
-    }, [])
+
     const updateBooking = useCallback(
         async (values) => {
             const createBookingData = {
@@ -69,9 +67,8 @@ export const useCreateBookingForm = () => {
                     sev: 'error',
                 })
             }
-            getBooking()
         },
-        [booking, getBooking, showSnackbar]
+        [showSnackbar]
     )
     const form = useFormik({
         initialValues: {
@@ -83,9 +80,9 @@ export const useCreateBookingForm = () => {
             tags: [],
             otherJobType: '',
             siteAddress: '',
-            qtyHelper: 0,
-            qtyTechnician: 0,
-            qtySupervisor: 0,
+            qtyHelper: '',
+            qtyTechnician: '',
+            qtySupervisor: '',
             startDate: new Date(),
             durationType: BookingDurations[0],
             state: 'none',
@@ -96,9 +93,9 @@ export const useCreateBookingForm = () => {
             wageHelper: '',
             wageSupervisor: '',
             wageTechnician: '',
-            dtHelper: 0,
-            dtSupervisor: 0,
-            dtTechnician: 0,
+            dtHelper: '',
+            dtSupervisor: '',
+            dtTechnician: '',
             pduHelper: '',
             pduSupervisor: '',
             pduTechnician: '',
@@ -160,7 +157,6 @@ export const useCreateBookingForm = () => {
 
     const isError = useCallback(
         (fieldName) => {
-            getBooking
             return checkError(fieldName, form)
         },
         [form]
@@ -235,42 +231,34 @@ export const useCreateBookingForm = () => {
                 [type]: false,
             }))
         },
-        [booking, project, customer, form, showSnackbar]
+        [project, customer, form, showSnackbar]
     )
     return useMemo(
         () => ({
-            booking: booking,
             customer: customer,
             project: project,
             updateBooking: updateBooking,
             form: form,
-            formDisabled: formDisabled,
             checkError: isError,
-            getBooking: getBooking,
             siteImages: siteImages,
             setSiteImages: setSiteImages,
             accomoImages: accomoImages,
             setAccomoImages: setAccomoImages,
             uploadImages: uploadImages,
-            editForm: editForm,
             isUploadingImages: isUploadingImages,
         }),
         [
-            booking,
             customer,
             project,
             updateBooking,
             form,
-            formDisabled,
             isError,
             siteImages,
             setSiteImages,
             accomoImages,
             setAccomoImages,
-            getBooking,
             uploadImages,
             isUploadingImages,
-            editForm,
         ]
     )
 }

@@ -1,5 +1,6 @@
 import {
     Box,
+    Button,
     Checkbox,
     Chip,
     Divider,
@@ -21,23 +22,25 @@ import { format } from 'date-fns'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
+import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { BookingDurations, JobTypeOptions } from '../../constant/booking'
 import { useSnackbar } from '../../providers/SnackbarProvider'
 import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { getSelectOptions } from '../../utils/InputHelpers'
+import { tags } from '../../utils/optionHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 import { getTimeOptions } from '../../utils/timeOptions'
 import { useCreateBookingForm } from './hooks/userCreateBookingForm'
 
 const CreateBookingForm = () => {
-    const { booking, project, customer, checkError, form, formDisabled, editForm, getBooking } = useCreateBookingForm()
+    const { project, customer, checkError, form } = useCreateBookingForm()
     const { showSnackbar } = useSnackbar()
     const [confirmationDialogProps, setConfirmationDialogProps] = useState({
         open: false,
     })
 
     return (
-        <>
+        <DashboardLayout>
             <ConfirmationDialog
                 content={
                     <>
@@ -62,11 +65,7 @@ const CreateBookingForm = () => {
                 open={confirmationDialogProps.open}
             />
 
-            <Paper
-                sx={{
-                    mt: CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions?.edit ? 8 : 0,
-                }}
-            >
+            <Paper component={'form'} onSubmit={form.handleSubmit} sx={{ p: 2 }}>
                 <Typography variant="h5" sx={{ mb: 2 }}>
                     <Stack direction="row" justifyContent="space-between">
                         Project Details
@@ -132,7 +131,6 @@ const CreateBookingForm = () => {
                         <Stack>
                             <InputLabel>Job Type</InputLabel>
                             <Select
-                                disabled={true}
                                 name="jobType"
                                 value={form.values.jobType}
                                 onChange={form.handleChange}
@@ -145,226 +143,50 @@ const CreateBookingForm = () => {
                         </Stack>
                     </Grid>
 
-                    {form.values.jobType !== 'none' && booking?.tags?.length > 0 && (
+                    {form.values.jobType !== 'none' && (
                         <>
                             <Grid item xs={12}>
                                 <Paper variant="outlined">
-                                    <Box p={2}>
-                                        {booking?.tags?.map((tag) => (
-                                            <Chip
-                                                key={tag}
-                                                disabled={true}
-                                                clickable
-                                                onClick={() => {
-                                                    if (!form.values.tags.includes(tag)) {
-                                                        form.setFieldValue('tags', [...form.values.tags, tag])
+                                    <Grid container p={2} spacing={1}>
+                                        {tags[form.values.jobType]?.map((tag) => (
+                                            <Grid item>
+                                                <Chip
+                                                    key={tag}
+                                                    clickable
+                                                    onClick={() => {
+                                                        if (!form.values.tags.includes(tag)) {
+                                                            form.setFieldValue('tags', [...form.values.tags, tag])
+                                                        }
+                                                    }}
+                                                    onDelete={
+                                                        form.values.tags.includes(tag)
+                                                            ? () => {
+                                                                  form.setFieldValue(
+                                                                      'tags',
+                                                                      form.values.tags?.filter((item) => item !== tag)
+                                                                  )
+                                                              }
+                                                            : undefined
                                                     }
-                                                }}
-                                                onDelete={
-                                                    form.values.tags.includes(tag)
-                                                        ? () => {
-                                                              form.setFieldValue(
-                                                                  'tags',
-                                                                  form.values.tags?.filter((item) => item !== tag)
-                                                              )
-                                                          }
-                                                        : undefined
-                                                }
-                                                label={tag}
-                                            ></Chip>
+                                                    label={tag}
+                                                ></Chip>
+                                            </Grid>
                                         ))}
-                                    </Box>
+                                    </Grid>
                                 </Paper>
                             </Grid>
                         </>
                     )}
-                    {/* <Grid item xs={12}>
-                        <TextField
-                            fullWidth
-                            disabled={true}
-                            type="number"
-                            variant="outlined"
-                            label="Other Job Types"
-                            name="otherJobType"
-                            error={checkError('otherJobType')}
-                            value={form.values.otherJobType}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                        />
-                    </Grid> */}
-                    {/* <Grid item xs={12}>
-                        <InputLabel>Number of requirements</InputLabel>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            disabled={formDisabled}
-                            type="number"
-                            variant="outlined"
-                            label="Helper*"
-                            name="qtyHelper"
-                            error={checkError('qtyHelper')}
-                            value={form.values.qtyHelper}
-                            onChange={(e) => {
-                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 500) {
-                                    form.handleChange(e)
-                                }
-                            }}
-                            onBlur={form.handleBlur}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            disabled={formDisabled}
-                            type="number"
-                            variant="outlined"
-                            label="Technician*"
-                            name="qtyTechnician"
-                            error={checkError('qtyTechnician')}
-                            value={form.values.qtyTechnician}
-                            onBlur={form.handleBlur}
-                            onChange={(e) => {
-                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 500) {
-                                    form.handleChange(e)
-                                }
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            disabled={formDisabled}
-                            type="number"
-                            variant="outlined"
-                            label="Supervisor*"
-                            name="qtySupervisor"
-                            error={checkError('qtySupervisor')}
-                            value={form.values.qtySupervisor}
-                            onChange={(e) => {
-                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 500) {
-                                    form.handleChange(e)
-                                }
-                            }}
-                            onBlur={form.handleBlur}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <InputLabel>Wage for worker Type</InputLabel>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            disabled={formDisabled || Number(form.values.qtyHelper) === 0}
-                            type="number"
-                            variant="outlined"
-                            label="Helper*"
-                            name="wageHelper"
-                            error={!!checkError('wageHelper')}
-                            value={form.values.wageHelper}
-                            onChange={(e) => {
-                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 2000) {
-                                    form.handleChange(e)
-                                }
-                            }}
-                            onBlur={form.handleBlur}
-                        />
-                    </Grid>
 
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            disabled={formDisabled || Number(form.values.qtyTechnician) === 0}
-                            type="number"
-                            variant="outlined"
-                            label="Technician*"
-                            name="wageTechnition"
-                            error={checkError('wageTechnition')}
-                            value={form.values.wageTechnition}
-                            onChange={(e) => {
-                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 2000) {
-                                    form.handleChange(e)
-                                }
-                            }}
-                            onBlur={form.handleBlur}
-                        />
-                    </Grid>
-
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            disabled={formDisabled || Number(form.values.qtySupervisor) === 0}
-                            type="number"
-                            variant="outlined"
-                            label="Supervisor*"
-                            name="wageSupervisor"
-                            error={checkError('wageSupervisor')}
-                            value={form.values.wageSupervisor}
-                            onChange={(e) => {
-                                if (Number(e.target.value) >= 0 && Number(e.target.value) <= 2000) {
-                                    form.handleChange(e)
-                                }
-                            }}
-                            onBlur={form.handleBlur}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <InputLabel>Daily Targets</InputLabel>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            disabled={formDisabled || Number(form.values.qtyHelper) === 0}
-                            type="number"
-                            variant="outlined"
-                            label="Helper*"
-                            name="dtHelper"
-                            error={!!checkError('dtHelper')}
-                            value={form.values.dtHelper}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                        />
-                    </Grid>
-
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            disabled={formDisabled || Number(form.values.qtyTechnician) === 0}
-                            type="number"
-                            variant="outlined"
-                            label="Technician*"
-                            name="dtTechnition"
-                            error={checkError('dtTechnition')}
-                            value={form.values.dtTechnition}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                        />
-                    </Grid>
-
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            disabled={formDisabled || Number(form.values.qtySupervisor) === 0}
-                            type="number"
-                            variant="outlined"
-                            label="Supervisor*"
-                            name="dtSupervisor"
-                            error={checkError('dtSupervisor')}
-                            value={form.values.dtSupervisor}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                        />
-                    </Grid> */}
                     {['Helper', 'Technician', 'Supervisor'].map((item) => {
                         return (
-                            <>
+                            <Grid container>
                                 <Grid item xs={12}>
                                     <InputLabel>{item}</InputLabel>
                                 </Grid>
                                 <Grid item xs={3}>
                                     <TextField
                                         fullWidth
-                                        disabled={formDisabled}
                                         type="number"
                                         variant="outlined"
                                         label={item + ' Quantity*'}
@@ -382,7 +204,7 @@ const CreateBookingForm = () => {
                                 <Grid item xs={3}>
                                     <TextField
                                         fullWidth
-                                        disabled={formDisabled || Number(form.values['qty' + item]) === 0}
+                                        disabled={Number(form.values['qty' + item]) === 0}
                                         type="number"
                                         variant="outlined"
                                         label={item + ' Wage*'}
@@ -400,7 +222,7 @@ const CreateBookingForm = () => {
                                 <Grid item xs={3}>
                                     <TextField
                                         fullWidth
-                                        disabled={formDisabled || Number(form.values['qty' + item]) === 0}
+                                        disabled={Number(form.values['qty' + item]) === 0}
                                         type="number"
                                         variant="outlined"
                                         label={item + ' Daily Targets*'}
@@ -414,7 +236,7 @@ const CreateBookingForm = () => {
                                 <Grid item xs={3}>
                                     <TextField
                                         fullWidth
-                                        disabled={formDisabled || Number(form.values['qty' + item]) === 0}
+                                        disabled={Number(form.values['qty' + item]) === 0}
                                         variant="outlined"
                                         label={item + ' Productivity Unit'}
                                         name={'pdu' + item}
@@ -424,7 +246,7 @@ const CreateBookingForm = () => {
                                         onBlur={form.handleBlur}
                                     />
                                 </Grid>
-                            </>
+                            </Grid>
                         )
                     })}
 
@@ -432,7 +254,6 @@ const CreateBookingForm = () => {
                         <InputLabel>Shift Start Timing *</InputLabel>
                         <Select
                             fullWidth
-                            disabled={formDisabled}
                             variant="outlined"
                             name={'shiftStartTime'}
                             value={form.values.shiftStartTime}
@@ -447,7 +268,6 @@ const CreateBookingForm = () => {
                         <InputLabel>Shift End Timing *</InputLabel>
                         <Select
                             fullWidth
-                            disabled={formDisabled}
                             variant="outlined"
                             name={'shiftEndTime'}
                             value={form.values.shiftEndTime}
@@ -463,7 +283,6 @@ const CreateBookingForm = () => {
                         <TextField
                             fullWidth
                             type="date"
-                            disabled={formDisabled}
                             variant="outlined"
                             name={'startDate'}
                             value={format(form.values.startDate, 'yyyy-MM-dd')}
@@ -476,7 +295,7 @@ const CreateBookingForm = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <FormControl disabled={formDisabled}>
+                        <FormControl>
                             <FormLabel id="demo-row-radio-buttons-group-label">Booking Duration *</FormLabel>
                             <RadioGroup
                                 name="durationType"
@@ -503,7 +322,6 @@ const CreateBookingForm = () => {
                         <InputLabel>Over Time Details</InputLabel>
                         <Select
                             fullWidth
-                            disabled={formDisabled}
                             type="number"
                             variant="outlined"
                             name="overTimeRate"
@@ -523,7 +341,6 @@ const CreateBookingForm = () => {
 
                     <Grid item xs={12}>
                         <FormControlLabel
-                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="Getting Accommodation"
                             name="accomodation"
@@ -532,7 +349,6 @@ const CreateBookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="Paid Travels "
                             name="travelAllowance"
@@ -541,7 +357,6 @@ const CreateBookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="Getting Food"
                             name="food"
@@ -550,7 +365,6 @@ const CreateBookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="PF"
                             name="pf"
@@ -559,7 +373,6 @@ const CreateBookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                         <FormControlLabel
-                            disabled={formDisabled}
                             control={<Checkbox color="primary" />}
                             label="ESI"
                             name="esi"
@@ -568,9 +381,18 @@ const CreateBookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                     </Grid>
+                    <Grid item xs={12} display="flex" flexDirection="row" justifyContent="flex-end" gap={2}>
+                        <Button variant="outlined" color="error" onClick={() => form.resetForm()}>
+                            Reset
+                        </Button>
+
+                        <Button variant="contained" color="primary" type="submit">
+                            Submit
+                        </Button>
+                    </Grid>
                 </Grid>
             </Paper>
-        </>
+        </DashboardLayout>
     )
 }
 
