@@ -66,10 +66,11 @@ const CreateBookingForm = () => {
             />
 
             <Paper component={'form'} onSubmit={form.handleSubmit} sx={{ p: 2 }}>
+                <Typography variant="h4" sx={{ mb: 2 }}>
+                    Create Booking
+                </Typography>
                 <Typography variant="h5" sx={{ mb: 2 }}>
-                    <Stack direction="row" justifyContent="space-between">
-                        Project Details
-                    </Stack>
+                    Project Details
                 </Typography>
                 <Grid container spacing={2} item xs={12} md={10} lg={7}>
                     <Grid item xs={12} md={4}>
@@ -180,7 +181,7 @@ const CreateBookingForm = () => {
 
                     {['Helper', 'Technician', 'Supervisor'].map((item) => {
                         return (
-                            <Grid container>
+                            <Grid item xs={12} container spacing={1}>
                                 <Grid item xs={12}>
                                     <InputLabel>{item}</InputLabel>
                                 </Grid>

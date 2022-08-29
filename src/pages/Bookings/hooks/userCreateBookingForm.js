@@ -114,6 +114,15 @@ export const useCreateBookingForm = () => {
         },
         validate: (values) => {
             const errors = {}
+            if (values.jobType === 'none') {
+                errors.jobType = true
+            }
+            if (values.shiftStartTime === 'none') {
+                errors.shiftStartTime = true
+            }
+            if (values.shiftEndTime === 'none') {
+                errors.shiftEndTime = true
+            }
             if (Number(values.qtyHelper) && values.wageHelper === '') {
                 errors.wageHelper = true
             }
