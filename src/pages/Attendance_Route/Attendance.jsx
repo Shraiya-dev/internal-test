@@ -156,7 +156,7 @@ export const AttendanceComponent = () => {
         },
         {
             field: 'earnings',
-            headerName: <h4>Total / Fixed / PTB / PTP / PF / ESI </h4>,
+            headerName: <h4>Total = Fixed + PTB - PTP - PF - ESI </h4>,
             width: 300,
             renderCell: (params) => {
                 return (
