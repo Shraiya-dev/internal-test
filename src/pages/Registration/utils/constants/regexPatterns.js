@@ -10,4 +10,5 @@ export const regexPatterns = {
     alphabetsOrSpace: /^[a-zA-Z ]*$/,
     alphabets: /^[a-zA-Z]*$/,
     upiVpa: /^[\w.-]+@[\w.-]+$/,
+    geoLocation: /^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/,
 }

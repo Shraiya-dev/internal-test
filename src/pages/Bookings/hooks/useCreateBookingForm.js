@@ -1,11 +1,13 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { useCallback, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { BookingDurations } from '../../../constant/booking'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 import { checkError } from '../../../utils/formikValidate'
 import { useProjectDetails } from '../../Project/provider/ProjectProvider'
+const SERVER_URL = getBackendUrl()
 export const useCreateBookingForm = () => {
     const { project, customer, createBookingInProject } = useProjectDetails()
 
@@ -17,10 +19,15 @@ export const useCreateBookingForm = () => {
         site: false,
         accomodation: false,
     })
-
+    const navigate = useNavigate()
     const updateBooking = useCallback(
         async (values) => {
+            console.log(project)
             const createBookingData = {
+                projectId: project?.id,
+                customerId: customer?.customerId,
+                jobType: values?.jobType,
+                tags: values?.tags,
                 requirements: {
                     SUPERVISOR: {
                         count: Number(values.qtySupervisor),
@@ -35,13 +42,13 @@ export const useCreateBookingForm = () => {
                         wage: Number(values.wageTechnician),
                     },
                 },
-                benefits: [
-                    values.pf ? 'PF' : '',
-                    values.esi ? 'INSURANCE' : '',
-                    values.accomodation ? 'ACCOMODATION' : '',
-                    values.travelAllowance ? 'PAID_TRAVEL' : '',
-                    values.food ? 'FOOD' : '',
-                ].filter((item) => item !== ''),
+                // benefits: [
+                //     values.pf ? 'PF' : '',
+                //     values.esi ? 'INSURANCE' : '',
+                //     values.accomodation ? 'ACCOMODATION' : '',
+                //     values.travelAllowance ? 'PAID_TRAVEL' : '',
+                //     values.food ? 'FOOD' : '',
+                // ].filter((item) => item !== ''),
                 startDate: values.startDate,
 
                 shiftTime: `${values.shiftStartTime}-${values.shiftEndTime}`,
@@ -49,18 +56,38 @@ export const useCreateBookingForm = () => {
                 overTime: {
                     rate: values.overTimeRate,
                 },
+                dailyTarget: {
+                    HELPER:
+                        Number(values.dtHelper) !== 0 || values.pduHelper !== 'none'
+                            ? {
+                                  target: Number(values.dtHelper),
+                                  metric: values.pduHelper,
+                              }
+                            : undefined,
+                    TECHNICIAN:
+                        Number(values.dtTechnician) !== 0 || values.pduTechnician !== 'none'
+                            ? {
+                                  target: Number(values.dtTechnician),
+                                  metric: values.pduTechnician,
+                              }
+                            : undefined,
+                    SUPERVISOR:
+                        Number(values.dtSupervisor) !== 0 || values.pduSupervisor !== 'none'
+                            ? {
+                                  target: Number(values.dtSupervisor),
+                                  metric: values.pduSupervisor,
+                              }
+                            : undefined,
+                },
             }
 
             try {
-                // const { status, data } = await axios.put(
-                //     `${SERVER_URL}/gateway/admin-api/bookings/${booking?.bookingId}`,
-                //     createBookingData
-                // )
+                const { status, data } = await axios.post(`${SERVER_URL}/gateway/admin-api/bookings`, createBookingData)
                 showSnackbar({
                     msg: 'Booking Updated Successfully',
                     sev: 'success',
                 })
-                editForm(false)
+                navigate(`/bookings/${data?.payload?.bookingId}`)
             } catch (error) {
                 showSnackbar({
                     msg: error?.response?.data?.developerInfo,
@@ -68,7 +95,7 @@ export const useCreateBookingForm = () => {
                 })
             }
         },
-        [showSnackbar]
+        [showSnackbar, project, customer]
     )
     const form = useFormik({
         initialValues: {
@@ -96,9 +123,9 @@ export const useCreateBookingForm = () => {
             dtHelper: '',
             dtSupervisor: '',
             dtTechnician: '',
-            pduHelper: '',
-            pduSupervisor: '',
-            pduTechnician: '',
+            pduHelper: 'none',
+            pduSupervisor: 'none',
+            pduTechnician: 'none',
             overTimeRate: 'none',
             overTimeBuffer: 30,
             pf: false,
@@ -134,25 +161,31 @@ export const useCreateBookingForm = () => {
             }
 
             // if qtyHelper is not 0 that time wages can't be 0
-            if (Number(values.qtyHelper && Number(values.wageHelper) === 0)) {
-                errors.wageHelper = true
+            if (Number(values.qtyHelper)) {
+                if (Number(values.wageHelper) === 0) errors.wageHelper = true
+                if (Number(values.dtHelper) === 0) errors.dtHelper = true
+                if (values.pduHelper === 'none') errors.pduHelper = true
             }
 
             if (Number(values.qtySupervisor) && values.wageSupervisor === '') {
                 errors.wageSupervisor = true
             }
             // if qtySupervisor is not 0 that time wages can't be 0
-            if (Number(values.qtySupervisor && Number(values.wageSupervisor) === 0)) {
-                errors.wageSupervisor = true
+            if (Number(values.qtySupervisor)) {
+                if (Number(values.wageSupervisor) === 0) errors.wageSupervisor = true
+                if (Number(values.dtSupervisor) === 0) errors.dtSupervisor = true
+                if (values.pduSupervisor === 'none') errors.pduSupervisor = true
             }
 
             if (Number(values.qtyTechnician) && values.wageTechnician === '') {
                 errors.wageTechnician = true
             }
 
-            //if qtyTechnician is not 0 that time wages can't be 0
-            if (Number(values.qtyTechnician && Number(values.wageTechnician) === 0)) {
-                errors.wageTechnician = true
+            // if qtySupervisor is not 0 that time wages can't be 0
+            if (Number(values.qtyTechnician)) {
+                if (Number(values.wageTechnician) === 0) errors.wageTechnician = true
+                if (Number(values.dtTechnician) === 0) errors.dtTechnician = true
+                if (values.pduTechnician === 'none') errors.pduTechnician = true
             }
 
             if (values.overTimeRate === 'none') {

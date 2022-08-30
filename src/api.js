@@ -7,7 +7,7 @@ export const getBackendUrl = () => {
     }
     return envs.SERVER_URL
 }
-const SERVER_URL = getBackendUrl()
+export const SERVER_URL = getBackendUrl()
 
 export const GET_JOB_TYPES_API = `${SERVER_URL}/job-type/formatted`
 export const SEND_OTP_API = `${SERVER_URL}/send-otp`

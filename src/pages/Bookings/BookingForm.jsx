@@ -131,7 +131,7 @@ const BookingForm = () => {
                         Project Details
                     </Stack>
                 </Typography>
-                <Grid container spacing={2} item xs={12} md={10} lg={7}>
+                <Grid container spacing={2} item xs={12} lg={7}>
                     <Grid item xs={12} md={4}>
                         <InputLabel>Project Name</InputLabel>
                         <Typography
