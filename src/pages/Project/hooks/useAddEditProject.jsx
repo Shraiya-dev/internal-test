@@ -267,7 +267,7 @@ export const useAddEditProject = () => {
             food: project?.benefits?.includes('FOOD') ?? '',
             siteImages: project?.images?.site ?? [],
             accommodationImages: project?.images?.accommodations ?? [],
-            geoLocation: `${project?.projectLocation?.latitude}, ${project?.projectLocation?.longitude}` ?? '',
+            geoLocation: `${project?.projectLocation?.latitude ?? ''}, ${project?.projectLocation?.longitude ?? ''}`,
             projectVideo: project?.videos ?? [],
         })
     }, [project])
