@@ -223,7 +223,7 @@ export const useBookingForm = () => {
                 wageSupervisor: booking?.rateCard?.SUPERVISOR ?? 0,
                 wageTechnician: booking?.rateCard?.TECHNICIAN ?? 0,
                 wageHelper: booking?.rateCard?.HELPER ?? 0,
-                dtHelper: booking?.dailyTarget?.HELPER.target ?? 0,
+                dtHelper: booking?.dailyTarget?.HELPER?.target ?? 0,
                 dtSupervisor: booking?.dailyTarget?.SUPERVISOR?.target ?? 0,
                 dtTechnician: booking?.dailyTarget?.TECHNICIAN?.target ?? 0,
                 pduHelper: booking?.dailyTarget?.HELPER?.metric ?? 'none',

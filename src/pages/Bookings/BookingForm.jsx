@@ -471,17 +471,22 @@ const BookingForm = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={3}>
-                                    <TextField
+                                    <Select
                                         fullWidth
                                         disabled={formDisabled || Number(form.values['qty' + item]) === 0}
                                         variant="outlined"
-                                        label={item + ' Productivity Unit'}
                                         name={'pdu' + item}
                                         error={checkError('pdu' + item)}
                                         value={form.values['pdu' + item]}
                                         onChange={form.handleChange}
                                         onBlur={form.handleBlur}
-                                    />
+                                    >
+                                        {getSelectOptions([
+                                            { label: 'Select metric', value: 'none' },
+                                            { label: 'sqft', value: 'sqft' },
+                                            { label: 'sqmt', value: 'sqmt' },
+                                        ])}
+                                    </Select>
                                 </Grid>
                             </>
                         )
