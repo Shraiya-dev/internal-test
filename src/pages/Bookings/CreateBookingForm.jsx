@@ -374,7 +374,7 @@ const CreateBookingForm = () => {
                                 <MenuItem value={2}>2</MenuItem>
                             </Select>
                         </Grid>
-                        <Grid container item xs={12}>
+                        {/* <Grid container item xs={12}>
                             <Grid item xs={12}>
                                 <InputLabel>Benefits</InputLabel>
                             </Grid>
@@ -468,7 +468,7 @@ const CreateBookingForm = () => {
                                     onBlur={form.handleBlur}
                                 />
                             </Grid>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
                 </Grid>
             </Box>

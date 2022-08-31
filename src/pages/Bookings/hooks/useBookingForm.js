@@ -61,21 +61,21 @@ export const useBookingForm = () => {
                 },
                 dailyTarget: {
                     HELPER:
-                        Number(values.dtHelper) !== 0 || values.pduHelper !== 'none'
+                        Number(values.dtHelper) !== 0 && values.pduHelper !== 'none'
                             ? {
                                   target: Number(values.dtHelper),
                                   metric: values.pduHelper,
                               }
                             : undefined,
                     TECHNICIAN:
-                        Number(values.dtTechnician) !== 0 || values.pduTechnician !== 'none'
+                        Number(values.dtTechnician) !== 0 && values.pduTechnician !== 'none'
                             ? {
                                   target: Number(values.dtTechnician),
                                   metric: values.pduTechnician,
                               }
                             : undefined,
                     SUPERVISOR:
-                        Number(values.dtSupervisor) !== 0 || values.pduSupervisor !== 'none'
+                        Number(values.dtSupervisor) !== 0 && values.pduSupervisor !== 'none'
                             ? {
                                   target: Number(values.dtSupervisor),
                                   metric: values.pduSupervisor,
@@ -130,9 +130,9 @@ export const useBookingForm = () => {
             dtHelper: 0,
             dtSupervisor: 0,
             dtTechnician: 0,
-            pduHelper: '',
-            pduSupervisor: '',
-            pduTechnician: '',
+            pduHelper: 'none',
+            pduSupervisor: 'none',
+            pduTechnician: 'none',
             overTimeRate: 'none',
             overTimeBuffer: 30,
             pf: false,
@@ -226,9 +226,9 @@ export const useBookingForm = () => {
                 dtHelper: booking?.dailyTarget?.HELPER.target ?? 0,
                 dtSupervisor: booking?.dailyTarget?.SUPERVISOR?.target ?? 0,
                 dtTechnician: booking?.dailyTarget?.TECHNICIAN?.target ?? 0,
-                pduHelper: booking?.dailyTarget?.HELPER?.metric ?? '',
-                pduSupervisor: booking?.dailyTarget?.SUPERVISOR?.metric ?? '',
-                pduTechnician: booking?.dailyTarget?.TECHNICIAN?.metric ?? '',
+                pduHelper: booking?.dailyTarget?.HELPER?.metric ?? 'none',
+                pduSupervisor: booking?.dailyTarget?.SUPERVISOR?.metric ?? 'none',
+                pduTechnician: booking?.dailyTarget?.TECHNICIAN?.metric ?? 'none',
                 shiftStartTime: booking?.schedule?.shiftTime?.split('-')[0] ?? 'none',
                 shiftEndTime: booking?.schedule?.shiftTime?.split('-')[1] ?? 'none',
                 overTimeRate: booking?.overTime?.rate ?? 'none',
