@@ -290,7 +290,6 @@ export const useBookingForm = () => {
                     const formData = new FormData()
                     formData.set('type', imgType)
                     formData.set('file', img)
-                    console.log(img.type)
                     return axios.post(`${SERVER_URL}/admin/bookings/${booking?.bookingId}/images`, formData)
                 })
             )

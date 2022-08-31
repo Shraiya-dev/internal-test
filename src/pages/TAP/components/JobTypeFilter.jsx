@@ -21,7 +21,6 @@ export const JobTypeFilter = () => {
         jobTypes = res?.data
     }
 
-    console.log(jobTypes)
 
     return (
         <FormControl fullWidth>

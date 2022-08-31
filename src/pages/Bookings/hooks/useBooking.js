@@ -28,9 +28,7 @@ export const useBookings = () => {
                 nsp.get('customerPhone') && nsp.set('customerPhone', '+91' + nsp.get('customerPhone'))
                 const { data, status } = await axios.get(`${SERVER_URL}/gateway/admin-api/bookings?${nsp.toString()}`)
                 setResponse(data.payload)
-            } catch (error) {
-                console.log(error)
-            }
+            } catch (error) {}
             setIsLoading(false)
         }, 500),
         []

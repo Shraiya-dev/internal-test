@@ -30,7 +30,6 @@ const EditAttendanceDialog = ({ open, data, onClose, field }) => {
     } = useEditAttendanceDialog(data, onClose, field)
 
     const [sp] = useSearchParams()
-    console.log(data)
     return (
         <Dialog
             open={open}

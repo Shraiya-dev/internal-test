@@ -283,7 +283,7 @@ const AddEditProject = () => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <FormControl error={formikProps('joiningBonus').error}>
+                                <FormControl error={formikProps('joiningBonus').error} disabled={disabled}>
                                     <FormLabel>Joining Bonus?</FormLabel>
                                     <RadioGroup
                                         {...formikProps('joiningBonus')}
@@ -299,7 +299,7 @@ const AddEditProject = () => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <FormControl error={formikProps('guaranteedSalary').error}>
+                                <FormControl error={formikProps('guaranteedSalary').error} disabled={disabled}>
                                     <FormLabel>Guaranteed Salary?</FormLabel>
                                     <RadioGroup
                                         {...formikProps('guaranteedSalary')}
@@ -315,7 +315,7 @@ const AddEditProject = () => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <FormControl error={formikProps('weeklyKharchi').error}>
+                                <FormControl error={formikProps('weeklyKharchi').error} disabled={disabled}>
                                     <FormLabel>Weekly Kharchi?</FormLabel>
                                     <RadioGroup
                                         {...formikProps('weeklyKharchi')}
@@ -331,7 +331,7 @@ const AddEditProject = () => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={4}>
-                                <FormControl error={formikProps('medicalSupport').error}>
+                                <FormControl error={formikProps('medicalSupport').error} disabled={disabled}>
                                     <FormLabel>Medical Support?</FormLabel>
                                     <RadioGroup
                                         {...formikProps('medicalSupport')}

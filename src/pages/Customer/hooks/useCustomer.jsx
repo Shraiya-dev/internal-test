@@ -35,7 +35,6 @@ export const useCustomer = () => {
                 const { status, data } = await axios.get(`${SERVER_URL}/gateway/admin-api/customers?${sp}`)
                 setCustomers(data.payload.customers.map((item) => ({ ...item.customer, ...item.organisation })))
                 setHasMore(data.payload.hasMore)
-                console.log()
             } catch (error) {
                 showSnackbar({
                     msg: error.response.data.developerInfo,

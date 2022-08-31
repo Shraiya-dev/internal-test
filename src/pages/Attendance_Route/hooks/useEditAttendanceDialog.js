@@ -7,7 +7,6 @@ import { getBackendUrl } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 const SERVER_URL = getBackendUrl()
 function isValidDate(d) {
-    console.log(isValid(d))
     return isValid(d)
 }
 
@@ -53,7 +52,6 @@ const useEditAttendanceDialog = (data, onClose, field) => {
                 fh.resetForm()
                 onClose()
             } catch (error) {
-                console.log(error)
                 showSnackbar({
                     msg: error.response.data.developerInfo,
                     sev: 'error',
@@ -171,8 +169,6 @@ const useEditAttendanceDialog = (data, onClose, field) => {
 
     const validate = useCallback(
         (values) => {
-            console.log(values)
-
             const errors = {}
             if (!data && values.checkedOutTime - new Date() > 0) {
                 errors.checkedOutTime = 'Check out time cannot be of future'
@@ -186,11 +182,7 @@ const useEditAttendanceDialog = (data, onClose, field) => {
             if (!isValid(values.checkedInTime)) {
                 errors.checkedInTime = 'Invalid check in time'
             }
-            console.log(
-                new Date(),
-                parse(sp.get('date'), 'dd/MM/yy', new Date()),
-                isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date()))
-            )
+
             if (data && !isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date())) && !values.checkedOutTime) {
                 errors.checkedOutTime = 'Invalid check out time'
             }
@@ -225,11 +217,7 @@ const useEditAttendanceDialog = (data, onClose, field) => {
             //     if (!isValid(values.otCheckedInTime)) {
             //         errors.otCheckedInTime = 'Invalid OT check in time'
             //     }
-            //     console.log(
-            //         new Date(),
-            //         parse(sp.get('date'), 'dd/MM/yy', new Date()),
-            //         isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date()))
-            //     )
+            //
             //     if (
             //         data &&
             //         !isAfter(new Date(), parse(sp.get('date'), 'dd/MM/yy', new Date())) &&

@@ -34,7 +34,6 @@ const useCreateBookings = () => {
         },
         validate: (values) => {
             const errors = {}
-            console.log(values)
             if (values.jobType === 'none') {
                 errors.jobType = true
             }
@@ -72,7 +71,6 @@ const useCreateBookings = () => {
             if (!validateEmail(values.email)) {
                 errors.email = true
             }
-            console.log(errors)
             return errors
         },
         onSubmit: async (values) => {

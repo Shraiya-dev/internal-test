@@ -175,7 +175,6 @@ const Registration = (props) => {
 
     const { workerId } = useParams()
 
-    console.log('workerId', workerId)
     const [data, setData] = useState({
         jobType: '',
         yoe: '',
@@ -304,7 +303,6 @@ const Registration = (props) => {
     }
 
     const handleModifyOptions = (data, name) => {
-        console.log('State-data', data, name)
         //modifyOptions(data, name, setStateCityOptions, stateCityOptions);
     }
 
@@ -321,22 +319,17 @@ const Registration = (props) => {
         if (workerId) {
             setLoading(true)
             axios.get(`https://staging-api.projecthero.in/admin/worker/${workerId}`).then((res) => {
-                console.log('workerInfo', res)
                 setData(res?.data?.payload)
             })
             setLoading(false)
         }
     }, [isEditable])
 
-    console.log('--data', data)
-
     // useEffect(()=>{
 
     //   //getWorkerInfoByID(setWorkerInfoById,workerId);
 
     // },[workerId])
-
-    console.log('workerInfoById', workerInfoById)
 
     const handleOpenToast = (message, status) => {
         setToastMessage(message)
@@ -413,7 +406,6 @@ const Registration = (props) => {
     }
 
     const handleSubmitCallback = (success, message) => {
-        console.log({ message })
         setIsLoading(false)
         if (success) {
             handleShowSuccessModal()
@@ -429,13 +421,11 @@ const Registration = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         if (checkForErrors()) {
-            console.log(errors)
             handleOpenToast(ERROR_TEXT.CHECK_ERRORS, 'error')
             return
         }
         setIsLoading(true)
 
-        //  console.log("data",data)
         if (workerId) {
             editUserInformation(workerId, prepareRegistrationData(data), handleSubmitCallback)
         } else {
@@ -500,7 +490,6 @@ const Registration = (props) => {
                 <p className={`${classes.mainHeading} ${classes.subHeading}`}>Personal Details</p>
                 <Grid container spacing={3} style={{ marginTop: 0 }}>
                     <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                        {console.log(isEditable)}
                         <InputTextField
                             label="Full Name"
                             onChange={handleChange}
@@ -1070,9 +1059,7 @@ const Registration = (props) => {
                                         width: '90%',
                                         backgroundColor: 'green',
                                     }}
-                                    onClick={() => {
-                                        console.log(hello)
-                                    }}
+                                    onClick={() => {}}
                                     disabled={isLoading}
                                 />
                             </div>

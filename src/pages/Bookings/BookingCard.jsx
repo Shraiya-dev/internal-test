@@ -9,7 +9,6 @@ import { useSnackbar } from '../../providers/SnackbarProvider'
 
 const BookingCard = ({ bookingData }) => {
     const { booking, project, customer, stats, jobs } = bookingData
-    console.log('Jobs: ' + JSON.stringify(jobs));
     const { showSnackbar } = useSnackbar()
     const allowedActions = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions, [booking])
     const allowedTabs = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs, [booking])

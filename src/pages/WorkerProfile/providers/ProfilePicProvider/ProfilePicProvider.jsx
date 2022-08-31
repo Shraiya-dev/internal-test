@@ -16,7 +16,6 @@ export const ProfilePicProvider = ({ children }) => {
         let reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onloadend = (e) => {
-            console.log(reader.result)
             setPreviewImage(reader.result)
         }
         setSelectedFile(file)

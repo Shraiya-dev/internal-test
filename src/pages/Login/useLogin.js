@@ -39,11 +39,9 @@ export const useLogin = () => {
     const handleOtpChange = (otp) => setOtp({ otp })
 
     const onPhoneNumberSubmit = async () => {
-        console.log('jo')
         setError(null)
         const result = validatePhoneNumber(phoneNumber)
         if (result !== 'valid') {
-            console.log(result)
             return setError((prev) => ({ ...prev, phoneNumber: result }))
         }
         // if (result === 'valid') {

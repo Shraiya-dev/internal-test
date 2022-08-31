@@ -10,11 +10,8 @@ export const useLocationMetadata = () => {
     const getStates = useCallback(async () => {
         try {
             const { data } = await axios.get(`${SERVER_URL}/gateway/metadata/locations/states`)
-            console.log(data.payload.states)
             return setStates([...data?.payload?.states])
-        } catch (error) {
-            console.log(error)
-        }
+        } catch (error) {}
     }, [])
     const getDistricts = useCallback(
         async (stateValue) => {
@@ -25,9 +22,7 @@ export const useLocationMetadata = () => {
                     `${SERVER_URL}/gateway/metadata/locations/states/${state.stateId}/districts`
                 )
                 setDistricts([...data.payload.districts])
-            } catch (error) {
-                console.log(error)
-            }
+            } catch (error) {}
         },
         [states]
     )

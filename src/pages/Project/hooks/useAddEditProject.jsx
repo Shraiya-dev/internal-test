@@ -232,7 +232,6 @@ export const useAddEditProject = () => {
                         }),
                     ])
                 } else {
-                    console.log(uploadSuccess)
                     form.setFieldValue(fieldName, [
                         ...form.values[fieldName],
                         ...uploadSuccess.map(({ data }) => {
@@ -251,7 +250,6 @@ export const useAddEditProject = () => {
     )
 
     useEffect(() => {
-        console.log(project)
         form.setValues({
             projectName: project?.name ?? '',
             siteAddress: project?.siteAddress ?? '',
@@ -262,6 +260,10 @@ export const useAddEditProject = () => {
             esi: project?.benefits?.includes('INSURANCE') ?? '',
             otf: project?.overTime?.rate ?? 'none',
             accommodation: project?.benefits?.includes('ACCOMODATION') ?? '',
+            joiningBonus: project?.benefits?.includes('JOINING_BONUS') ?? '',
+            guaranteedSalary: project?.benefits?.includes('GUARANTEED_SALARY') ?? '',
+            weeklyKharchi: project?.benefits?.includes('WEEKLY_KHARCHI') ?? '',
+            medicalSupport: project?.benefits?.includes('MEDICAL_SUPPORT') ?? '',
             food: project?.benefits?.includes('FOOD') ?? '',
             siteImages: project?.images?.site ?? [],
             accommodationImages: project?.images?.accommodations ?? [],

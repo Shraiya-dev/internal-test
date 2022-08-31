@@ -41,7 +41,6 @@ export const WorkerProfileProvider = ({ children }) => {
         if (!isValid) {
             return
         }
-        console.log('Fields valid')
     }
 
     useEffect(() => {

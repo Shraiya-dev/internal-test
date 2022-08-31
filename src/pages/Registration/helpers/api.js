@@ -88,27 +88,21 @@ export const getJobTypes = async (callback) => {
         if (response.data.success) {
             callback(response.data.data)
         }
-    } catch (error) {
-        console.log(error)
-    }
+    } catch (error) {}
 }
 
 export const getStates = async (callback) => {
     try {
         const response = await axios.get(`${GET_STATES_URL}`, getStatesOrCityConfig)
         callback(response.data, 'state')
-    } catch (error) {
-        console.log(error)
-    }
+    } catch (error) {}
 }
 
 export const getCity = async (state = 'MP', callback) => {
     try {
         const response = await axios.get(`${GET_STATES_URL}/${state}/cities`, getStatesOrCityConfig)
         callback(response.data, 'city')
-    } catch (error) {
-        console.log(error)
-    }
+    } catch (error) {}
 }
 
 export const getWorkerInfoByID = async (workerId, callback) => {
@@ -117,9 +111,7 @@ export const getWorkerInfoByID = async (workerId, callback) => {
         if (response.data.success) {
             callback(response.data.data)
         }
-    } catch (error) {
-        console.log(error)
-    }
+    } catch (error) {}
 }
 
 export const logout = () => {

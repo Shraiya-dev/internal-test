@@ -11,7 +11,6 @@ export const useAddOrgMember = (organisation, onClose) => {
     const { showSnackbar } = useSnackbar()
     const onSubmit = useCallback(
         async (values, fh) => {
-            console.log(organisation)
             try {
                 const { status, data } = await axios.post(
                     `${SERVER_URL}/gateway/admin-api/organisations/${organisation.organisationId}/members`,
