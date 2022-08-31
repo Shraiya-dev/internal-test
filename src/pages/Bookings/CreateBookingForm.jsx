@@ -74,7 +74,7 @@ const CreateBookingForm = () => {
                                     Reset
                                 </Button>
 
-                                <Button disabled={!form.isValid} variant="contained" color="primary" type="submit">
+                                <Button variant="contained" color="primary" type="submit">
                                     Submit
                                 </Button>
                             </Stack>

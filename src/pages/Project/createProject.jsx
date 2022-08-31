@@ -90,7 +90,7 @@ const CreateProject = () => {
                             <Button type="reset" color="error" variant="outlined">
                                 Reset
                             </Button>
-                            <Button disabled={!form.isValid} type="submit" variant="contained">
+                            <Button type="submit" variant="contained">
                                 Submit
                             </Button>
                         </Stack>
