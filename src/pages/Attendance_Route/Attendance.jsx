@@ -156,14 +156,14 @@ export const AttendanceComponent = () => {
         },
         {
             field: 'earnings',
-            headerName: <h4>Total = Fixed + PTB - PTP - PF - ESI </h4>,
+            headerName: <h4>Total = Fixed + PTB + OT - PTP - PF - ESI </h4>,
             width: 300,
             renderCell: (params) => {
                 return (
                     <>
-                        &#8377; {params.row.total ?? 'NA'} = &#8377; {params.row.fixed ?? 'NA'} + &#8377;{' '}
-                        {params.row.productivityBonus ?? 'NA'} - &#8377; {params.row.productivityPenalty ?? 'NA'} -
-                        &#8377;
+                        &#8377; {params.row.total ?? 'NA'} = &#8377; {params.row.fixed ?? 'NA'} &#8377;{' '}
+                        {params.row.ot ?? 'NA'} + &#8377; {params.row.productivityBonus ?? 'NA'} - &#8377;{' '}
+                        {params.row.productivityPenalty ?? 'NA'} - &#8377;
                         {params.row.pf ?? 'NA'} - &#8377; {params.row.esi ?? 'NA'}
                     </>
                 )
