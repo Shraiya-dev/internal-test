@@ -157,7 +157,7 @@ export const AttendanceComponent = () => {
         {
             field: 'earnings',
             headerName: <h4>Total = Fixed + PTB + OT - PTP - PF - ESI </h4>,
-            width: 300,
+            width: 350,
             renderCell: (params) => {
                 return (
                     <>
