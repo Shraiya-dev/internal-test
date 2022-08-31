@@ -218,7 +218,7 @@ const AddEditProject = () => {
                             Add worker benefits for the project {form.values.projectName}
                         </Typography>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={4}>
                                 <FormControl error={formikProps('pf').error} disabled={disabled}>
                                     <FormLabel>Provident Fund (PF) available?</FormLabel>
                                     <RadioGroup
@@ -234,7 +234,7 @@ const AddEditProject = () => {
                                     </RadioGroup>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={4}>
                                 <FormControl error={formikProps('esi').error} disabled={disabled}>
                                     <FormLabel>Employee State Insurance (ESI) provided?</FormLabel>
                                     <RadioGroup
@@ -250,7 +250,7 @@ const AddEditProject = () => {
                                     </RadioGroup>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={4}>
                                 <FormControl error={formikProps('accommodation').error} disabled={disabled}>
                                     <FormLabel>Accommodation provided?</FormLabel>
                                     <RadioGroup
@@ -266,7 +266,7 @@ const AddEditProject = () => {
                                     </RadioGroup>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={4}>
                                 <FormControl error={formikProps('food').error} disabled={disabled}>
                                     <FormLabel>Food provided?</FormLabel>
                                     <RadioGroup
@@ -282,7 +282,71 @@ const AddEditProject = () => {
                                     </RadioGroup>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
+                                <FormControl error={formikProps('joiningBonus').error}>
+                                    <FormLabel>Joining Bonus?</FormLabel>
+                                    <RadioGroup
+                                        {...formikProps('joiningBonus')}
+                                        onChange={(e) => {
+                                            form.setFieldValue(e.target.name, e.target.value === 'true')
+                                        }}
+                                    >
+                                        <Stack direction={'row'}>
+                                            <FormControlLabel value={true} control={<Radio />} label={'Yes'} />
+                                            <FormControlLabel value={false} control={<Radio />} label={'No'} />
+                                        </Stack>
+                                    </RadioGroup>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                                <FormControl error={formikProps('guaranteedSalary').error}>
+                                    <FormLabel>Guaranteed Salary?</FormLabel>
+                                    <RadioGroup
+                                        {...formikProps('guaranteedSalary')}
+                                        onChange={(e) => {
+                                            form.setFieldValue(e.target.name, e.target.value === 'true')
+                                        }}
+                                    >
+                                        <Stack direction={'row'}>
+                                            <FormControlLabel value={true} control={<Radio />} label={'Yes'} />
+                                            <FormControlLabel value={false} control={<Radio />} label={'No'} />
+                                        </Stack>
+                                    </RadioGroup>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                                <FormControl error={formikProps('weeklyKharchi').error}>
+                                    <FormLabel>Weekly Kharchi?</FormLabel>
+                                    <RadioGroup
+                                        {...formikProps('weeklyKharchi')}
+                                        onChange={(e) => {
+                                            form.setFieldValue(e.target.name, e.target.value === 'true')
+                                        }}
+                                    >
+                                        <Stack direction={'row'}>
+                                            <FormControlLabel value={true} control={<Radio />} label={'Yes'} />
+                                            <FormControlLabel value={false} control={<Radio />} label={'No'} />
+                                        </Stack>
+                                    </RadioGroup>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                                <FormControl error={formikProps('medicalSupport').error}>
+                                    <FormLabel>Medical Support?</FormLabel>
+                                    <RadioGroup
+                                        {...formikProps('medicalSupport')}
+                                        onChange={(e) => {
+                                            form.setFieldValue(e.target.name, e.target.value === 'true')
+                                        }}
+                                    >
+                                        <Stack direction={'row'}>
+                                            <FormControlLabel value={true} control={<Radio />} label={'Yes'} />
+                                            <FormControlLabel value={false} control={<Radio />} label={'No'} />
+                                        </Stack>
+                                    </RadioGroup>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={6}>
                                 <FormLabel>Over Time Factor</FormLabel>
 
                                 <Select fullWidth variant="outlined" disabled={disabled} {...formikProps('otf')}>

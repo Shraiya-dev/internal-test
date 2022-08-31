@@ -29,12 +29,16 @@ export const useCreateProject = () => {
             shiftTime: '',
             pf: '',
             esi: '',
-            otf: 'none', // over time factor
+            food: '',
             accommodation: '',
+            joiningBonus: '',
+            guaranteedSalary: '',
+            weeklyKharchi: '',
+            medicalSupport: '',
+            otf: 'none',
             workerCount: '',
             geoLocation: '',
             projectVideo: [],
-            food: '',
             siteImages: [],
             accommodationImages: [],
         },
@@ -72,15 +76,30 @@ export const useCreateProject = () => {
             if (values.esi === '') {
                 errors.esi = 'Required *'
             }
-            if (values.otf === 'none') {
-                errors.otf = 'Required *'
-            }
+
             if (values.accommodation === '') {
                 errors.accommodation = 'Required *'
             }
             if (values.food === '') {
                 errors.food = 'Required *'
             }
+            if (values.joiningBonus === '') {
+                errors.joiningBonus = 'Required *'
+            }
+            if (values.guaranteedSalary === '') {
+                errors.guaranteedSalary = 'Required *'
+            }
+            if (values.weeklyKharchi === '') {
+                errors.weeklyKharchi = 'Required *'
+            }
+            if (values.medicalSupport === '') {
+                errors.medicalSupport = 'Required *'
+            }
+
+            if (values.otf === 'none') {
+                errors.otf = 'Required *'
+            }
+
             return errors
         },
         onSubmit: async (values, fh) => {
@@ -97,10 +116,13 @@ export const useCreateProject = () => {
                 benefits: [
                     values.pf ? 'PF' : '',
                     values.esi ? 'INSURANCE' : '',
-                    values.accommodation ? 'ACCOMODATION' : '',
+                    values.accomodation ? 'ACCOMODATION' : '',
                     values.travelAllowance ? 'PAID_TRAVEL' : '',
-
                     values.food ? 'FOOD' : '',
+                    values.joiningBonus ? 'JOINING_BONUS' : '',
+                    values.guaranteedSalary ? 'GUARANTEED_SALARY' : '',
+                    values.weeklyKharchi ? 'WEEKLY_KHARCHI' : '',
+                    values.medicalSupport ? 'MEDICAL_SUPPORT' : '',
                 ].filter((item) => item !== ''),
                 images: {
                     accommodations: values.accommodationImages,

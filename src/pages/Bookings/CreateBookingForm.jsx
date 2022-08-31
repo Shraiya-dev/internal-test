@@ -374,48 +374,100 @@ const CreateBookingForm = () => {
                                 <MenuItem value={2}>2</MenuItem>
                             </Select>
                         </Grid>
-
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                control={<Checkbox color="primary" />}
-                                label="Getting Accommodation"
-                                name="accomodation"
-                                checked={form.values.accomodation}
-                                onChange={form.handleChange}
-                                onBlur={form.handleBlur}
-                            />
-                            <FormControlLabel
-                                control={<Checkbox color="primary" />}
-                                label="Paid Travels "
-                                name="travelAllowance"
-                                checked={form.values.travelAllowance}
-                                onChange={form.handleChange}
-                                onBlur={form.handleBlur}
-                            />
-                            <FormControlLabel
-                                control={<Checkbox color="primary" />}
-                                label="Getting Food"
-                                name="food"
-                                checked={form.values.food}
-                                onChange={form.handleChange}
-                                onBlur={form.handleBlur}
-                            />
-                            <FormControlLabel
-                                control={<Checkbox color="primary" />}
-                                label="PF"
-                                name="pf"
-                                checked={form.values.pf}
-                                onChange={form.handleChange}
-                                onBlur={form.handleBlur}
-                            />
-                            <FormControlLabel
-                                control={<Checkbox color="primary" />}
-                                label="ESI"
-                                name="esi"
-                                checked={form.values.esi}
-                                onChange={form.handleChange}
-                                onBlur={form.handleBlur}
-                            />
+                        <Grid container item xs={12}>
+                            <Grid item xs={12}>
+                                <InputLabel>Benefits</InputLabel>
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Checkbox color="primary" />}
+                                    label="Getting Accommodation"
+                                    name="accomodation"
+                                    checked={form.values.accomodation}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Checkbox color="primary" />}
+                                    label="Paid Travels "
+                                    name="travelAllowance"
+                                    checked={form.values.travelAllowance}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Checkbox color="primary" />}
+                                    label="Getting Food"
+                                    name="food"
+                                    checked={form.values.food}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Checkbox color="primary" />}
+                                    label="PF"
+                                    name="pf"
+                                    checked={form.values.pf}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Checkbox color="primary" />}
+                                    label="ESI"
+                                    name="esi"
+                                    checked={form.values.esi}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Checkbox color="primary" />}
+                                    label="Joining Bonus"
+                                    name="joiningBonus"
+                                    checked={form.values.joiningBonus}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Checkbox color="primary" />}
+                                    label="Guaranteed Salary"
+                                    name="guaranteedSalary"
+                                    checked={form.values.guaranteedSalary}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Checkbox color="primary" />}
+                                    label="Weekly Kharchi"
+                                    name="weeklyKharchi"
+                                    checked={form.values.weeklyKharchi}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <FormControlLabel
+                                    control={<Checkbox color="primary" />}
+                                    label="Medical Support"
+                                    name="medicalSupport"
+                                    checked={form.values.medicalSupport}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                />
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>

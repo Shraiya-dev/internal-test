@@ -30,14 +30,18 @@ export const useAddEditProject = () => {
             pincode: '',
             phoneNumber: '',
             shiftTime: '',
-            pf: '',
-            esi: '',
             otf: 'none', // over time factor
-            accommodation: '',
             workerCount: '',
             geoLocation: '',
             projectVideo: [],
+            accommodation: '',
+            pf: '',
+            esi: '',
             food: '',
+            joiningBonus: '',
+            guaranteedSalary: '',
+            weeklyKharchi: '',
+            medicalSupport: '',
             siteImages: [],
             accommodationImages: [],
         },
@@ -84,6 +88,18 @@ export const useAddEditProject = () => {
             if (values.food === '') {
                 errors.food = 'Required *'
             }
+            if (values.joiningBonus === '') {
+                errors.joiningBonus = 'Required *'
+            }
+            if (values.guaranteedSalary === '') {
+                errors.guaranteedSalary = 'Required *'
+            }
+            if (values.weeklyKharchi === '') {
+                errors.weeklyKharchi = 'Required *'
+            }
+            if (values.medicalSupport === '') {
+                errors.medicalSupport = 'Required *'
+            }
             return errors
         },
         onSubmit: async (values) => {
@@ -99,10 +115,13 @@ export const useAddEditProject = () => {
                 benefits: [
                     values.pf ? 'PF' : '',
                     values.esi ? 'INSURANCE' : '',
-                    values.accommodation ? 'ACCOMODATION' : '',
+                    values.accomodation ? 'ACCOMODATION' : '',
                     values.travelAllowance ? 'PAID_TRAVEL' : '',
-
                     values.food ? 'FOOD' : '',
+                    values.joiningBonus ? 'JOINING_BONUS' : '',
+                    values.guaranteedSalary ? 'GUARANTEED_SALARY' : '',
+                    values.weeklyKharchi ? 'WEEKLY_KHARCHI' : '',
+                    values.medicalSupport ? 'MEDICAL_SUPPORT' : '',
                 ].filter((item) => item !== ''),
                 images: {
                     accommodations: values.accommodationImages,

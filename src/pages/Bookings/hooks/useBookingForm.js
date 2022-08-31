@@ -47,6 +47,10 @@ export const useBookingForm = () => {
                     values.accomodation ? 'ACCOMODATION' : '',
                     values.travelAllowance ? 'PAID_TRAVEL' : '',
                     values.food ? 'FOOD' : '',
+                    values.joiningBonus ? 'JOINING_BONUS' : '',
+                    values.guaranteedSalary ? 'GUARANTEED_SALARY' : '',
+                    values.weeklyKharchi ? 'WEEKLY_KHARCHI' : '',
+                    values.medicalSupport ? 'MEDICAL_SUPPORT' : '',
                 ].filter((item) => item !== ''),
                 startDate: values.startDate,
 
@@ -54,6 +58,29 @@ export const useBookingForm = () => {
                 bookingDuration: values?.durationType,
                 overTime: {
                     rate: values.overTimeRate,
+                },
+                dailyTarget: {
+                    HELPER:
+                        Number(values.dtHelper) !== 0 || values.pduHelper !== 'none'
+                            ? {
+                                  target: Number(values.dtHelper),
+                                  metric: values.pduHelper,
+                              }
+                            : undefined,
+                    TECHNICIAN:
+                        Number(values.dtTechnician) !== 0 || values.pduTechnician !== 'none'
+                            ? {
+                                  target: Number(values.dtTechnician),
+                                  metric: values.pduTechnician,
+                              }
+                            : undefined,
+                    SUPERVISOR:
+                        Number(values.dtSupervisor) !== 0 || values.pduSupervisor !== 'none'
+                            ? {
+                                  target: Number(values.dtSupervisor),
+                                  metric: values.pduSupervisor,
+                              }
+                            : undefined,
                 },
             }
 
@@ -116,6 +143,10 @@ export const useBookingForm = () => {
             accomodation: false,
             travelAllowance: false,
             food: false,
+            joiningBonus: false,
+            guaranteedSalary: false,
+            weeklyKharchi: false,
+            medicalSupport: false,
             siteImages: [],
             accomodationImages: [],
         },
@@ -209,6 +240,10 @@ export const useBookingForm = () => {
                 isHolidayPaid: booking?.isHolidayPaid ?? booking?.isHolidayPaid ?? false,
                 accomodation: booking?.benefits?.includes('ACCOMODATION') ?? false,
                 travelAllowance: booking?.benefits?.includes('PAID_TRAVEL') ?? false,
+                joiningBonus: booking?.benefits?.includes('JOINING_BONUS') ?? false,
+                guaranteedSalary: booking?.benefits?.includes('GUARANTEED_SALARY') ?? false,
+                weeklyKharchi: booking?.benefits?.includes('WEEKLY_KHARCHI') ?? false,
+                medicalSupport: booking?.benefits?.includes('MEDICAL_SUPPORT') ?? false,
                 pf: booking?.benefits?.includes('PF') ?? false,
                 esi: booking?.benefits?.includes('INSURANCE') ?? false,
                 food: booking?.benefits?.includes('FOOD') ?? false,
