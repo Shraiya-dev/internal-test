@@ -1,25 +1,22 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useCallback, useMemo, useState } from 'react'
+import { Router, useNavigate, useParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 import { isPinCodeValid, validateRegex } from '../../../utils/formikValidate'
 import { regexPatterns } from '../../Registration/utils/constants/regexPatterns'
-import { useProjectDetails } from '../provider/ProjectProvider'
 const SERVER_URL = getBackendUrl()
 
-export const useAddEditProject = () => {
-    const { projectId } = useParams()
-    const [disabled, setDisabled] = useState(projectId && true)
-    const { project, customer, updateProject } = useProjectDetails()
+export const useCreateProject = () => {
+    const { customerId, organisationId } = useParams()
     const [isUploadingImages, setIsUploadingImages] = useState({
         site: false,
         accommodation: false,
+        projectVideo: false,
     })
-    const handleDisable = () => {
-        setDisabled(!disabled)
-    }
+    const navigate = useNavigate()
+
     const { showSnackbar } = useSnackbar()
     const form = useFormik({
         initialValues: {
@@ -86,9 +83,10 @@ export const useAddEditProject = () => {
             }
             return errors
         },
-        onSubmit: async (values) => {
+        onSubmit: async (values, fh) => {
             const payload = {
                 name: values.projectName,
+                customerId: customerId,
                 siteAddress: values.siteAddress,
                 city: values.city,
                 state: values.state,
@@ -112,11 +110,22 @@ export const useAddEditProject = () => {
                     latitude: Number(values.geoLocation.split(', ')[0]),
                     longitude: Number(values.geoLocation.split(', ')[1]),
                 },
-
                 videos: values.projectVideo,
             }
-            await updateProject(payload)
-            handleDisable()
+            try {
+                const res = await axios.post(`${SERVER_URL}/gateway/admin-api/projects/`, payload)
+                showSnackbar({
+                    msg: 'Project Created Successfully',
+                    sev: 'success',
+                })
+                fh.resetForm()
+                navigate(`/projects/${res?.data?.payload?.projectId}`)
+            } catch (error) {
+                showSnackbar({
+                    msg: error?.response?.data?.developerInfo,
+                    sev: 'error',
+                })
+            }
         },
     })
     const uploadFiles = useCallback(
@@ -166,7 +175,7 @@ export const useAddEditProject = () => {
                         formData.set('type', fileType)
                         formData.set('file', file)
                         formData.set('entity', 'project')
-                        formData.set('customerId', customer?.customerId)
+                        formData.set('customerId', customerId)
                         return new Promise(async (res, rej) => {
                             try {
                                 if (fieldName === 'projectVideo') {
@@ -213,7 +222,6 @@ export const useAddEditProject = () => {
                         }),
                     ])
                 } else {
-                    console.log(uploadSuccess)
                     form.setFieldValue(fieldName, [
                         ...form.values[fieldName],
                         ...uploadSuccess.map(({ data }) => {
@@ -228,37 +236,14 @@ export const useAddEditProject = () => {
                 [type]: false,
             }))
         },
-        [form, showSnackbar, customer]
+        [form, showSnackbar, customerId]
     )
-
-    useEffect(() => {
-        console.log(project)
-        form.setValues({
-            projectName: project?.name ?? '',
-            siteAddress: project?.siteAddress ?? '',
-            state: project?.state ?? 'none',
-            city: project?.city ?? 'none',
-            pincode: project?.pincode ?? '',
-            pf: project?.benefits?.includes('PF') ?? '',
-            esi: project?.benefits?.includes('INSURANCE') ?? '',
-            otf: project?.overTime?.rate ?? 'none',
-            accommodation: project?.benefits?.includes('ACCOMODATION') ?? '',
-            food: project?.benefits?.includes('FOOD') ?? '',
-            siteImages: project?.images?.site ?? [],
-            accommodationImages: project?.images?.accommodations ?? [],
-            geoLocation: `${project?.projectLocation?.latitude}, ${project?.projectLocation?.longitude}` ?? '',
-            projectVideo: project?.videos ?? [],
-        })
-    }, [project])
-
     return useMemo(
         () => ({
             form: form,
-            disabled: disabled,
-            handleDisable: handleDisable,
             isUploadingImages,
             uploadFiles,
         }),
-        [form, disabled, handleDisable, isUploadingImages, uploadFiles]
+        [form, isUploadingImages, uploadFiles]
     )
 }

@@ -78,6 +78,9 @@ const useCreateBookings = () => {
         onSubmit: async (values) => {
             const payload = {
                 userData: {
+                    customerId: customerId,
+                    jobType: values.jobType,
+                    tags: values.tags,
                     cmpName: values.companyName,
                     name: values.name,
                     userName: values.name,
@@ -97,7 +100,6 @@ const useCreateBookings = () => {
                     state: values.state,
                     city: values.city,
                     shiftTime: values.shiftTime,
-                    customerId: customerId,
                     supCount: values?.qtySupervisor,
                     helpCount: values?.qtyHelper,
                     techCount: values?.qtyTechnician,
@@ -117,7 +119,12 @@ const useCreateBookings = () => {
                         sev: 'error',
                     })
                 }
-            } catch (error) {}
+            } catch (error) {
+                showSnackbar({
+                    msg: data?.error,
+                    sev: 'error',
+                })
+            }
         },
     })
 

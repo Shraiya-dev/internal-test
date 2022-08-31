@@ -1,5 +1,4 @@
 import { Delete, Upload } from '@mui/icons-material'
-import { LoadingButton } from '@mui/lab'
 import {
     Button,
     FormControl,
@@ -24,12 +23,10 @@ import { CityOptions } from '../../constant/city'
 import { StatesOptions } from '../../constant/state'
 import { useFormikProps } from '../../hooks/useFormikProps'
 import { getSelectOptions } from '../../utils/InputHelpers'
-import { useAddEditProject } from './hooks/useAddEditProject'
-import { useProjectDetails } from './provider/ProjectProvider'
+import { useCreateProject } from './hooks/useCreateProject'
 
-const AddEditProject = () => {
-    const { form, disabled, handleDisable, uploadFiles, isUploadingImages } = useAddEditProject()
-    const { customer, project, getProject } = useProjectDetails()
+const CreateProject = () => {
+    const { form, uploadFiles, isUploadingImages } = useCreateProject()
     const [confirmationDialogProps, setConfirmationDialogProps] = useState({
         open: false,
     })
@@ -58,9 +55,9 @@ const AddEditProject = () => {
                 }}
                 open={confirmationDialogProps.open}
             />
-            <form onSubmit={form.handleSubmit}>
+            <form onSubmit={form.handleSubmit} onReset={form.handleReset}>
                 <Stack alignItems="stretch" margin="0" maxWidth={1000}>
-                    <Paper sx={{ px: 2, mb: 2 }}>
+                    {/* <Paper sx={{ p: 2, mb: 2 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Typography variant="h5">Customer Details</Typography>
@@ -86,80 +83,28 @@ const AddEditProject = () => {
                                 <Typography variant="h6">{customer?.GSTIN}</Typography>
                             </Grid>
                         </Grid>
-                    </Paper>
-                    <Stack
-                        direction={'row'}
-                        mb={3}
-                        justifyContent="space-between"
-                        position="sticky"
-                        px={2}
-                        zIndex={1000}
-                        top={-24}
-                        sx={{ background: '#ffffff' }}
-                    >
-                        <Typography variant="h5">Project Details</Typography>
-                        <Stack spacing={2} my={2} justifyContent="flex-end" direction={'row'}>
-                            {disabled ? (
-                                project?._id && (
-                                    <>
-                                        <Button
-                                            sx={{ mr: 2 }}
-                                            variant="outlined"
-                                            onClick={() => {
-                                                handleDisable(false)
-                                            }}
-                                        >
-                                            Edit
-                                        </Button>
-                                    </>
-                                )
-                            ) : (
-                                <>
-                                    {project?._id && (
-                                        <Button
-                                            variant="outlined"
-                                            sx={{ mr: 2 }}
-                                            onClick={() => {
-                                                handleDisable()
-                                                getProject()
-                                            }}
-                                        >
-                                            Cancel
-                                        </Button>
-                                    )}
-                                    <LoadingButton
-                                        loading={
-                                            isUploadingImages?.site ||
-                                            isUploadingImages?.accommodation ||
-                                            form.isSubmitting
-                                        }
-                                        variant="outlined"
-                                        onClick={() => {
-                                            setConfirmationDialogProps({ open: true })
-                                        }}
-                                    >
-                                        Submit
-                                    </LoadingButton>
-                                </>
-                            )}
+                    </Paper> */}
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+                        <Typography variant="h4">Project Details</Typography>
+                        <Stack direction="row" spacing={2}>
+                            <Button type="reset" color="error" variant="outlined">
+                                Reset
+                            </Button>
+                            <Button disabled={!form.isValid} type="submit" variant="contained">
+                                Submit
+                            </Button>
                         </Stack>
                     </Stack>
-                    <Paper sx={{ px: 2, mb: 2 }}>
+                    <Paper sx={{ p: 2, mb: 2 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={12}>
-                                <TextField
-                                    fullWidth
-                                    label="Project Name"
-                                    disabled={disabled}
-                                    {...formikProps('projectName')}
-                                />
+                                <TextField fullWidth label="Project Name" {...formikProps('projectName')} />
                             </Grid>
 
                             <Grid item xs={12} md={4}>
                                 <Select
                                     fullWidth
                                     variant="outlined"
-                                    disabled={true}
                                     {...formikProps('state')}
                                     onChange={(e) => {
                                         form.handleChange(e)
@@ -174,7 +119,7 @@ const AddEditProject = () => {
                                 <Select
                                     fullWidth
                                     variant="outlined"
-                                    disabled={form.values.state === 'none' || true}
+                                    disabled={form.values.state === 'none'}
                                     {...formikProps('city')}
                                 >
                                     {getSelectOptions([
@@ -188,17 +133,11 @@ const AddEditProject = () => {
                                     fullWidth
                                     label="Pincode"
                                     placeholder="Enter Pincode "
-                                    disabled={disabled}
                                     {...formikProps('pincode')}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField
-                                    fullWidth
-                                    disabled={disabled}
-                                    label="Geo Location"
-                                    {...formikProps('geoLocation')}
-                                />
+                                <TextField fullWidth label="Geo Location" {...formikProps('geoLocation')} />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -206,20 +145,19 @@ const AddEditProject = () => {
                                     label="Site Address"
                                     multiline
                                     rows={3}
-                                    disabled={disabled}
                                     {...formikProps('siteAddress')}
                                 />
                             </Grid>
                         </Grid>
                     </Paper>
-                    <Paper sx={{ px: 2, mb: 2 }}>
+                    <Paper sx={{ p: 2, mb: 2 }}>
                         <Typography variant="h5">Worker Benefits</Typography>
                         <Typography variant="caption">
                             Add worker benefits for the project {form.values.projectName}
                         </Typography>
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={6}>
-                                <FormControl error={formikProps('pf').error} disabled={disabled}>
+                                <FormControl error={formikProps('pf').error}>
                                     <FormLabel>Provident Fund (PF) available?</FormLabel>
                                     <RadioGroup
                                         {...formikProps('pf')}
@@ -235,7 +173,7 @@ const AddEditProject = () => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <FormControl error={formikProps('esi').error} disabled={disabled}>
+                                <FormControl error={formikProps('esi').error}>
                                     <FormLabel>Employee State Insurance (ESI) provided?</FormLabel>
                                     <RadioGroup
                                         {...formikProps('esi')}
@@ -251,7 +189,7 @@ const AddEditProject = () => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <FormControl error={formikProps('accommodation').error} disabled={disabled}>
+                                <FormControl error={formikProps('accommodation').error}>
                                     <FormLabel>Accommodation provided?</FormLabel>
                                     <RadioGroup
                                         {...formikProps('accommodation')}
@@ -267,7 +205,7 @@ const AddEditProject = () => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <FormControl error={formikProps('food').error} disabled={disabled}>
+                                <FormControl error={formikProps('food').error}>
                                     <FormLabel>Food provided?</FormLabel>
                                     <RadioGroup
                                         {...formikProps('food')}
@@ -285,13 +223,13 @@ const AddEditProject = () => {
                             <Grid item xs={4}>
                                 <FormLabel>Over Time Factor</FormLabel>
 
-                                <Select fullWidth variant="outlined" disabled={disabled} {...formikProps('otf')}>
+                                <Select fullWidth variant="outlined" {...formikProps('otf')}>
                                     {getSelectOptions(OverTimeFactor)}
                                 </Select>
                             </Grid>
                         </Grid>
                     </Paper>
-                    <Paper sx={{ px: 2, mb: 2 }}>
+                    <Paper sx={{ p: 2, mb: 2 }}>
                         <Grid container spacing={1} alignItems="flex-start">
                             <Grid container item spacing={1} xs={12} md={6}>
                                 <Grid item xs={12} display="flex" flexDirection="row">
@@ -305,7 +243,6 @@ const AddEditProject = () => {
                                             uploadFiles('site', [...e.target.files])
                                             e.target.value = ''
                                         }}
-                                        disabled={disabled}
                                         isLoading={isUploadingImages?.site}
                                         accept="image/*"
                                         id="siteImages"
@@ -318,29 +255,27 @@ const AddEditProject = () => {
                                 {form.values.siteImages?.length ? (
                                     form.values.siteImages?.map((url) => (
                                         <Grid item xs={6} md={4} key={url} position="relative">
-                                            {!disabled && (
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => {
-                                                        form.setFieldValue(
-                                                            'siteImages',
-                                                            form.values.siteImages.filter((item) => item !== url)
-                                                        )
-                                                    }}
-                                                    sx={{
-                                                        position: 'absolute',
-                                                        top: 8,
-                                                        right: 0,
-                                                        background: '#efefef',
-                                                        '&:hover': {
-                                                            background: '#efefefa1',
-                                                        },
-                                                    }}
-                                                    color="error"
-                                                >
-                                                    <Delete />
-                                                </IconButton>
-                                            )}
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => {
+                                                    form.setFieldValue(
+                                                        'siteImages',
+                                                        form.values.siteImages.filter((item) => item !== url)
+                                                    )
+                                                }}
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: 8,
+                                                    right: 0,
+                                                    background: '#efefef',
+                                                    '&:hover': {
+                                                        background: '#efefefa1',
+                                                    },
+                                                }}
+                                                color="error"
+                                            >
+                                                <Delete />
+                                            </IconButton>
                                             <img width={'100%'} src={url} srcSet={url} loading="lazy" />
                                         </Grid>
                                     ))
@@ -364,7 +299,6 @@ const AddEditProject = () => {
                                             uploadFiles('accommodation', [...e.target.files])
                                             e.target.value = ''
                                         }}
-                                        disabled={disabled}
                                         isLoading={isUploadingImages?.accommodation}
                                         accept="image/*"
                                         id="accommodationImages"
@@ -377,31 +311,27 @@ const AddEditProject = () => {
                                 {form.values.accommodationImages?.length ? (
                                     form.values.accommodationImages?.map((url) => (
                                         <Grid item xs={6} md={4} key={url} position="relative">
-                                            {!disabled && (
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => {
-                                                        form.setFieldValue(
-                                                            'accommodationImages',
-                                                            form.values.accommodationImages.filter(
-                                                                (item) => item !== url
-                                                            )
-                                                        )
-                                                    }}
-                                                    sx={{
-                                                        position: 'absolute',
-                                                        top: 8,
-                                                        right: 0,
-                                                        background: '#efefef',
-                                                        '&:hover': {
-                                                            background: '#efefefa1',
-                                                        },
-                                                    }}
-                                                    color="error"
-                                                >
-                                                    <Delete />
-                                                </IconButton>
-                                            )}
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => {
+                                                    form.setFieldValue(
+                                                        'accommodationImages',
+                                                        form.values.accommodationImages.filter((item) => item !== url)
+                                                    )
+                                                }}
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: 8,
+                                                    right: 0,
+                                                    background: '#efefef',
+                                                    '&:hover': {
+                                                        background: '#efefefa1',
+                                                    },
+                                                }}
+                                                color="error"
+                                            >
+                                                <Delete />
+                                            </IconButton>
                                             <img width={'100%'} src={url} srcSet={url} loading="lazy" />
                                         </Grid>
                                     ))
@@ -421,7 +351,6 @@ const AddEditProject = () => {
                                     </Stack>
 
                                     <FileInput
-                                        disabled={disabled}
                                         onChange={(e) => {
                                             uploadFiles('projectVideo', [...e.target.files])
                                             e.target.value = ''
@@ -438,31 +367,29 @@ const AddEditProject = () => {
                                 {form.values.projectVideo?.length ? (
                                     form.values.projectVideo?.map((url) => (
                                         <Grid item xs={6} md={4} key={url.url} position="relative">
-                                            {!disabled && (
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => {
-                                                        form.setFieldValue(
-                                                            'projectVideo',
-                                                            form.values.projectVideo.filter((item) => item !== url)
-                                                        )
-                                                    }}
-                                                    sx={{
-                                                        position: 'absolute',
-                                                        top: 0,
-                                                        right: 0,
-                                                        zIndex: 10,
-                                                        background: '#efefef',
-                                                        transform: 'translate(50%, 0%)',
-                                                        '&:hover': {
-                                                            background: '#efefefa1',
-                                                        },
-                                                    }}
-                                                    color="error"
-                                                >
-                                                    <Delete />
-                                                </IconButton>
-                                            )}
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => {
+                                                    form.setFieldValue(
+                                                        'projectVideo',
+                                                        form.values.projectVideo.filter((item) => item !== url)
+                                                    )
+                                                }}
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    right: 0,
+                                                    zIndex: 10,
+                                                    background: '#efefef',
+                                                    transform: 'translate(50%, 0%)',
+                                                    '&:hover': {
+                                                        background: '#efefefa1',
+                                                    },
+                                                }}
+                                                color="error"
+                                            >
+                                                <Delete />
+                                            </IconButton>
                                             <video
                                                 controls
                                                 width={'100%'}
@@ -488,4 +415,4 @@ const AddEditProject = () => {
     )
 }
 
-export default AddEditProject
+export default CreateProject

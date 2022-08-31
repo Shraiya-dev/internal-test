@@ -6,10 +6,12 @@ import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import './App.css'
 import { PrivateRoute } from './components'
+import DashboardLayout from './components/Layouts/DashboardLayout'
 import { AllocatedWorkers, AttendanceComponent, Customer, CustomerBookings, Login, WorkerProfile } from './pages'
 import Attendance from './pages/Attendance'
 import BookingById from './pages/Bookings/BookingById'
 import Bookings from './pages/Bookings/Bookings'
+import CreateBookingForm from './pages/Bookings/CreateBookingForm'
 import CreateBookings from './pages/Bookings/CreateBookings'
 import Dashboard from './pages/Dashboard/Dashboard'
 import JCA from './pages/JCA/jobCards'
@@ -17,6 +19,8 @@ import JobCards from './pages/jobCards/JobCards'
 import { Organisation } from './pages/Organization/Organization'
 import { AddEditPartner } from './pages/Partner/EditPartner'
 import Partner from './pages/Partner/Partner'
+import AddEditProject from './pages/Project/AddEditProject'
+import CreateProject from './pages/Project/createProject'
 import Project from './pages/Project/Project'
 import ProjectById from './pages/Project/ProjectById'
 import { ProjectProvider } from './pages/Project/provider/ProjectProvider'
@@ -42,28 +46,17 @@ import {
     DASHBOARD_ROUTE,
     JCA_ROUTE,
     JOBCARDS_FOR_BOOKING_ROUTE,
+    ORGANISATION_ORGANISATION_ID_CUSTOMER_CUSTOMER_ID_PROJECT_CREATE,
     ORGANIZATION_ROUTE,
     PARTNER_DETAIL_VIEW,
     PROJECT_BY_ID_ROUTE,
+    PROJECT_PROJECT_ID_BOOKING_CREATE,
     PROJECT_ROUTE,
     REWARD_PENALTIES_ROUTE,
     WORKER_INFO_BY_ID_ROUTE,
     WORKER_INFO_ROUTE,
 } from './routes'
 
-// const theme = createTheme({
-// 	palette: {
-// 		primary: {
-// 			main: '#788896',
-// 		},
-// 		secondary: {
-// 			main: '#C2CFD9',
-// 		},
-// 	},
-// 	typography: {
-// 		fontFamily: "'Inter', 'sans-serif'",
-// 	},
-// })
 const lightTheme = createTheme({
     palette: {
         primary: {
@@ -78,16 +71,7 @@ const lightTheme = createTheme({
                 elevation: 0,
             },
         },
-        // MuiOutlinedInput: {
-        //     styleOverrides: {
-        //         input: {
-        //             padding: '0px',
-        //         },
-        //         root: {
-        //             padding: '14px',
-        //         },
-        //     },
-        // },
+
         MuiInput: {
             defaultProps: {
                 disableUnderline: true,
@@ -114,14 +98,6 @@ function App() {
                     <SnackbarProvider>
                         <div className="App">
                             <Routes>
-                                {/* <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Bookings />
-                </PrivateRoute>
-              }
-            /> */}
                                 <Route
                                     path="/"
                                     element={
@@ -241,6 +217,16 @@ function App() {
                                         </PrivateRoute>
                                     }
                                 />
+                                <Route
+                                    path={ORGANISATION_ORGANISATION_ID_CUSTOMER_CUSTOMER_ID_PROJECT_CREATE}
+                                    element={
+                                        <PrivateRoute>
+                                            <DashboardLayout>
+                                                <CreateProject />
+                                            </DashboardLayout>
+                                        </PrivateRoute>
+                                    }
+                                />
 
                                 <Route
                                     path={DASHBOARD_ROUTE}
@@ -268,6 +254,17 @@ function App() {
                                         </PrivateRoute>
                                     }
                                 />
+                                <Route
+                                    path={PROJECT_PROJECT_ID_BOOKING_CREATE}
+                                    element={
+                                        <PrivateRoute>
+                                            <ProjectProvider>
+                                                <CreateBookingForm />
+                                            </ProjectProvider>
+                                        </PrivateRoute>
+                                    }
+                                />
+
                                 <Route
                                     path={BOOKING_BOOKINGID_ROUTE}
                                     element={
