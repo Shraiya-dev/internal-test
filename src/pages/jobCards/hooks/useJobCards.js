@@ -62,7 +62,6 @@ export const useJobCards = () => {
                     hasMore: data.payload.hasMore,
                 })
             } catch (error) {
-                console.log(error)
                 showSnackbar({
                     msg: error.response.data.developerInfo,
                     sev: 'error',

@@ -58,7 +58,6 @@ export const AuthProvider = ({ children }) => {
             }
             return res
         } catch (error) {
-            console.log(error.message)
             return {
                 data: {
                     error: 'Something went wrong',

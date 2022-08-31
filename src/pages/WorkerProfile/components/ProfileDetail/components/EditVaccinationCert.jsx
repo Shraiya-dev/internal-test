@@ -66,7 +66,6 @@ const ActionButtons = () => {
             </Button>
             <Button
                 onClick={() => {
-                    console.log('Save the edit/remove picture operation')
                 }}
                 variant="contained"
                 className={clsx(classes.btn, classes.saveBtn)}

@@ -1,4 +1,4 @@
-import { Button, debounce, Typography } from '@mui/material'
+import { Button, debounce, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -35,7 +35,6 @@ export const useCustomer = () => {
                 const { status, data } = await axios.get(`${SERVER_URL}/gateway/admin-api/customers?${sp}`)
                 setCustomers(data.payload.customers.map((item) => ({ ...item.customer, ...item.organisation })))
                 setHasMore(data.payload.hasMore)
-                console.log()
             } catch (error) {
                 showSnackbar({
                     msg: error.response.data.developerInfo,
@@ -127,18 +126,33 @@ export const useCustomer = () => {
                 field: 'projects',
                 headerName: 'Projects',
                 renderCell: (params) => (
-                    <Link to={`/projects?organisationId=${params?.row?.linkedOrganisation?.organisationId}`}>
-                        <Button variant="outlined">View Projects </Button>
-                    </Link>
+                    <Stack direction="row" spacing={1}>
+                        <Link to={`/projects?organisationId=${params?.row?.linkedOrganisation?.organisationId}`}>
+                            <Button variant="outlined">View Projects </Button>
+                        </Link>
+                        {params?.row?.linkedOrganisation?.organisationId && (
+                            <Link
+                                to={`/organisation/${params?.row?.linkedOrganisation?.organisationId}/customer/${params?.row?.customerId}/project/create`}
+                            >
+                                <Button variant="outlined">Create Project </Button>
+                            </Link>
+                        )}
+                    </Stack>
                 ),
                 sortable: true,
-                width: 220,
+                width: 400,
             },
             {
                 field: 'bookings',
                 headerName: 'Bookings',
                 renderCell: (params) => (
-                    <Link to={params?.row?.linkedOrganisation?.organisationId ? `/bookings?organisationId=${params?.row?.linkedOrganisation?.organisationId}` : `/bookings?customerPhone=${params?.row?.phoneNumber}`}>
+                    <Link
+                        to={
+                            params?.row?.linkedOrganisation?.organisationId
+                                ? `/bookings?organisationId=${params?.row?.linkedOrganisation?.organisationId}`
+                                : `/bookings?customerPhone=${params?.row?.phoneNumber}`
+                        }
+                    >
                         <Button variant="outlined"> View Bookings </Button>
                     </Link>
                 ),

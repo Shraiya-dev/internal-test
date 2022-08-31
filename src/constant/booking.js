@@ -44,4 +44,5 @@ export const BookingDurations = [
     'THIRTY_TO_FORTY_FIVE',
     'FORTY_FIVE_TO_NINETY',
     'NINETY_TO_ONE_FIFTY',
+    'MORE_THAN_ONE_FIFTY',
 ]

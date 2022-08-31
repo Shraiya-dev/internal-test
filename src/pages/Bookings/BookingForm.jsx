@@ -131,7 +131,7 @@ const BookingForm = () => {
                         Project Details
                     </Stack>
                 </Typography>
-                <Grid container spacing={2} item xs={12} md={7}>
+                <Grid container spacing={2} item xs={12} lg={7}>
                     <Grid item xs={12} md={4}>
                         <InputLabel>Project Name</InputLabel>
                         <Typography
@@ -159,7 +159,7 @@ const BookingForm = () => {
                 <Typography variant="h5" sx={{ mb: 2 }}>
                     Customer Details
                 </Typography>
-                <Grid container spacing={2} item xs={12} md={7}>
+                <Grid container spacing={2} item xs={12} md={10} lg={7}>
                     <Grid item xs={12} md={4}>
                         <InputLabel>Name</InputLabel>
                         <Typography variant="h6">{customer?.name}</Typography>
@@ -186,7 +186,7 @@ const BookingForm = () => {
                 <Typography variant="h5" sx={{ mb: 2 }}>
                     Booking Details
                 </Typography>
-                <Grid container spacing={2} item xs={12} md={7}>
+                <Grid container spacing={2} item xs={12} md={10} lg={7}>
                     <Grid item xs={12}>
                         <Stack>
                             <InputLabel>Job Type</InputLabel>
@@ -251,7 +251,7 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                     </Grid> */}
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                         <InputLabel>Number of requirements</InputLabel>
                     </Grid>
                     <Grid item xs={4}>
@@ -367,6 +367,130 @@ const BookingForm = () => {
                             onBlur={form.handleBlur}
                         />
                     </Grid>
+                    <Grid item xs={12}>
+                        <InputLabel>Daily Targets</InputLabel>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            fullWidth
+                            disabled={formDisabled || Number(form.values.qtyHelper) === 0}
+                            type="number"
+                            variant="outlined"
+                            label="Helper*"
+                            name="dtHelper"
+                            error={!!checkError('dtHelper')}
+                            value={form.values.dtHelper}
+                            onChange={form.handleChange}
+                            onBlur={form.handleBlur}
+                        />
+                    </Grid>
+
+                    <Grid item xs={4}>
+                        <TextField
+                            fullWidth
+                            disabled={formDisabled || Number(form.values.qtyTechnician) === 0}
+                            type="number"
+                            variant="outlined"
+                            label="Technician*"
+                            name="dtTechnition"
+                            error={checkError('dtTechnition')}
+                            value={form.values.dtTechnition}
+                            onChange={form.handleChange}
+                            onBlur={form.handleBlur}
+                        />
+                    </Grid>
+
+                    <Grid item xs={4}>
+                        <TextField
+                            fullWidth
+                            disabled={formDisabled || Number(form.values.qtySupervisor) === 0}
+                            type="number"
+                            variant="outlined"
+                            label="Supervisor*"
+                            name="dtSupervisor"
+                            error={checkError('dtSupervisor')}
+                            value={form.values.dtSupervisor}
+                            onChange={form.handleChange}
+                            onBlur={form.handleBlur}
+                        />
+                    </Grid> */}
+                    {['Helper', 'Technician', 'Supervisor'].map((item) => {
+                        return (
+                            <>
+                                <Grid item xs={12}>
+                                    <InputLabel>{item}</InputLabel>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <TextField
+                                        fullWidth
+                                        disabled={formDisabled}
+                                        type="number"
+                                        variant="outlined"
+                                        label={item + ' Quantity*'}
+                                        name={'qty' + item}
+                                        error={checkError('qty' + item)}
+                                        value={form.values['qty' + item]}
+                                        onChange={(e) => {
+                                            if (Number(e.target.value) >= 0 && Number(e.target.value) <= 500) {
+                                                form.handleChange(e)
+                                            }
+                                        }}
+                                        onBlur={form.handleBlur}
+                                    />
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <TextField
+                                        fullWidth
+                                        disabled={formDisabled || Number(form.values['qty' + item]) === 0}
+                                        type="number"
+                                        variant="outlined"
+                                        label={item + ' Wage*'}
+                                        name={'wage' + item}
+                                        error={!!checkError('wage' + item)}
+                                        value={form.values['wage' + item]}
+                                        onChange={(e) => {
+                                            if (Number(e.target.value) >= 0 && Number(e.target.value) <= 2000) {
+                                                form.handleChange(e)
+                                            }
+                                        }}
+                                        onBlur={form.handleBlur}
+                                    />
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <TextField
+                                        fullWidth
+                                        disabled={formDisabled || Number(form.values['qty' + item]) === 0}
+                                        type="number"
+                                        variant="outlined"
+                                        label={item + ' Daily Targets*'}
+                                        name={'dt' + item}
+                                        error={checkError('dt' + item)}
+                                        value={form.values['dt' + item]}
+                                        onChange={form.handleChange}
+                                        onBlur={form.handleBlur}
+                                    />
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Select
+                                        fullWidth
+                                        disabled={formDisabled || Number(form.values['qty' + item]) === 0}
+                                        variant="outlined"
+                                        name={'pdu' + item}
+                                        error={checkError('pdu' + item)}
+                                        value={form.values['pdu' + item]}
+                                        onChange={form.handleChange}
+                                        onBlur={form.handleBlur}
+                                    >
+                                        {getSelectOptions([
+                                            { label: 'Select metric', value: 'none' },
+                                            { label: 'sqft', value: 'sqft' },
+                                            { label: 'sqmt', value: 'sqmt' },
+                                        ])}
+                                    </Select>
+                                </Grid>
+                            </>
+                        )
+                    })}
 
                     <Grid item xs={4}>
                         <InputLabel>Shift Start Timing *</InputLabel>
@@ -461,52 +585,109 @@ const BookingForm = () => {
                         </Select>
                     </Grid>
 
-                    <Grid item xs={12}>
-                        <FormControlLabel
-                            disabled={formDisabled}
-                            control={<Checkbox color="primary" />}
-                            label="Getting Accommodation"
-                            name="accomodation"
-                            checked={form.values.accomodation}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                        />
-                        <FormControlLabel
-                            disabled={formDisabled}
-                            control={<Checkbox color="primary" />}
-                            label="Paid Travels "
-                            name="travelAllowance"
-                            checked={form.values.travelAllowance}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                        />
-                        <FormControlLabel
-                            disabled={formDisabled}
-                            control={<Checkbox color="primary" />}
-                            label="Getting Food"
-                            name="food"
-                            checked={form.values.food}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                        />
-                        <FormControlLabel
-                            disabled={formDisabled}
-                            control={<Checkbox color="primary" />}
-                            label="PF"
-                            name="pf"
-                            checked={form.values.pf}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                        />
-                        <FormControlLabel
-                            disabled={formDisabled}
-                            control={<Checkbox color="primary" />}
-                            label="ESI"
-                            name="esi"
-                            checked={form.values.esi}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                        />
+                    <Grid container item xs={12}>
+                        <Grid item xs={12}>
+                            <InputLabel>Benefits</InputLabel>
+                        </Grid>
+                        <Grid item>
+                            <FormControlLabel
+                                disabled={formDisabled}
+                                control={<Checkbox color="primary" />}
+                                label="Getting Accommodation"
+                                name="accomodation"
+                                checked={form.values.accomodation}
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <FormControlLabel
+                                disabled={formDisabled}
+                                control={<Checkbox color="primary" />}
+                                label="Paid Travels "
+                                name="travelAllowance"
+                                checked={form.values.travelAllowance}
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <FormControlLabel
+                                disabled={formDisabled}
+                                control={<Checkbox color="primary" />}
+                                label="Getting Food"
+                                name="food"
+                                checked={form.values.food}
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <FormControlLabel
+                                disabled={formDisabled}
+                                control={<Checkbox color="primary" />}
+                                label="PF"
+                                name="pf"
+                                checked={form.values.pf}
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <FormControlLabel
+                                disabled={formDisabled}
+                                control={<Checkbox color="primary" />}
+                                label="ESI"
+                                name="esi"
+                                checked={form.values.esi}
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <FormControlLabel
+                                disabled={formDisabled}
+                                control={<Checkbox color="primary" />}
+                                label="Joining Bonus"
+                                name="joiningBonus"
+                                checked={form.values.joiningBonus}
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <FormControlLabel
+                                disabled={formDisabled}
+                                control={<Checkbox color="primary" />}
+                                label="Guaranteed Salary"
+                                name="guaranteedSalary"
+                                checked={form.values.guaranteedSalary}
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <FormControlLabel
+                                disabled={formDisabled}
+                                control={<Checkbox color="primary" />}
+                                label="Weekly Kharchi"
+                                name="weeklyKharchi"
+                                checked={form.values.weeklyKharchi}
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <FormControlLabel
+                                disabled={formDisabled}
+                                control={<Checkbox color="primary" />}
+                                label="Medical Support"
+                                name="medicalSupport"
+                                checked={form.values.medicalSupport}
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                            />
+                        </Grid>
                     </Grid>
                 </Grid>
             </Paper>

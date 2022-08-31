@@ -52,6 +52,27 @@ const ProjectProvider = ({ children }) => {
         },
         [projectId]
     )
+    const createBookingInProject = useCallback(
+        async (payload) => {
+            try {
+                // const { status, data } = await axios.put(
+                //     `${SERVER_URL}/gateway/admin-api/projects/${projectId}`,
+                //     payload
+                // )
+                showSnackbar({
+                    msg: 'Updated Project successfully!',
+                    sev: 'success',
+                })
+            } catch (error) {
+                showSnackbar({
+                    msg: error?.response?.data?.developerInfo,
+                    sev: 'error',
+                })
+            }
+            await getProject()
+        },
+        [projectId]
+    )
 
     //get project details on provider load
     useEffect(getProject, [])
@@ -62,6 +83,7 @@ const ProjectProvider = ({ children }) => {
             getProject: getProject,
             updateProject: updateProject,
             project: response?.project,
+            createBookingInProject: createBookingInProject,
             customer: response?.customer,
         }),
         [getProject, updateProject, createProject, response]

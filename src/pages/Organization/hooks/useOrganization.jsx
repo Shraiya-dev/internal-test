@@ -1,4 +1,4 @@
-import { Button, debounce } from '@mui/material'
+import { Button, debounce, Stack } from '@mui/material'
 import axios from 'axios'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -28,7 +28,7 @@ export const useOrganization = () => {
                 if (searchParams.get('pageNumber')) {
                     sp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
                 }
-                sp.set('pageSize', 100)
+                sp.set('pageSize', 20)
                 const { status, data } = await axios.get(
                     `${SERVER_URL}/gateway/admin-api/organisations?${sp.toString()}`
                 )
@@ -98,8 +98,8 @@ export const useOrganization = () => {
                         <Button variant="outlined">View Projects </Button>
                     </Link>
                 ),
+                width: 400,
                 sortable: true,
-                width: 220,
             },
             {
                 field: 'bookings',

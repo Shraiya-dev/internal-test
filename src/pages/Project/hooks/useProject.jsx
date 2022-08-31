@@ -28,7 +28,7 @@ export const useProject = () => {
                 if (searchParams.get('customerPhone')) {
                     sp.set('customerPhone', '+91' + searchParams.get('customerPhone'))
                 }
-                sp.set('pageSize', 100)
+                sp.set('pageSize', 20)
                 const { status, data } = await axios.get(`${SERVER_URL}/gateway/admin-api/projects?${sp.toString()}`)
                 setProjects(
                     data.payload.projects.map((item) => ({

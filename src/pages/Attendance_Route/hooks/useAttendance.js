@@ -88,7 +88,6 @@ const useAttendance = () => {
                 msg: error.response.data.developerInfo,
                 sev: 'error',
             })
-            console.log(error)
         }
         setIsLoading(false)
     }, [])

@@ -39,6 +39,7 @@ const LimitedDiscoveryCTAMap = {
             view: true,
             closeAllocation: true,
             jobCards: true,
+            cancel: true,
             duplicate: false,
         },
     },

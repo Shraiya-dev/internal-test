@@ -27,9 +27,7 @@ export const useEmployeeDashboard = () => {
                 nsp.set('pageSize', 20)
                 const { data, status } = await axios.get(`${SERVER_URL}/gateway/admin-api/employees?${nsp.toString()}`)
                 setResponse(data.payload)
-            } catch (error) {
-                console.log(error)
-            }
+            } catch (error) {}
             setIsLoading(false)
         }, 500),
         []

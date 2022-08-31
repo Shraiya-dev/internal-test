@@ -178,6 +178,13 @@ const ProjectById = () => {
                             <Typography variant="caption">Company Name: {customer?.companyName}</Typography>
                         </Grid>
                         <Grid ml="auto" display="flex" item>
+                            <Link style={{ display: 'flex' }} to={`/projects/${project?._id}/booking/create`}>
+                                <Button fullWidth variant="outlined">
+                                    create Booking
+                                </Button>
+                            </Link>
+                        </Grid>
+                        <Grid display="flex" item>
                             <Button
                                 fullWidth
                                 onClick={() => {

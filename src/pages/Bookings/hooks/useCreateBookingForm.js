@@ -1,18 +1,16 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useCallback, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { BookingDurations } from '../../../constant/booking'
-import { useBooking } from '../../../providers/BookingProvider'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 import { checkError } from '../../../utils/formikValidate'
+import { useProjectDetails } from '../../Project/provider/ProjectProvider'
 const SERVER_URL = getBackendUrl()
-export const useBookingForm = () => {
-    const { bookingId } = useParams()
-    const { getBooking, booking, project, customer } = useBooking()
+export const useCreateBookingForm = () => {
+    const { project, customer, createBookingInProject } = useProjectDetails()
 
-    const [formDisabled, setFormDisabled] = useState(true)
     const [siteImages, setSiteImages] = useState([])
     const [accomoImages, setAccomoImages] = useState([])
 
@@ -21,12 +19,14 @@ export const useBookingForm = () => {
         site: false,
         accomodation: false,
     })
-    const editForm = useCallback((val) => {
-        setFormDisabled(!val)
-    }, [])
+    const navigate = useNavigate()
     const updateBooking = useCallback(
         async (values) => {
-            const updateBookingData = {
+            const createBookingData = {
+                projectId: project?.id,
+                customerId: customer?.customerId,
+                jobType: values?.jobType,
+                tags: values?.tags,
                 requirements: {
                     SUPERVISOR: {
                         count: Number(values.qtySupervisor),
@@ -41,17 +41,17 @@ export const useBookingForm = () => {
                         wage: Number(values.wageTechnician),
                     },
                 },
-                benefits: [
-                    values.pf ? 'PF' : '',
-                    values.esi ? 'INSURANCE' : '',
-                    values.accomodation ? 'ACCOMODATION' : '',
-                    values.travelAllowance ? 'PAID_TRAVEL' : '',
-                    values.food ? 'FOOD' : '',
-                    values.joiningBonus ? 'JOINING_BONUS' : '',
-                    values.guaranteedSalary ? 'GUARANTEED_SALARY' : '',
-                    values.weeklyKharchi ? 'WEEKLY_KHARCHI' : '',
-                    values.medicalSupport ? 'MEDICAL_SUPPORT' : '',
-                ].filter((item) => item !== ''),
+                // benefits: [
+                //     values.pf ? 'PF' : '',
+                //     values.esi ? 'INSURANCE' : '',
+                //     values.accomodation ? 'ACCOMODATION' : '',
+                //     values.travelAllowance ? 'PAID_TRAVEL' : '',
+                //     values.food ? 'FOOD' : '',
+                //     values.joiningBonus ? 'JOINING_BONUS' : '',
+                //     values.guaranteedSalary ? 'GUARANTEED_SALARY' : '',
+                //     values.weeklyKharchi ? 'WEEKLY_KHARCHI' : '',
+                //     values.medicalSupport ? 'MEDICAL_SUPPORT' : '',
+                // ].filter((item) => item !== ''),
                 startDate: values.startDate,
 
                 shiftTime: `${values.shiftStartTime}-${values.shiftEndTime}`,
@@ -61,21 +61,21 @@ export const useBookingForm = () => {
                 },
                 dailyTarget: {
                     HELPER:
-                        Number(values.dtHelper) !== 0 && values.pduHelper !== 'none'
+                        Number(values.dtHelper) !== 0 || values.pduHelper !== 'none'
                             ? {
                                   target: Number(values.dtHelper),
                                   metric: values.pduHelper,
                               }
                             : undefined,
                     TECHNICIAN:
-                        Number(values.dtTechnician) !== 0 && values.pduTechnician !== 'none'
+                        Number(values.dtTechnician) !== 0 || values.pduTechnician !== 'none'
                             ? {
                                   target: Number(values.dtTechnician),
                                   metric: values.pduTechnician,
                               }
                             : undefined,
                     SUPERVISOR:
-                        Number(values.dtSupervisor) !== 0 && values.pduSupervisor !== 'none'
+                        Number(values.dtSupervisor) !== 0 || values.pduSupervisor !== 'none'
                             ? {
                                   target: Number(values.dtSupervisor),
                                   metric: values.pduSupervisor,
@@ -85,24 +85,20 @@ export const useBookingForm = () => {
             }
 
             try {
-                const { status, data } = await axios.put(
-                    `${SERVER_URL}/gateway/admin-api/bookings/${booking?.bookingId}`,
-                    updateBookingData
-                )
+                const { status, data } = await axios.post(`${SERVER_URL}/gateway/admin-api/bookings`, createBookingData)
                 showSnackbar({
                     msg: 'Booking Updated Successfully',
                     sev: 'success',
                 })
-                editForm(false)
+                navigate(`/bookings/${data?.payload?.bookingId}`)
             } catch (error) {
                 showSnackbar({
                     msg: error?.response?.data?.developerInfo,
                     sev: 'error',
                 })
             }
-            getBooking()
         },
-        [booking, getBooking, showSnackbar]
+        [showSnackbar, project, customer]
     )
     const form = useFormik({
         initialValues: {
@@ -114,9 +110,9 @@ export const useBookingForm = () => {
             tags: [],
             otherJobType: '',
             siteAddress: '',
-            qtyHelper: 0,
-            qtyTechnician: 0,
-            qtySupervisor: 0,
+            qtyHelper: '',
+            qtyTechnician: '',
+            qtySupervisor: '',
             startDate: new Date(),
             durationType: BookingDurations[0],
             state: 'none',
@@ -127,9 +123,9 @@ export const useBookingForm = () => {
             wageHelper: '',
             wageSupervisor: '',
             wageTechnician: '',
-            dtHelper: 0,
-            dtSupervisor: 0,
-            dtTechnician: 0,
+            dtHelper: '',
+            dtSupervisor: '',
+            dtTechnician: '',
             pduHelper: 'none',
             pduSupervisor: 'none',
             pduTechnician: 'none',
@@ -152,6 +148,15 @@ export const useBookingForm = () => {
         },
         validate: (values) => {
             const errors = {}
+            if (values.jobType === 'none') {
+                errors.jobType = true
+            }
+            if (values.shiftStartTime === 'none') {
+                errors.shiftStartTime = true
+            }
+            if (values.shiftEndTime === 'none') {
+                errors.shiftEndTime = true
+            }
             if (Number(values.qtyHelper) && values.wageHelper === '') {
                 errors.wageHelper = true
             }
@@ -163,25 +168,31 @@ export const useBookingForm = () => {
             }
 
             // if qtyHelper is not 0 that time wages can't be 0
-            if (Number(values.qtyHelper && Number(values.wageHelper) === 0)) {
-                errors.wageHelper = true
+            if (Number(values.qtyHelper)) {
+                if (Number(values.wageHelper) === 0) errors.wageHelper = true
+                if (Number(values.dtHelper) === 0) errors.dtHelper = true
+                if (values.pduHelper === 'none') errors.pduHelper = true
             }
 
             if (Number(values.qtySupervisor) && values.wageSupervisor === '') {
                 errors.wageSupervisor = true
             }
             // if qtySupervisor is not 0 that time wages can't be 0
-            if (Number(values.qtySupervisor && Number(values.wageSupervisor) === 0)) {
-                errors.wageSupervisor = true
+            if (Number(values.qtySupervisor)) {
+                if (Number(values.wageSupervisor) === 0) errors.wageSupervisor = true
+                if (Number(values.dtSupervisor) === 0) errors.dtSupervisor = true
+                if (values.pduSupervisor === 'none') errors.pduSupervisor = true
             }
 
             if (Number(values.qtyTechnician) && values.wageTechnician === '') {
                 errors.wageTechnician = true
             }
 
-            //if qtyTechnician is not 0 that time wages can't be 0
-            if (Number(values.qtyTechnician && Number(values.wageTechnician) === 0)) {
-                errors.wageTechnician = true
+            // if qtySupervisor is not 0 that time wages can't be 0
+            if (Number(values.qtyTechnician)) {
+                if (Number(values.wageTechnician) === 0) errors.wageTechnician = true
+                if (Number(values.dtTechnician) === 0) errors.dtTechnician = true
+                if (values.pduTechnician === 'none') errors.pduTechnician = true
             }
 
             if (values.overTimeRate === 'none') {
@@ -195,61 +206,10 @@ export const useBookingForm = () => {
 
     const isError = useCallback(
         (fieldName) => {
-            getBooking
             return checkError(fieldName, form)
         },
         [form]
     )
-
-    useEffect(() => {
-        if (booking || customer || project) {
-            form.setValues({
-                jobType: booking?.jobType ?? '',
-                tags: [...booking?.tags],
-                otherJobType: booking?.otherJobType ?? '',
-                startDate: booking?.schedule?.startDate ? new Date(booking?.schedule?.startDate) : new Date(),
-                shiftTime: booking?.shiftTimings?.split('-')[0] ?? 'none',
-                durationType: booking?.schedule?.bookingDuration ?? BookingDurations[0],
-                state: project?.state ?? 'none',
-                city: project?.city ?? 'none',
-                siteAddress: project?.siteAddress ?? '',
-                qtyHelper: booking?.peopleRequired.HELPER ?? 0,
-                qtyTechnician: booking?.peopleRequired.TECHNICIAN ?? 0,
-                qtySupervisor: booking?.peopleRequired.SUPERVISOR ?? 0,
-                cmpName: customer?.companyName ?? '',
-                name: customer?.name ?? '',
-                email: customer?.email ?? '',
-                phoneNumber: customer?.phoneNumber ?? '',
-                wageSupervisor: booking?.rateCard?.SUPERVISOR ?? 0,
-                wageTechnician: booking?.rateCard?.TECHNICIAN ?? 0,
-                wageHelper: booking?.rateCard?.HELPER ?? 0,
-                dtHelper: booking?.dailyTarget?.HELPER?.target ?? 0,
-                dtSupervisor: booking?.dailyTarget?.SUPERVISOR?.target ?? 0,
-                dtTechnician: booking?.dailyTarget?.TECHNICIAN?.target ?? 0,
-                pduHelper: booking?.dailyTarget?.HELPER?.metric ?? 'none',
-                pduSupervisor: booking?.dailyTarget?.SUPERVISOR?.metric ?? 'none',
-                pduTechnician: booking?.dailyTarget?.TECHNICIAN?.metric ?? 'none',
-                shiftStartTime: booking?.schedule?.shiftTime?.split('-')[0] ?? 'none',
-                shiftEndTime: booking?.schedule?.shiftTime?.split('-')[1] ?? 'none',
-                overTimeRate: booking?.overTime?.rate ?? 'none',
-                overTimeBuffer: booking?.overTime?.buffer ?? 30,
-                overTimeBufferType: booking?.overTime?.bufferType ?? 'minutes',
-                holidayDays: booking?.holidayDays ?? [],
-                siteImages: project?.images?.site ?? [],
-                accomodationImages: project?.images?.accommodations ?? [],
-                isHolidayPaid: booking?.isHolidayPaid ?? booking?.isHolidayPaid ?? false,
-                accomodation: booking?.benefits?.includes('ACCOMODATION') ?? false,
-                travelAllowance: booking?.benefits?.includes('PAID_TRAVEL') ?? false,
-                joiningBonus: booking?.benefits?.includes('JOINING_BONUS') ?? false,
-                guaranteedSalary: booking?.benefits?.includes('GUARANTEED_SALARY') ?? false,
-                weeklyKharchi: booking?.benefits?.includes('WEEKLY_KHARCHI') ?? false,
-                medicalSupport: booking?.benefits?.includes('MEDICAL_SUPPORT') ?? false,
-                pf: booking?.benefits?.includes('PF') ?? false,
-                esi: booking?.benefits?.includes('INSURANCE') ?? false,
-                food: booking?.benefits?.includes('FOOD') ?? false,
-            })
-        }
-    }, [booking, customer, project])
 
     const uploadImages = useCallback(
         async (type, files) => {
@@ -319,42 +279,34 @@ export const useBookingForm = () => {
                 [type]: false,
             }))
         },
-        [booking, project, customer, form, showSnackbar]
+        [project, customer, form, showSnackbar]
     )
     return useMemo(
         () => ({
-            booking: booking,
             customer: customer,
             project: project,
             updateBooking: updateBooking,
             form: form,
-            formDisabled: formDisabled,
             checkError: isError,
-            getBooking: getBooking,
             siteImages: siteImages,
             setSiteImages: setSiteImages,
             accomoImages: accomoImages,
             setAccomoImages: setAccomoImages,
             uploadImages: uploadImages,
-            editForm: editForm,
             isUploadingImages: isUploadingImages,
         }),
         [
-            booking,
             customer,
             project,
             updateBooking,
             form,
-            formDisabled,
             isError,
             siteImages,
             setSiteImages,
             accomoImages,
             setAccomoImages,
-            getBooking,
             uploadImages,
             isUploadingImages,
-            editForm,
         ]
     )
 }

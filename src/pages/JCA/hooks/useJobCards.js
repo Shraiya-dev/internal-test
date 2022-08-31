@@ -25,7 +25,6 @@ export const useJobCards = () => {
             if (nsp.get('createdAtEndDate')) {
                 const date = new Date(nsp.get('createdAtEndDate'))
                 date.setDate(date.getDate() + 1)
-                console.log(date.toISOString(), date.getDate())
                 nsp.set('createdAtEndDate', date.toISOString())
             }
             Number(searchParams.get('pageNumber')) > 1
@@ -64,7 +63,6 @@ export const useJobCards = () => {
             if (nsp.get('createdAtEndDate')) {
                 const date = new Date(nsp.get('createdAtEndDate'))
                 date.setDate(date.getDate() + 1)
-                console.log(date.toISOString(), date.getDate())
                 nsp.set('createdAtEndDate', date.toISOString())
             }
             const res = await axios.get(`${SERVER_URL}/gateway/admin-api/job-cards/download?` + nsp.toString(), {

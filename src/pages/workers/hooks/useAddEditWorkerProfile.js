@@ -163,7 +163,6 @@ export const useAddEditWorkerProfile = (workerId) => {
             accHolderName: '',
         },
         validate: (values) => {
-            console.log(values)
             const errors = {}
             if (values.name === '') {
                 errors.name = true
@@ -222,7 +221,6 @@ export const useAddEditWorkerProfile = (workerId) => {
                     errors.accHolderName = true
                 }
             }
-            console.log(values)
             return errors
         },
         onSubmit: (v, fh) => {
