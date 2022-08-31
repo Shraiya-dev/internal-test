@@ -28,7 +28,7 @@ export const useOrganization = () => {
                 if (searchParams.get('pageNumber')) {
                     sp.set('pageNumber', Number(searchParams.get('pageNumber')) - 1)
                 }
-                sp.set('pageSize', 100)
+                sp.set('pageSize', 20)
                 const { status, data } = await axios.get(
                     `${SERVER_URL}/gateway/admin-api/organisations?${sp.toString()}`
                 )
