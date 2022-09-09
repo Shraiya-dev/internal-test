@@ -485,6 +485,7 @@ const BookingForm = () => {
                                             { label: 'Select metric', value: 'none' },
                                             { label: 'sqft', value: 'sqft' },
                                             { label: 'sqmt', value: 'sqmt' },
+                                            { label: 'kg', value: 'kg' },
                                         ])}
                                     </Select>
                                 </Grid>
