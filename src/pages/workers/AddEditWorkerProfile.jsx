@@ -33,6 +33,7 @@ import {
 } from './helper'
 import useAddEditWorkerProfile from './hooks/useAddEditWorkerProfile'
 import { PaymentDetails } from './PaymentDetails'
+import { Verification } from './Verification'
 
 const AddEditWorkerProfile = () => {
     const { workerId } = useParams()
@@ -48,7 +49,6 @@ const AddEditWorkerProfile = () => {
         worker,
         snackbarProps,
         fetchWorker,
-        updateWorkerStatus,
     } = useAddEditWorkerProfile(workerId)
     const formikProps = useFormikProps(form, { disabled: disableForm })
 
@@ -340,39 +340,7 @@ const AddEditWorkerProfile = () => {
                             </Grid>
                         </Container>
                     </Paper>
-                    {workerId && (
-                        <Paper sx={{ p: 2, m: 2 }}>
-                            <Container>
-                                <h3>Verification Status</h3>
-                                <Grid container>
-                                    <Grid item xs={3}>
-                                        <Select
-                                            disabled={disableForm}
-                                            fullWidth
-                                            name="verificationStatus"
-                                            value={form.values.verificationStatus}
-                                            onChange={(e) => {
-                                                form.handleChange(e)
-                                                updateWorkerStatus(e.target.value)
-                                            }}
-                                        >
-                                            {[
-                                                { label: 'Unverified', value: 'UNVERIFIED' },
-                                                { label: 'Verified', value: 'VERIFIED' },
-                                                { label: 'Certified', value: 'CERTIFIED' },
-                                            ].map((item) => {
-                                                return (
-                                                    <MenuItem key={item?.value} value={item?.value}>
-                                                        {item?.label}
-                                                    </MenuItem>
-                                                )
-                                            })}
-                                        </Select>
-                                    </Grid>
-                                </Grid>
-                            </Container>
-                        </Paper>
-                    )}
+
                     {worker?.onboardingDetails && (
                         <Paper sx={{ p: 2, m: 2 }}>
                             <Container>
@@ -449,6 +417,11 @@ const AddEditWorkerProfile = () => {
                             </FormControl>
                         </Container>
                     </Paper>
+                    {workerId && (
+                        <Paper sx={{ p: 2, m: 2 }}>
+                            <Verification uid={workerId} user={worker} fetchWorker={fetchWorker} />
+                        </Paper>
+                    )}
                     {workerId && (
                         <Paper sx={{ p: 2, m: 2 }}>
                             <PaymentDetails uid={workerId} userType="worker" />
