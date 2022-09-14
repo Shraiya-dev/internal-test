@@ -1,4 +1,4 @@
-import { Button, Dialog, FormHelperText, Select, Stack, TextField, Typography } from '@mui/material'
+import { Button, Dialog, FormHelperText, InputLabel, Select, Stack, TextField, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { useState } from 'react'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
@@ -43,7 +43,45 @@ export const Verification = ({ uid, user, fetchWorker }) => {
                         </Button>
                     )}
                 </Stack>
-                <Typography>{user?.verification?.verificationStatus}</Typography>
+
+                <Stack direction="row" spacing={2}>
+                    <Stack>
+                        <InputLabel>Status</InputLabel>
+                        <Typography>{user?.verification?.verificationStatus}</Typography>
+                    </Stack>
+                    {user?.verification?.certificates[user?.verification?.certificates?.length - 1] && (
+                        <>
+                            <Stack>
+                                <InputLabel>Site Name</InputLabel>
+                                <Typography>
+                                    {
+                                        user?.verification?.certificates[user?.verification?.certificates?.length - 1]
+                                            ?.certificationSite.siteName
+                                    }
+                                </Typography>
+                            </Stack>
+                            <Stack>
+                                <InputLabel>City</InputLabel>
+                                <Typography>
+                                    {
+                                        user?.verification?.certificates[user?.verification?.certificates?.length - 1]
+                                            ?.certificationSite.city
+                                    }
+                                </Typography>
+                            </Stack>
+                            <Stack>
+                                <InputLabel>State</InputLabel>
+                                <Typography>
+                                    {' '}
+                                    {
+                                        user?.verification?.certificates[user?.verification?.certificates?.length - 1]
+                                            ?.certificationSite.state
+                                    }
+                                </Typography>
+                            </Stack>
+                        </>
+                    )}
+                </Stack>
             </Stack>
             <ConfirmationDialog
                 cancel={() => setConfirmationDialogProps({ open: false })}
