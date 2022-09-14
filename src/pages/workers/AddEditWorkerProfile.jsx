@@ -33,6 +33,7 @@ import {
 } from './helper'
 import useAddEditWorkerProfile from './hooks/useAddEditWorkerProfile'
 import { PaymentDetails } from './PaymentDetails'
+import { Verification } from './Verification'
 
 const AddEditWorkerProfile = () => {
     const { workerId } = useParams()
@@ -339,6 +340,7 @@ const AddEditWorkerProfile = () => {
                             </Grid>
                         </Container>
                     </Paper>
+
                     {worker?.onboardingDetails && (
                         <Paper sx={{ p: 2, m: 2 }}>
                             <Container>
@@ -415,6 +417,11 @@ const AddEditWorkerProfile = () => {
                             </FormControl>
                         </Container>
                     </Paper>
+                    {workerId && (
+                        <Paper sx={{ p: 2, m: 2 }}>
+                            <Verification uid={workerId} user={worker} fetchWorker={fetchWorker} />
+                        </Paper>
+                    )}
                     {workerId && (
                         <Paper sx={{ p: 2, m: 2 }}>
                             <PaymentDetails uid={workerId} userType="worker" />

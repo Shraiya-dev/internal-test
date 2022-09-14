@@ -161,6 +161,7 @@ export const useAddEditWorkerProfile = (workerId) => {
             accountNumber: '',
             ifscCode: '',
             accHolderName: '',
+            verificationStatus: 'UNVERIFIED',
         },
         validate: (values) => {
             const errors = {}
@@ -238,7 +239,30 @@ export const useAddEditWorkerProfile = (workerId) => {
         },
         [form]
     )
-
+    const updateWorkerStatus = useCallback(
+        async (value) => {
+            try {
+                const payload = {
+                    verificationStatus: value,
+                }
+                const { data, status } = await axios.post(
+                    `${BACKEND_URL}/gateway/admin-api/workers/${workerId}/verification-status`,
+                    payload
+                )
+                showSnackbar({
+                    msg: `Verification Status Updated`,
+                    sev: 'success',
+                })
+            } catch (error) {
+                const { developerInfo } = error.response.data
+                showSnackbar({
+                    msg: `Marking Worker as available failed:!${developerInfo}`,
+                    sev: 'error',
+                })
+            }
+        },
+        [form]
+    )
     useEffect(() => {
         if (worker) {
             setStateId(worker?.state)
@@ -262,6 +286,7 @@ export const useAddEditWorkerProfile = (workerId) => {
                 accountNumber: worker?.bankDetails?.accountNumber ?? '',
                 ifscCode: worker?.bankDetails?.ifsc ?? '',
                 accHolderName: worker?.name ?? '',
+                verificationStatus: worker?.verification?.verificationStatus ?? 'UNVERIFIED',
             })
         }
     }, [worker])
@@ -287,6 +312,7 @@ export const useAddEditWorkerProfile = (workerId) => {
             states,
             districts,
             setStateId,
+            updateWorkerStatus,
         }),
         [
             form,
@@ -301,6 +327,7 @@ export const useAddEditWorkerProfile = (workerId) => {
             states,
             districts,
             setStateId,
+            updateWorkerStatus,
         ]
     )
 }
