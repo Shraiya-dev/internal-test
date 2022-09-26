@@ -1,5 +1,5 @@
 import { Search } from '@material-ui/icons'
-import { Download } from '@mui/icons-material'
+import { Download, Upload, WorkspacePremium } from '@mui/icons-material'
 import { DatePicker, LoadingButton, LocalizationProvider } from '@mui/lab'
 import {
     Box,
@@ -16,8 +16,10 @@ import {
 } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import React from 'react'
+import axios from 'axios'
+import React, { useCallback } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { FileInput } from '../../components/CustomInputs'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useLocationMetadata } from '../../hooks/useLocationMetadata'
 import { ADD_WORKER_ROUTE } from '../../routes'
@@ -68,7 +70,8 @@ const skillType = [
 ]
 
 export default function DataTable() {
-    const { checkError, form, response, isLoading, downloadWorkersWithFilters, isDownloading } = useWorkerInfo()
+    const { checkError, form, response, isLoading, downloadWorkersWithFilters, handelBulkVerification, isDownloading } =
+        useWorkerInfo()
     const { states, districts, setStateId } = useLocationMetadata()
 
     const columns = [
@@ -195,6 +198,22 @@ export default function DataTable() {
                             Add Worker
                         </Button>
                     </Link>
+                    <FileInput
+                        sx={{
+                            mb: 2,
+                            height: 48,
+                        }}
+                        id="uploadBulkVerificationFile"
+                        label="Worker bulk Verification"
+                        variant={'contained'}
+                        startIcon={<Upload />}
+                        onChange={(e) => {
+                            handelBulkVerification(e.target.files[0])
+                            e.target.value = ''
+                        }}
+                        type="file"
+                        accept=".xls,.xlsx"
+                    />
                 </Stack>
             </Box>
             <Paper>
