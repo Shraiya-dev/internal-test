@@ -203,6 +203,7 @@ export default function DataTable() {
                             mb: 2,
                             height: 48,
                         }}
+                        isLoading={isDownloading}
                         id="uploadBulkVerificationFile"
                         label="Worker bulk Verification"
                         variant={'contained'}

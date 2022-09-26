@@ -134,6 +134,7 @@ export const useWorkerInfo = () => {
         // setSearchParams(sp)
     }, [])
     const handelBulkVerification = useCallback(async (file) => {
+        setIsDownloading(true)
         try {
             console.log(file)
             const formData = new FormData()
@@ -154,8 +155,12 @@ export const useWorkerInfo = () => {
                 sev: 'success',
             })
         } catch (error) {
-            console.log(error)
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
         }
+        setIsDownloading(false)
     }, [])
     const fetchWorkerData = useCallback(
         async (searchParams) => {
@@ -175,7 +180,7 @@ export const useWorkerInfo = () => {
                 })
             } catch (error) {
                 showSnackbar({
-                    msg: data.error,
+                    msg: error.response.data.developerInfo,
                     sev: 'error',
                 })
             }
