@@ -155,10 +155,12 @@ export const useWorkerInfo = () => {
                 sev: 'success',
             })
         } catch (error) {
+            const sr = await JSON.parse(await error.response.data.text())
             showSnackbar({
-                msg: error.response.data.developerInfo,
+                msg: sr.developerInfo,
                 sev: 'error',
             })
+            setIsDownloading(false)
         }
         setIsDownloading(false)
     }, [])
@@ -216,8 +218,9 @@ export const useWorkerInfo = () => {
             })
             setIsDownloading(false)
         } catch (error) {
+            const sr = await JSON.parse(await error.response.data.text())
             showSnackbar({
-                msg: error.response.data.developerInfo,
+                msg: sr.developerInfo,
                 sev: 'error',
             })
             setIsDownloading(false)
