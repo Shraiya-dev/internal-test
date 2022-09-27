@@ -50,9 +50,9 @@ export const useAddEditProject = () => {
             if (values.projectName === '') {
                 errors.projectName = 'Required *'
             }
-            if (values.siteAddress === '') {
-                errors.siteAddress = 'Required *'
-            }
+            // if (values.siteAddress === '') {
+            //     errors.siteAddress = 'Required *'
+            // }
             if (values.state === 'none') {
                 errors.state = 'Required *'
             }
@@ -60,18 +60,18 @@ export const useAddEditProject = () => {
                 errors.city = 'Required *'
             }
 
-            if (values.pincode === '') {
-                errors.pincode = 'Required *'
-            }
-            if (values.pincode !== '' && !isPinCodeValid(values.pincode)) {
-                errors.pincode = 'Invalid format *'
-            }
-            if (values.geoLocation === '') {
-                errors.geoLocation = 'Required *'
-            }
-            if (values.geoLocation !== '' && !validateRegex(regexPatterns.geoLocation, values.geoLocation)) {
-                errors.geoLocation = 'Invalid format *'
-            }
+            // if (values.pincode === '') {
+            //     errors.pincode = 'Required *'
+            // }
+            // if (values.pincode !== '' && !isPinCodeValid(values.pincode)) {
+            //     errors.pincode = 'Invalid format *'
+            // }
+            // if (values.geoLocation === '') {
+            //     errors.geoLocation = 'Required *'
+            // }
+            // if (values.geoLocation !== '' && !validateRegex(regexPatterns.geoLocation, values.geoLocation)) {
+            //     errors.geoLocation = 'Invalid format *'
+            // }
 
             if (values.pf === '') {
                 errors.pf = 'Required *'
