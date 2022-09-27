@@ -16,6 +16,7 @@ export const useWorkerInfo = () => {
         hasMore: false,
         workerData: [],
     })
+
     const [isLoading, setIsLoading] = useState(false)
     const [isDownloading, setIsDownloading] = useState(false)
     const { showSnackbar } = useSnackbar()
@@ -132,7 +133,37 @@ export const useWorkerInfo = () => {
         // }
         // setSearchParams(sp)
     }, [])
+    const handelBulkVerification = useCallback(async (file) => {
+        setIsDownloading(true)
+        try {
+            console.log(file)
+            const formData = new FormData()
+            formData.append('file', file)
+            const res = await axios.post(SERVER_URL + '/gateway/admin-api/workers/bulk-verification', formData, {
+                responseType: 'blob',
+            })
 
+            const url = window.URL.createObjectURL(res.data)
+            var a = document.createElement('a')
+            a.href = url
+            a.download = 'verification-result' + new Date().toLocaleDateString() + '.xlsx'
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            showSnackbar({
+                msg: 'Download Complete',
+                sev: 'success',
+            })
+        } catch (error) {
+            const sr = await JSON.parse(await error.response.data.text())
+            showSnackbar({
+                msg: sr.developerInfo,
+                sev: 'error',
+            })
+            setIsDownloading(false)
+        }
+        setIsDownloading(false)
+    }, [])
     const fetchWorkerData = useCallback(
         async (searchParams) => {
             setIsLoading(true)
@@ -151,7 +182,7 @@ export const useWorkerInfo = () => {
                 })
             } catch (error) {
                 showSnackbar({
-                    msg: data.error,
+                    msg: error.response.data.developerInfo,
                     sev: 'error',
                 })
             }
@@ -187,8 +218,9 @@ export const useWorkerInfo = () => {
             })
             setIsDownloading(false)
         } catch (error) {
+            const sr = await JSON.parse(await error.response.data.text())
             showSnackbar({
-                msg: error.response.data.developerInfo,
+                msg: sr.developerInfo,
                 sev: 'error',
             })
             setIsDownloading(false)
@@ -203,7 +235,8 @@ export const useWorkerInfo = () => {
             isLoading: isLoading,
             downloadWorkersWithFilters: downloadWorkersWithFilters,
             isDownloading: isDownloading,
+            handelBulkVerification,
         }),
-        [form, checkError, response, isLoading, downloadWorkersWithFilters, isDownloading]
+        [form, checkError, response, isLoading, downloadWorkersWithFilters, isDownloading, handelBulkVerification]
     )
 }
