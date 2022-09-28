@@ -56,6 +56,13 @@ export const useCustomer = () => {
                 field: 'name',
                 headerName: 'Name',
                 sortable: true,
+                renderCell: (params) => (
+                    <Link to={`/customers/${params?.row?.customerId}`}>
+                        <Typography color="primary.main" sx={{ textDecoration: 'underline' }}>
+                            {params?.row?.name ?? 'No Name'}
+                        </Typography>
+                    </Link>
+                ),
                 width: 180,
             },
             {

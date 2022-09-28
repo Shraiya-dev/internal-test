@@ -5,6 +5,7 @@ import {
     Button,
     Drawer,
     IconButton,
+    LinearProgress,
     List,
     ListItem,
     Menu,
@@ -88,7 +89,7 @@ const DrawerList = [
     return 0
 })
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = ({ children, loading = false }) => {
     const navigate = useNavigate()
     const { pathname } = useLocation()
     const { isUserLoggedIn, logout } = useAuth()
@@ -221,8 +222,11 @@ const DashboardLayout = ({ children }) => {
                     flexGrow: 1,
                     paddingTop: '82px',
                     paddingLeft: drawerWidth,
+                    position: 'relative',
                 }}
             >
+                {loading && <LinearProgress sx={{ minHeight: 5, width: '100%', position: 'absolute', top: 82 }} />}
+
                 <Box
                     sx={{
                         p: 3,
