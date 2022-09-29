@@ -34,26 +34,23 @@ export const useAddEditCustomerDetails = () => {
         if (!refresh) return
         fetchUserDetails()
     }, [refresh])
-
-    const form = useFormik({
-        initialValues: {
-            name: '',
-            email: '',
-            companyName: '',
-            gstin: '',
-            designation: 'none',
-        },
-        validationSchema: Yup.object({
-            gstin: Yup.string().matches(regexPatterns.gstin, 'Invalid gstin'),
-        }),
-        onSubmit: async (values) => {
+    const onSubmit = useCallback(
+        async (values) => {
             try {
                 const payload = {
                     name: values.name?.trim().length > 0 ? values.name?.trim() : undefined,
                     email: values.email?.trim().length > 0 ? values.email?.trim() : undefined,
                     companyName: values.companyName?.trim().length > 0 ? values.companyName?.trim() : undefined,
-                    GSTIN: values.gstin?.trim().length > 0 ? values.gstin?.trim() : undefined,
-                    designation: values.designation?.trim() !== 'none' ? values.designation?.trim() : undefined,
+                    GSTIN: !response?.organisation
+                        ? values.gstin?.trim().length > 0
+                            ? values.gstin?.trim()
+                            : undefined
+                        : undefined,
+                    designation: !response?.organisation
+                        ? values.designation?.trim() !== 'none'
+                            ? values.designation?.trim()
+                            : undefined
+                        : undefined,
                 }
                 const { data } = await axios.put(`${SERVER_URL}/gateway/admin-api/customers/${customerId}`, payload)
                 showSnackbar({
@@ -70,6 +67,24 @@ export const useAddEditCustomerDetails = () => {
                 })
             }
         },
+        [response]
+    )
+
+    const form = useFormik({
+        initialValues: {
+            name: '',
+            email: '',
+            companyName: '',
+            gstin: '',
+            designation: 'none',
+        },
+        validationSchema: Yup.object({
+            gstin: Yup.string().when({
+                is: !!response?.organisation,
+                then: Yup.string().matches(regexPatterns.gstin, 'Invalid gstin'),
+            }),
+        }),
+        onSubmit: onSubmit,
     })
     useEffect(() => {
         if (!response) return
