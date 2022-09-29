@@ -17,6 +17,7 @@ import {
     Typography,
 } from '@mui/material'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import { FileInput } from '../../components/CustomInputs'
 import { OverTimeFactor } from '../../constant/booking'
@@ -67,7 +68,11 @@ const AddEditProject = () => {
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <InputLabel>Name</InputLabel>
-                                <Typography variant="h6">{customer?.name}</Typography>
+                                <Link to={`/customers/${customer?.customerId}`}>
+                                    <Typography color="primary.main" sx={{ textDecoration: 'underline' }}>
+                                        {customer?.name || 'No Name'}
+                                    </Typography>
+                                </Link>
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <InputLabel>Company Name</InputLabel>

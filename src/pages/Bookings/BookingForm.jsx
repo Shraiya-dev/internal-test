@@ -162,7 +162,11 @@ const BookingForm = () => {
                 <Grid container spacing={2} item xs={12} md={10} lg={7}>
                     <Grid item xs={12} md={4}>
                         <InputLabel>Name</InputLabel>
-                        <Typography variant="h6">{customer?.name}</Typography>
+                        <Link to={`/customers/${customer?.customerId}`}>
+                            <Typography color="primary.main" sx={{ textDecoration: 'underline' }}>
+                                {customer?.name || 'No Name'}
+                            </Typography>
+                        </Link>
                     </Grid>
                     <Grid item xs={12} md={4}>
                         <InputLabel>Company Name</InputLabel>
