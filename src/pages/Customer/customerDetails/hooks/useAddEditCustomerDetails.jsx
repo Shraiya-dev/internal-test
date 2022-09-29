@@ -64,7 +64,6 @@ export const useAddEditCustomerDetails = () => {
                 setRefresh(true)
                 setRefresh(true)
             } catch (error) {
-                console.log(error)
                 showSnackbar({
                     msg: error?.response?.data?.developerInfo,
                     sev: 'error',

@@ -68,11 +68,16 @@ export const AddEditCustomerDetail = () => {
                                 fullWidth
                                 label="Company Name"
                                 {...formikProps('companyName')}
-                                disabled={disableForm}
+                                disabled={disableForm || organisation}
                             />
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField fullWidth label="GSTIN" {...formikProps('gstin')} disabled={disableForm} />
+                            <TextField
+                                fullWidth
+                                label="GSTIN"
+                                {...formikProps('gstin')}
+                                disabled={disableForm || organisation}
+                            />
                         </Grid>
                         <Grid item xs={4}>
                             <Select
