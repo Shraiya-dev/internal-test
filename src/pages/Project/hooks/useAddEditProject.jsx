@@ -47,9 +47,9 @@ export const useAddEditProject = () => {
         },
         validate: (values) => {
             const errors = {}
-            if (values.projectName === '') {
-                errors.projectName = 'Required *'
-            }
+            // if (values.projectName === '') {
+            //     errors.projectName = 'Required *'
+            // }
             // if (values.siteAddress === '') {
             //     errors.siteAddress = 'Required *'
             // }
