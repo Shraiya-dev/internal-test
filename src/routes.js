@@ -25,6 +25,8 @@ export const CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE = '/customers/:customerId/book
 export const ATTENDANCE_ROUTE = '/attendance'
 export const JCA_ROUTE = '/job-cards'
 export const CUSTOMER_ROUTE = '/customers'
+export const CUSTOMER_CUSTOMER_ID_ROUTE = '/customers/:customerId'
+
 export const ORGANIZATION_ROUTE = '/organization'
 export const PROJECT_PROJECT_ID_BOOKING_CREATE = '/projects/:projectId/booking/create'
 export const ORGANISATION_ORGANISATION_ID_CUSTOMER_CUSTOMER_ID_PROJECT_CREATE =

@@ -13,6 +13,7 @@ import BookingById from './pages/Bookings/BookingById'
 import Bookings from './pages/Bookings/Bookings'
 import CreateBookingForm from './pages/Bookings/CreateBookingForm'
 import CreateBookings from './pages/Bookings/CreateBookings'
+import { AddEditCustomerDetail } from './pages/Customer/customerDetails/AddEditCustomerDetail'
 import Dashboard from './pages/Dashboard/Dashboard'
 import JCA from './pages/JCA/jobCards'
 import JobCards from './pages/jobCards/JobCards'
@@ -42,6 +43,7 @@ import {
     BOOKING_BY_ID_ROUTE,
     BOOKING_ROUTE,
     CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE,
+    CUSTOMER_CUSTOMER_ID_ROUTE,
     CUSTOMER_ROUTE,
     DASHBOARD_ROUTE,
     JCA_ROUTE,
@@ -314,6 +316,14 @@ function App() {
                                     element={
                                         <PrivateRoute>
                                             <Customer />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={CUSTOMER_CUSTOMER_ID_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <AddEditCustomerDetail />
                                         </PrivateRoute>
                                     }
                                 />
