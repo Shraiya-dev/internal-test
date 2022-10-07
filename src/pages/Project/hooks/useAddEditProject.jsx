@@ -115,7 +115,7 @@ export const useAddEditProject = () => {
                 benefits: [
                     values.pf ? 'PF' : '',
                     values.esi ? 'INSURANCE' : '',
-                    values.accomodation ? 'ACCOMODATION' : '',
+                    values.accommodation ? 'ACCOMODATION' : '',
                     values.travelAllowance ? 'PAID_TRAVEL' : '',
                     values.food ? 'FOOD' : '',
                     values.joiningBonus ? 'JOINING_BONUS' : '',
