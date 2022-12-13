@@ -26,6 +26,7 @@ const LimitedDiscoveryCTAMap = {
     ALLOCATION_IN_PROGRESS: {
         tabs: {
             WORKER_APPLIED: {
+                addWorkerAsApplied: true,
                 jobCardActions: {
                     cancel: true,
                 },
