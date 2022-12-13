@@ -82,7 +82,7 @@ const useAddWorkerDialog = (jobIdForSkillType) => {
                 workerId: workerDetail.workerId,
             })
             setSnackBar({
-                msg: 'worker add as RTD successfully',
+                msg: 'worker add as APPLIED successfully',
                 sev: 'success',
             })
         } catch (error) {
@@ -94,7 +94,7 @@ const useAddWorkerDialog = (jobIdForSkillType) => {
                 return
             }
             setSnackBar({
-                msg: 'Something went wrong while adding worker as rtd ',
+                msg: 'Something went wrong while adding worker as APPLIED ',
                 sev: 'error',
             })
         }
