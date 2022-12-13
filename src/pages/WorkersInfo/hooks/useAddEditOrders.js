@@ -1,25 +1,17 @@
+import axios from 'axios'
 import { useFormik } from 'formik'
 import React, { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
+import { ORDERS_INFO_ROUTE } from '../../../routes'
 import { checkError } from '../../../utils/formikValidate'
 
 const BACKEND_URL = getBackendUrl()
 
-const regexPatterns = {
-    phoneNumber: /^[0-9]{10}$/,
-    pincode: /^[0-9]{6}$/,
-    aadhar: /^[2-9]\d{11}$/,
-    bankAccount: /^\d{9,18}$/,
-    pan: /^[A-Z]{5}\d{4}[A-Z]$/,
-    uan: /^\d{12}$/,
-    isNum: /^\d*$/,
-    specialChar: /^[A-Za-z ]+$/,
-}
-
 export const useAddEditOrders = () => {
     const { showSnackbar } = useSnackbar()
-
+    const navigate = useNavigate()
     const form = useFormik({
         initialValues: {
             referenceId: '',
@@ -52,8 +44,8 @@ export const useAddEditOrders = () => {
             if (values.jobDetails === '') {
                 errors.jobDetails = true
             }
-            if (form.values.orderValue !== '' && !regexPatterns.phoneNumber.test(values.orderValue)) {
-                errors.panNumber = true
+            if (form.values.orderValue === '' || Number.isNaN(form.values.orderValue)) {
+                errors.orderValue = true
             }
             return errors
         },
@@ -75,12 +67,15 @@ export const useAddEditOrders = () => {
 
     const addWorker = useCallback(async (payload) => {
         try {
-            const { status, data } = await axios.put(`${SERVER_URL}/gateway/admin-api/contractor-orders`, payload)
+            const { status, data } = await axios.post(`${BACKEND_URL}/gateway/admin-api/contractor-orders`, payload)
+
             showSnackbar({
                 msg: 'Added Order successfully!',
                 sev: 'success',
             })
+            navigate(ORDERS_INFO_ROUTE)
         } catch (error) {
+            console.log(error)
             showSnackbar({
                 msg: error?.response?.data?.developerInfo,
                 sev: 'error',

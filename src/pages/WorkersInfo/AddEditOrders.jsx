@@ -1,3 +1,4 @@
+import { CurrencyRupee } from '@mui/icons-material'
 import {
     Box,
     Button,
@@ -5,6 +6,7 @@ import {
     FormControl,
     FormControlLabel,
     Grid,
+    InputAdornment,
     MenuItem,
     Paper,
     Radio,
@@ -64,12 +66,18 @@ export const AddEditOrders = () => {
                                 mb: 4,
                             }}
                         >
-                            <Stack justifyContent="flex-start" alignItems="flex-start">
+                            <Stack width={'100%'} direction="row" justifyContent="space-between" alignItems="center">
                                 <Typography variant="h3">Order Information</Typography>
+                                <Stack direction="row" spacing={1}>
+                                    <Button color="error" variant="outlined" onClick={() => form.resetForm()}>
+                                        Reset
+                                    </Button>
+                                    <Button variant="outlined" onClick={() => form.handleSubmit()}>
+                                        Submit
+                                    </Button>
+                                </Stack>
                             </Stack>
-                            <Button variant="outlined" onClick={() => form.handleSubmit()}>
-                                Submit
-                            </Button>
+
                             <Grid container spacing={2} mt={2}>
                                 <Grid item xs={6}>
                                     <TextField
@@ -89,19 +97,19 @@ export const AddEditOrders = () => {
                                 <Grid item xs={6}>
                                     <TextField
                                         fullWidth
-                                        type={'number'}
-                                        label="Order Value"
-                                        {...formikProps('orderValue')}
+                                        label="Start Date"
+                                        {...formikProps('startDateLabel')}
                                         onChange={(e) => {
                                             if (e.target.value.trim().length > 0) {
-                                                form.setFieldValue('orderValue', e.target.value)
+                                                form.setFieldValue('startDateLabel', e.target.value)
                                             } else {
-                                                form.setFieldValue('orderValue', e.target.value.trim())
+                                                form.setFieldValue('startDateLabel', e.target.value.trim())
                                             }
                                         }}
-                                        error={isError('orderValue')}
+                                        error={isError('startDateLabel')}
                                     />
                                 </Grid>
+
                                 <Grid item xs={6}>
                                     <Select
                                         fullWidth
@@ -147,21 +155,7 @@ export const AddEditOrders = () => {
                                         error={isError('materialSpecs')}
                                     />
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        label="Start Date"
-                                        {...formikProps('startDateLabel')}
-                                        onChange={(e) => {
-                                            if (e.target.value.trim().length > 0) {
-                                                form.setFieldValue('startDateLabel', e.target.value)
-                                            } else {
-                                                form.setFieldValue('startDateLabel', e.target.value.trim())
-                                            }
-                                        }}
-                                        error={isError('startDateLabel')}
-                                    />
-                                </Grid>
+
                                 <Grid item xs={6}>
                                     <TextField
                                         fullWidth
@@ -177,6 +171,7 @@ export const AddEditOrders = () => {
                                         error={isError('jobDetails')}
                                     />
                                 </Grid>
+
                                 <Grid item xs={6}>
                                     <Select
                                         fullWidth
@@ -191,6 +186,29 @@ export const AddEditOrders = () => {
                                             ...orderTypeOptions,
                                         ])}
                                     </Select>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <CurrencyRupee />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                        fullWidth
+                                        type={'number'}
+                                        label="Order Value"
+                                        {...formikProps('orderValue')}
+                                        onChange={(e) => {
+                                            if (e.target.value.trim().length > 0) {
+                                                form.setFieldValue('orderValue', e.target.value)
+                                            } else {
+                                                form.setFieldValue('orderValue', e.target.value.trim())
+                                            }
+                                        }}
+                                        error={isError('orderValue')}
+                                    />
                                 </Grid>
                                 <Grid item xs={6}>
                                     <h3>isActive</h3>
