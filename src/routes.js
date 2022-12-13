@@ -17,6 +17,9 @@ export const JOBCARDS_FOR_BOOKING_ROUTE = '/bookings/:bookingId/job-cards/:jobCa
 export const ADD_PARTNER_ROUTE = '/partners'
 export const PARTNER_DETAIL_VIEW = '/partners/:partnerId'
 
+export const ORDERS_INFO_ROUTE = '/orders'
+export const ADD_ORDERS_ROUTE = '/orders/create'
+
 export const WORKER_INFO_ROUTE = '/workers'
 export const ADD_WORKER_ROUTE = '/workers/create'
 export const WORKER_INFO_BY_ID_ROUTE = '/workers/:workerId'

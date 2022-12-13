@@ -17,6 +17,7 @@ import { AddEditCustomerDetail } from './pages/Customer/customerDetails/AddEditC
 import Dashboard from './pages/Dashboard/Dashboard'
 import JCA from './pages/JCA/jobCards'
 import JobCards from './pages/jobCards/JobCards'
+import { Orders } from './pages/OrdersInfo/OrdersInfo'
 import { Organisation } from './pages/Organization/Organization'
 import { AddEditPartner } from './pages/Partner/EditPartner'
 import Partner from './pages/Partner/Partner'
@@ -29,11 +30,13 @@ import RewardAndPenalty from './pages/Rewards'
 import { WorkerProfileProvider } from './pages/WorkerProfile/providers/WorkerProfileProvider/WorkerProfileProvider'
 import AddEditWorkerProfile from './pages/workers/AddEditWorkerProfile'
 import AddWorkerForBooking from './pages/workers/AddWorkerForBooking'
+import { AddEditOrders } from './pages/WorkersInfo/AddEditOrders'
 import WorkerInfoTable from './pages/WorkersInfo/workerInfo'
 import { BookingProvider } from './providers/BookingProvider'
 import { LoaderProvider } from './providers/LoaderProvider'
 import { SnackbarProvider } from './providers/SnackbarProvider'
 import {
+    ADD_ORDERS_ROUTE,
     ADD_PARTNER_ROUTE,
     ADD_WORKER_IN_BOOKING_ROUTE,
     ADD_WORKER_ROUTE,
@@ -48,6 +51,7 @@ import {
     DASHBOARD_ROUTE,
     JCA_ROUTE,
     JOBCARDS_FOR_BOOKING_ROUTE,
+    ORDERS_INFO_ROUTE,
     ORGANISATION_ORGANISATION_ID_CUSTOMER_CUSTOMER_ID_PROJECT_CREATE,
     ORGANIZATION_ROUTE,
     PARTNER_DETAIL_VIEW,
@@ -156,6 +160,24 @@ function App() {
                                             <ProjectProvider>
                                                 <ProjectById />
                                             </ProjectProvider>
+                                        </PrivateRoute>
+                                    }
+                                />
+
+                                <Route
+                                    path={ORDERS_INFO_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <Orders />
+                                        </PrivateRoute>
+                                    }
+                                />
+
+                                <Route
+                                    path={ADD_ORDERS_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <AddEditOrders />
                                         </PrivateRoute>
                                     }
                                 />
