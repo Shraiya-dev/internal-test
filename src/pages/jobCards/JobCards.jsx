@@ -3,6 +3,7 @@ import {
     Box,
     Button,
     Checkbox,
+    Chip,
     CircularProgress,
     FormControlLabel,
     IconButton,
@@ -44,9 +45,12 @@ const JobCards = () => {
         reload,
     } = useJobCards()
 
-    const [open, setOpen] = useState(false)
+    const [addHeroModalProps, setAddHeroModalProps] = useState({ open: false })
     const [employmentCompleteDialogProps, setEmploymentCompleteDialog] = useState()
-    const allowedTabs = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs, [booking])
+    const allowedTabs = useMemo(
+        () => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs,
+        [booking]
+    )
 
     const [confirmDialogProps, setConfirmDialogProps] = useState({
         content: '',
@@ -302,8 +306,9 @@ const JobCards = () => {
             <ConfirmationDialog {...confirmationDialogProps} />
             {booking && setReload && (
                 <AddWorkerDialog
-                    open={open}
-                    setOpen={setOpen}
+                    open={addHeroModalProps.open}
+                    state={addHeroModalProps.state}
+                    setOpen={setAddHeroModalProps}
                     setReload={setReload}
                     jobIdForSkillType={booking?.jobIds}
                 />
@@ -347,16 +352,38 @@ const JobCards = () => {
                                 )
                             })}
                             <Stack direction="row" justifyContent="flex-end" spacing={2} ml="auto" alignItems="center">
-                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[sp.get('jobCardStates')]?.addWorker && !bulkSelectionOn && (
-                                    <Button
-                                        variant="outlined"
-                                        onClick={() => {
-                                            setOpen(!open)
-                                        }}
-                                    >
-                                        Add Hero
-                                    </Button>
-                                )}
+                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[
+                                    sp.get('jobCardStates')
+                                ]?.addWorkerAsApplied &&
+                                    !bulkSelectionOn && (
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => {
+                                                setAddHeroModalProps({
+                                                    open: !addHeroModalProps.open,
+                                                    state: 'WORKER_APPLIED',
+                                                })
+                                            }}
+                                        >
+                                            Add Hero Applied
+                                        </Button>
+                                    )}
+                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[
+                                    sp.get('jobCardStates')
+                                ]?.addWorker &&
+                                    !bulkSelectionOn && (
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => {
+                                                setAddHeroModalProps({
+                                                    open: !addHeroModalProps.open,
+                                                    state: 'READY_TO_DEPLOY',
+                                                })
+                                            }}
+                                        >
+                                            Add Hero RTD
+                                        </Button>
+                                    )}
                                 <>
                                     {bulkSelectionOn ? (
                                         <>
@@ -443,13 +470,22 @@ const JobCards = () => {
                                     <Tab
                                         key={tab.value}
                                         sx={{ alignItems: 'flex-end' }}
-                                        label={`${tab?.label} (${tab?.count})`}
+                                        label={
+                                            <Stack direction="row" alignItems="center" spacing={2}>
+                                                <Stack>{`${tab?.label} (${tab?.count})`}</Stack>
+                                                {booking?.jobIds[tab.value] && (
+                                                    <Chip color="primary" size="small" label={'Live'} />
+                                                )}
+                                            </Stack>
+                                        }
                                         value={tab?.value}
                                     />
                                 )
                             })}
                             <Stack direction={'row'} spacing={2} ml="auto" mr={3} alignItems="center">
-                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.pdrc && (
+                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[
+                                    sp.get('jobCardStates')
+                                ]?.filters?.pdrc && (
                                     <FormControlLabel
                                         checked={sp.get('isPDRCDone') === 'true'}
                                         onChange={(e, checked) => {
@@ -466,7 +502,9 @@ const JobCards = () => {
                                         label="PDRC"
                                     />
                                 )}
-                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[sp.get('jobCardStates')]?.filters?.drc && (
+                                {CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.tabs[
+                                    sp.get('jobCardStates')
+                                ]?.filters?.drc && (
                                     <FormControlLabel
                                         checked={sp.get('isDRCDone') === 'true'}
                                         onChange={(e, checked) => {

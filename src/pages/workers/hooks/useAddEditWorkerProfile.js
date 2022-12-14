@@ -73,7 +73,7 @@ export const useAddEditWorkerProfile = (workerId) => {
                 setWorker(response.data.payload)
             } catch (error) {
                 showSnackbar({
-                    msg: response.data.error,
+                    msg: error?.response?.data?.error,
                     sev: 'error',
                 })
             }

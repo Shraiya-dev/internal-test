@@ -32,6 +32,7 @@ import {
     yoeOptions,
 } from './helper'
 import useAddEditWorkerProfile from './hooks/useAddEditWorkerProfile'
+import { Membership } from './Membership'
 import { PaymentDetails } from './PaymentDetails'
 import { Verification } from './Verification'
 
@@ -419,6 +420,11 @@ const AddEditWorkerProfile = () => {
                     </Paper>
                     {workerId && (
                         <Paper sx={{ p: 2, m: 2 }}>
+                            <Membership uid={workerId} user={worker} fetchWorker={fetchWorker} />
+                        </Paper>
+                    )}
+                    {workerId && (
+                        <Paper sx={{ p: 2, m: 2 }}>
                             <Verification uid={workerId} user={worker} fetchWorker={fetchWorker} />
                         </Paper>
                     )}
@@ -427,66 +433,6 @@ const AddEditWorkerProfile = () => {
                             <PaymentDetails uid={workerId} userType="worker" />
                         </Paper>
                     )}
-                    {/* <Paper sx={{ p: 2, m: 2 }}>
-                        <Container>
-                            <h3>Bank Information</h3>
-                            <h5>Do they have bank account</h5>
-                            <FormControl fullWidth disabled={disableForm}>
-                                <RadioGroup
-                                    {...formikProps('bankAccount')}
-                                    onChange={(e) => {
-                                        form.setFieldValue('bankAccount', e.target.value === 'true')
-                                    }}
-                                >
-                                    <Grid container spacing={2}>
-                                        {yesOrNoBooleanOptions.map((x) => {
-                                            return (
-                                                <Grid key={x.value} item xs={6}>
-                                                    <FormControlLabel
-                                                        value={x.value}
-                                                        control={<Radio />}
-                                                        label={x.label}
-                                                    />
-                                                </Grid>
-                                            )
-                                        })}
-                                    </Grid>
-                                </RadioGroup>
-                            </FormControl>
-                            {form.values.bankAccount && (
-                                <Paper>
-                                    <h3>Bank Information</h3>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={4}>
-                                            <TextField
-                                                fullWidth
-                                                label="Account holder name"
-                                                {...formikProps('accHolderName')}
-                                                error={isError('accHolderName')}
-                                            />
-                                        </Grid>
-
-                                        <Grid item xs={4}>
-                                            <TextField
-                                                fullWidth
-                                                label="Account Number"
-                                                {...formikProps('accountNumber')}
-                                                error={isError('accountNumber')}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <TextField
-                                                fullWidth
-                                                label="IFSC Code"
-                                                {...formikProps('ifscCode')}
-                                                error={isError('ifscCode')}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </Paper>
-                            )}
-                        </Container>
-                    </Paper> */}
                 </Stack>
             </DashboardLayout>
             <PopAlert {...snackbarProps} />

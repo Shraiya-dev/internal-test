@@ -75,6 +75,30 @@ const useAddWorkerDialog = (jobIdForSkillType) => {
             })
         }
     }, [jobIdForSkillType, workerDetail])
+    const addWorkerJobCardAsApplied = useCallback(async () => {
+        try {
+            const { status, data } = await axios.post(`${SERVER_URL}/gateway/admin-api/job-cards/assisted-applied`, {
+                jobId: jobIdForSkillType[workerDetail.skillType],
+                workerId: workerDetail.workerId,
+            })
+            setSnackBar({
+                msg: 'worker add as APPLIED successfully',
+                sev: 'success',
+            })
+        } catch (error) {
+            if (error.response.status === 400) {
+                setSnackBar({
+                    msg: error.response.data.developerInfo,
+                    sev: 'error',
+                })
+                return
+            }
+            setSnackBar({
+                msg: 'Something went wrong while adding worker as APPLIED ',
+                sev: 'error',
+            })
+        }
+    }, [jobIdForSkillType, workerDetail])
     const isError = useCallback(
         (name) => {
             const touched = form.touched
@@ -89,6 +113,7 @@ const useAddWorkerDialog = (jobIdForSkillType) => {
             workerDetail: workerDetail,
             setWorkerDetail: setWorkerDetail,
             addWorkerJobCardAsRTD: addWorkerJobCardAsRTD,
+            addWorkerJobCardAsApplied: addWorkerJobCardAsApplied,
             sncBar: sncBar,
             setSnackBar: setSnackBar,
             isError: isError,

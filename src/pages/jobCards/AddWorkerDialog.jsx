@@ -25,13 +25,13 @@ import useAddWorkerDialog from './hooks/useAddWorkerDialog'
 //     { label: 'Techician', value: 'TECHNICIAN' },
 // ]
 
-const AddWorkerDialog = ({ open, setOpen, jobIdForSkillType, setReload }) => {
-    const { form, workerDetail, addWorkerJobCardAsRTD, isError, sncBar, setWorkerDetail } =
-        useAddWorkerDialog(jobIdForSkillType)
+const AddWorkerDialog = ({ open, setOpen, state, jobIdForSkillType, setReload }) => {
+    const { form, workerDetail, addWorkerJobCardAsRTD, addWorkerJobCardAsApplied, isError, sncBar, setWorkerDetail } =
+        useAddWorkerDialog(jobIdForSkillType, state)
     const handleClose = () => {
         form.resetForm()
         setWorkerDetail()
-        setOpen(false)
+        setOpen({ open: false })
     }
     const navigate = useNavigate()
 
@@ -156,7 +156,12 @@ const AddWorkerDialog = ({ open, setOpen, jobIdForSkillType, setReload }) => {
                     <Button
                         // disabled={!workerDetail}
                         onClick={async () => {
-                            await addWorkerJobCardAsRTD()
+                            if (state === 'WORKER_APPLIED') {
+                                await addWorkerJobCardAsApplied()
+                            }
+                            if (state === 'READY_TO_DEPLOY') {
+                                await addWorkerJobCardAsRTD()
+                            }
                             setReload(true)
                             handleClose()
                         }}

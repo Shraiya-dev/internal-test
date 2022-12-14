@@ -49,7 +49,7 @@ export const Verification = ({ uid, user, fetchWorker }) => {
                         <InputLabel>Status</InputLabel>
                         <Typography>{user?.verification?.verificationStatus}</Typography>
                     </Stack>
-                    {user?.verification?.certificates[user?.verification?.certificates?.length - 1] && (
+                    {user?.verification?.certificates?.[user?.verification?.certificates?.length - 1] && (
                         <>
                             <Stack>
                                 <InputLabel>Site Name</InputLabel>

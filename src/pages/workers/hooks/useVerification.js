@@ -27,7 +27,6 @@ export const useVerification = (uid, userType, fetchWorker, setCertificationDial
                         sev: 'success',
                     })
                 } catch (error) {
-                    console.log(error)
                     const { developerInfo } = error?.response?.data
                     showSnackbar({
                         msg: `Marking Worker as available failed:!${developerInfo}`,
