@@ -3,6 +3,7 @@ import {
     Box,
     Button,
     Checkbox,
+    Chip,
     CircularProgress,
     FormControlLabel,
     IconButton,
@@ -469,7 +470,14 @@ const JobCards = () => {
                                     <Tab
                                         key={tab.value}
                                         sx={{ alignItems: 'flex-end' }}
-                                        label={`${tab?.label} (${tab?.count})`}
+                                        label={
+                                            <Stack direction="row" alignItems="center" spacing={2}>
+                                                <Stack>{`${tab?.label} (${tab?.count})`}</Stack>
+                                                {booking?.jobIds[tab.value] && (
+                                                    <Chip color="primary" size="small" label={'Live'} />
+                                                )}
+                                            </Stack>
+                                        }
                                         value={tab?.value}
                                     />
                                 )
