@@ -70,6 +70,25 @@ export const useAddEditCustomerDetails = () => {
         [response]
     )
 
+    const onBlacklist = useCallback(
+        async (values) => {
+            try {
+                await axios.post(`${SERVER_URL}/gateway/admin-api/customers/${customerId}/blacklist`)
+                showSnackbar({
+                    msg: 'Customer Blacklisted',
+                    sev: 'success',
+                })
+                setRefresh(true)
+                setRefresh(true)
+            } catch (error) {
+                showSnackbar({
+                    msg: error?.response?.data?.developerInfo,
+                    sev: 'error',
+                })
+            }
+        }
+    )
+
     const form = useFormik({
         initialValues: {
             name: '',
@@ -109,7 +128,8 @@ export const useAddEditCustomerDetails = () => {
             form,
             handleFormEditCancel,
             disableForm,
+            onBlacklist,
         }),
-        [response, refresh, handleFormEditCancel, setRefresh, formikProps, , disableForm, form]
+        [response, refresh, handleFormEditCancel, setRefresh, formikProps, , disableForm, form, onBlacklist]
     )
 }
