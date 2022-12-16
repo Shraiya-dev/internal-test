@@ -1,4 +1,4 @@
-import { Button, Grid, InputLabel, LinearProgress, Paper, Select, Stack, TextField, Typography } from '@mui/material'
+import { Button, Grid, InputLabel, Chip, Paper, Select, Stack, TextField, Typography } from '@mui/material'
 import DashboardLayout from '../../../components/Layouts/DashboardLayout'
 import { getSelectOptions } from '../../../utils/InputHelpers'
 import { useAddEditCustomerDetails } from './hooks/useAddEditCustomerDetails'
@@ -6,7 +6,7 @@ import { DesignationOptions } from '../../../constant/customers'
 import { Link } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 export const AddEditCustomerDetail = () => {
-    const { customer, organisation, formikProps, form, refresh, disableForm, handleFormEditCancel } =
+    const { customer, organisation, formikProps, form, refresh, disableForm, handleFormEditCancel, onBlacklist } =
         useAddEditCustomerDetails()
     return (
         <DashboardLayout loading={refresh}>
@@ -19,8 +19,25 @@ export const AddEditCustomerDetail = () => {
                 spacing={2}
             >
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="h4">Customer Details</Typography>
                     <Stack direction="row" spacing={1}>
+                    <Typography variant="h4">Customer Details</Typography>
+                    {!!customer?.isBlacklisted && 
+                        <Chip
+                                sx={(theme) => ({
+                                    backgroundColor: theme.palette.error.dark,
+                                    color: theme.palette.primary.contrastText,
+                                    height: '36px',
+                                })}
+                                label='Blacklisted'
+                            />
+                    }
+                    </Stack>
+                    <Stack direction="row" spacing={1}>
+                        {!customer?.isBlacklisted &&
+                            (<Button variant="contained" color="error" onClick={() => onBlacklist()}>
+                                Blacklist
+                            </Button>)
+                        }
                         {disableForm ? (
                             <Button variant="outlined" onClick={() => handleFormEditCancel(false)}>
                                 Edit
