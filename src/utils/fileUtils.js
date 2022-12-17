@@ -1,4 +1,4 @@
-import * as XLSX from 'xlsx'
+import * as XLSX from 'xlsx/xlsx.mjs'
 
 export const retriveDataFromExcel = async (fileBlob, callback) => {
     var reader = new FileReader()

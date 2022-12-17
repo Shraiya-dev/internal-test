@@ -37,15 +37,17 @@ export const useAddEditCustomerDetails = () => {
     const onSubmit = useCallback(
         async (values) => {
             try {
+                const gstin = !response?.organisation
+                    ? values.gstin?.trim().length > 0
+                        ? values.gstin?.trim()
+                        : undefined
+                    : undefined
                 const payload = {
                     name: values.name?.trim().length > 0 ? values.name?.trim() : undefined,
                     email: values.email?.trim().length > 0 ? values.email?.trim() : undefined,
                     companyName: values.companyName?.trim().length > 0 ? values.companyName?.trim() : undefined,
-                    GSTIN: !response?.organisation
-                        ? values.gstin?.trim().length > 0
-                            ? values.gstin?.trim()
-                            : undefined
-                        : undefined,
+                    GSTIN: gstin,
+                    doesNotHaveGstin: !gstin,
                     designation: !response?.organisation
                         ? values.designation?.trim() !== 'none'
                             ? values.designation?.trim()
@@ -58,7 +60,6 @@ export const useAddEditCustomerDetails = () => {
                     sev: 'success',
                 })
                 setDisableForm(true)
-                setRefresh(true)
                 setRefresh(true)
             } catch (error) {
                 showSnackbar({
@@ -79,14 +80,14 @@ export const useAddEditCustomerDetails = () => {
                     sev: 'success',
                 })
                 setRefresh(true)
-                setRefresh(true)
             } catch (error) {
                 showSnackbar({
                     msg: error?.response?.data?.developerInfo,
                     sev: 'error',
                 })
             }
-        }
+        },
+        [customerId]
     )
 
     const form = useFormik({
