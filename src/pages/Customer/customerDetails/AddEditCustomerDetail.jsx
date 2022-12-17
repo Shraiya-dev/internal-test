@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Button, Grid, InputLabel, Chip, Paper, Select, Stack, TextField, Typography } from '@mui/material'
 import DashboardLayout from '../../../components/Layouts/DashboardLayout'
 import { getSelectOptions } from '../../../utils/InputHelpers'
@@ -5,11 +6,37 @@ import { useAddEditCustomerDetails } from './hooks/useAddEditCustomerDetails'
 import { DesignationOptions } from '../../../constant/customers'
 import { Link } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
+import ConfirmationDialog from '../../../components/ConfirmationDialog'
 export const AddEditCustomerDetail = () => {
     const { customer, organisation, formikProps, form, refresh, disableForm, handleFormEditCancel, onBlacklist } =
         useAddEditCustomerDetails()
+    const [confirmationDialogProps, setConfirmationDialogProps] = useState({
+        openBlacklistConfirmDialog: false,
+    })
     return (
         <DashboardLayout loading={refresh}>
+            <ConfirmationDialog
+                content={
+                    <>
+                        <Typography variant="h5">Blacklist Customer?</Typography>
+                        <Typography pt={3}>
+                            <Typography component="span" color="error">
+                                <strong> Disclaimer:</strong>
+                            </Typography>{' '}
+                            Blacklisted Customers will be logged out and will not be able
+                            to login again into the ProjectHero Customer App or WebApp.
+                        </Typography>
+                    </>
+                }
+                cancel={() => {
+                    setConfirmationDialogProps({ openBlacklistConfirmDialog: false });
+                }}
+                confirm={() => {
+                    onBlacklist();
+                    setConfirmationDialogProps({ openBlacklistConfirmDialog: false });
+                }}
+                open={confirmationDialogProps.openBlacklistConfirmDialog}
+            />
             <Stack
                 component={'form'}
                 onSubmit={form.handleSubmit}
@@ -34,7 +61,7 @@ export const AddEditCustomerDetail = () => {
                     </Stack>
                     <Stack direction="row" spacing={1}>
                         {!customer?.isBlacklisted &&
-                            (<Button variant="contained" color="error" onClick={() => onBlacklist()}>
+                            (<Button variant="contained" color="error" onClick={() => setConfirmationDialogProps({ openBlacklistConfirmDialog: true })}>
                                 Blacklist
                             </Button>)
                         }
