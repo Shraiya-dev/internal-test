@@ -13,7 +13,7 @@ const SnackbarProvider = ({ children }) => {
             ...p,
             open: false,
         }))
-    })
+    }, [])
     const showSnackbar = useCallback((props) => {
         setSnackbarProps((p) => ({
             ...p,
@@ -23,17 +23,16 @@ const SnackbarProvider = ({ children }) => {
             ...props,
             open: true,
         })
-    })
+    }, [])
 
     const snackbarValue = useMemo(() => ({ showSnackbar: showSnackbar }), [showSnackbar])
     return (
         <Provider value={snackbarValue}>
             {children}
-
             <Snackbar
-                autoHideDuration={snackbarProps.autoHideDuration ?? 6000}
+                autoHideDuration={snackbarProps?.autoHideDuration ?? 6000}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={snackbarProps.open}
+                open={snackbarProps?.open}
                 onClose={handelClose}
             >
                 <Alert variant="filled" onClose={handelClose} severity={snackbarProps?.sev ?? 'info'}>

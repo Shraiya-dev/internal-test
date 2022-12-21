@@ -47,7 +47,12 @@ export const useAddEditCustomerDetails = () => {
                     email: values.email?.trim().length > 0 ? values.email?.trim() : undefined,
                     companyName: values.companyName?.trim().length > 0 ? values.companyName?.trim() : undefined,
                     GSTIN: gstin,
-                    doesNotHaveGstin: !gstin,
+                    _removeFields: gstin
+                        ? undefined
+                        : {
+                              gstin: '',
+                          },
+                    // doesNotHaveGstin: !gstin,
                     designation: !response?.organisation
                         ? values.designation?.trim() !== 'none'
                             ? values.designation?.trim()

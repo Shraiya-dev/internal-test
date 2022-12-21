@@ -1,12 +1,13 @@
 import { Button, Dialog, Grid, LinearProgress, Pagination, Paper, Stack, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import React from 'react'
+import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { QueryField } from '../../components/queryInputs'
 import { useOrganization } from './hooks/useOrganization'
 import { AddOrgMember } from '../Customer/AddOrgMember'
 import { GSTINModal } from '../../components'
+import { CreateOrganizationForCustomer } from '../Customer/CreateOrganizationForCustomer'
 export const Organisation = () => {
     const {
         columns,
@@ -18,22 +19,40 @@ export const Organisation = () => {
         openGSTINModal,
         modalHandler,
     } = useOrganization()
+    const [createOrganizationForCustomerProps, setCreateOrganizationForCustomerProps] = useState({
+        open: false,
+    })
     const [sp, setSp] = useSearchParams()
     return (
         <>
             <AddOrgMember {...addOrgMemberProps} />
-            <DashboardLayout>
-                <Typography variant="h4" fontWeight={600}>
-                    Manage Organisation
-                </Typography>
+            <CreateOrganizationForCustomer
+                {...createOrganizationForCustomerProps}
+                onClose={() =>
+                    setCreateOrganizationForCustomerProps({
+                        open: false,
+                    })
+                }
+            />
 
-                <Paper
-                    elevation={0}
-                    sx={{
-                        mt: 2,
-                        p: 2,
-                    }}
-                >
+            <DashboardLayout>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant="h4" fontWeight={600}>
+                        Manage Organisation
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            setCreateOrganizationForCustomerProps({
+                                open: true,
+                            })
+                        }}
+                    >
+                        Create Organisation
+                    </Button>
+                </Stack>
+
+                <Paper elevation={0} sx={{ mt: 2, p: 2 }}>
                     <Grid container spacing={2}>
                         <Grid item>
                             <QueryField
