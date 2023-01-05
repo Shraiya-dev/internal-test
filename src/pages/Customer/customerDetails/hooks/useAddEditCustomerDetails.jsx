@@ -52,7 +52,7 @@ export const useAddEditCustomerDetails = () => {
                         : {
                               gstin: '',
                           },
-                    // doesNotHaveGstin: !gstin,
+                    doesNotHaveGstin: !gstin,
                     designation: !response?.organisation
                         ? values.designation?.trim() !== 'none'
                             ? values.designation?.trim()
