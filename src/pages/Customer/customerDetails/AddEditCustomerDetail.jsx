@@ -8,8 +8,17 @@ import { Link } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import ConfirmationDialog from '../../../components/ConfirmationDialog'
 export const AddEditCustomerDetail = () => {
-    const { customer, organisation, formikProps, form, refresh, disableForm, handleFormEditCancel, onBlacklist } =
-        useAddEditCustomerDetails()
+    const {
+        customer,
+        organisation,
+        formikProps,
+        form,
+        refresh,
+        disableForm,
+        handleFormEditCancel,
+        onBlacklist,
+        onMarkVerified,
+    } = useAddEditCustomerDetails()
     const [confirmationDialogProps, setConfirmationDialogProps] = useState({
         openBlacklistConfirmDialog: false,
     })
@@ -23,17 +32,17 @@ export const AddEditCustomerDetail = () => {
                             <Typography component="span" color="error">
                                 <strong> Disclaimer:</strong>
                             </Typography>{' '}
-                            Blacklisted Customers will be logged out and will not be able
-                            to login again into the ProjectHero Customer App or WebApp.
+                            Blacklisted Customers will be logged out and will not be able to login again into the
+                            ProjectHero Customer App or WebApp.
                         </Typography>
                     </>
                 }
                 cancel={() => {
-                    setConfirmationDialogProps({ openBlacklistConfirmDialog: false });
+                    setConfirmationDialogProps({ openBlacklistConfirmDialog: false })
                 }}
                 confirm={() => {
-                    onBlacklist();
-                    setConfirmationDialogProps({ openBlacklistConfirmDialog: false });
+                    onBlacklist()
+                    setConfirmationDialogProps({ openBlacklistConfirmDialog: false })
                 }}
                 open={confirmationDialogProps.openBlacklistConfirmDialog}
             />
@@ -47,24 +56,33 @@ export const AddEditCustomerDetail = () => {
             >
                 <Stack direction="row" justifyContent="space-between">
                     <Stack direction="row" spacing={1}>
-                    <Typography variant="h4">Customer Details</Typography>
-                    {!!customer?.isBlacklisted && 
-                        <Chip
+                        <Typography variant="h4">Customer Details</Typography>
+                        {!!customer?.isBlacklisted && (
+                            <Chip
                                 sx={(theme) => ({
                                     backgroundColor: theme.palette.error.dark,
                                     color: theme.palette.primary.contrastText,
                                     height: '36px',
                                 })}
-                                label='Blacklisted'
+                                label="Blacklisted"
                             />
-                    }
+                        )}
                     </Stack>
                     <Stack direction="row" spacing={1}>
-                        {!customer?.isBlacklisted &&
-                            (<Button variant="contained" color="error" onClick={() => setConfirmationDialogProps({ openBlacklistConfirmDialog: true })}>
+                        {customer?.customerVerification?.verificationStatus !== 'FULLY_VERIFIED' && (
+                            <Button variant="contained" onClick={() => onMarkVerified()}>
+                                Mark as Verified
+                            </Button>
+                        )}
+                        {!customer?.isBlacklisted && (
+                            <Button
+                                variant="contained"
+                                color="error"
+                                onClick={() => setConfirmationDialogProps({ openBlacklistConfirmDialog: true })}
+                            >
                                 Blacklist
-                            </Button>)
-                        }
+                            </Button>
+                        )}
                         {disableForm ? (
                             <Button variant="outlined" onClick={() => handleFormEditCancel(false)}>
                                 Edit
@@ -95,6 +113,10 @@ export const AddEditCustomerDetail = () => {
                         <Grid item xs={4}>
                             <InputLabel>Status</InputLabel>
                             <Typography>{customer?.customerStatus ?? 'NA'}</Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <InputLabel>Verification Status</InputLabel>
+                            <Typography>{customer?.customerVerification?.verificationStatus ?? 'NA'}</Typography>
                         </Grid>
                     </Grid>
                 </Paper>
