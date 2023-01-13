@@ -95,6 +95,22 @@ export const useAddEditCustomerDetails = () => {
         [customerId]
     )
 
+    const onMarkVerified = useCallback(async () => {
+        try {
+            await axios.post(`${SERVER_URL}/gateway/admin-api/customers/${customerId}/mark-as-fully-verified`)
+            showSnackbar({
+                msg: 'Customer Marked as Verified',
+                sev: 'success',
+            })
+            setRefresh(true)
+        } catch (error) {
+            showSnackbar({
+                msg: error?.response?.data?.developerInfo,
+                sev: 'error',
+            })
+        }
+    }, [customerId])
+
     const form = useFormik({
         initialValues: {
             name: '',
@@ -135,7 +151,19 @@ export const useAddEditCustomerDetails = () => {
             handleFormEditCancel,
             disableForm,
             onBlacklist,
+            onMarkVerified,
         }),
-        [response, refresh, handleFormEditCancel, setRefresh, formikProps, , disableForm, form, onBlacklist]
+        [
+            response,
+            refresh,
+            handleFormEditCancel,
+            setRefresh,
+            formikProps,
+            ,
+            disableForm,
+            form,
+            onBlacklist,
+            onMarkVerified,
+        ]
     )
 }
