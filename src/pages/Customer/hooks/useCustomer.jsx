@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
+import { ADD_PROJECT_ROUTE } from '../../../routes'
 import { validateEmail } from '../../../utils/optionHelpers'
 const SERVER_URL = getBackendUrl()
 
@@ -144,6 +145,19 @@ export const useCustomer = () => {
                                 <Button variant="outlined">Create Project </Button>
                             </Link>
                         )}
+                    </Stack>
+                ),
+                sortable: true,
+                width: 400,
+            },
+            {
+                field: 'addProjects',
+                headerName: 'AddProjects',
+                renderCell: (params) => (
+                    <Stack direction="row" spacing={1}>
+                        <Link to={`/projects/create/${params?.row?.customerId}`}>
+                            <Button variant="outlined">Create Project </Button>
+                        </Link>
                     </Stack>
                 ),
                 sortable: true,
