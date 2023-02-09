@@ -1,11 +1,9 @@
-import { debounce, Tooltip, Typography } from '@mui/material'
+import { Button, debounce, Stack, Typography } from '@mui/material'
 import axios from 'axios'
-import { useFormik } from 'formik'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
-import { isError } from '../../../utils/formErrorsChecker'
 const SERVER_URL = getBackendUrl()
 
 export const useProject = () => {
@@ -96,6 +94,18 @@ export const useProject = () => {
             headerName: 'Booking Count',
 
             width: 250,
+        },
+        {
+            field: 'addBooking',
+            headerName: 'AddBooking',
+            renderCell: (params) => (
+                <Stack direction="row" spacing={1}>
+                    <Link to={`/projects/${params?.id}/booking/create`}>
+                        <Button variant="outlined">Create Booking</Button>
+                    </Link>
+                </Stack>
+            ),
+            width: 400,
         },
     ]
 

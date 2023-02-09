@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { useMemo, useState, useCallback, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import { getBackendUrl } from '../../../../api'
 import { useFormikProps } from '../../../../hooks/useFormikProps'
@@ -15,6 +15,8 @@ export const useAddEditCustomerDetails = () => {
     const [disableForm, setDisableForm] = useState(true)
     const { customerId } = useParams()
     const { showSnackbar } = useSnackbar()
+    const navigate = useNavigate()
+
     const fetchUserDetails = useCallback(async () => {
         try {
             const { data } = await axios.get(`${SERVER_URL}/gateway/admin-api/customers/${customerId}`)
@@ -25,6 +27,7 @@ export const useAddEditCustomerDetails = () => {
             setRefresh(false)
         }
     }, [customerId])
+
     const handleFormEditCancel = useCallback(async (cancel) => {
         setDisableForm(cancel)
         setRefresh(cancel)
@@ -32,8 +35,13 @@ export const useAddEditCustomerDetails = () => {
 
     useEffect(() => {
         if (!refresh) return
-        fetchUserDetails()
+        if (customerId) {
+            fetchUserDetails()
+        } else {
+            setDisableForm(false)
+        }
     }, [refresh])
+
     const onSubmit = useCallback(
         async (values) => {
             try {
@@ -111,6 +119,49 @@ export const useAddEditCustomerDetails = () => {
         }
     }, [customerId])
 
+    const onMarkGold = useCallback(async () => {
+        try {
+            await axios.post(`${SERVER_URL}/gateway/admin-api/customers/add-members`, {
+                customerIds: [customerId],
+                membershipType: 'GOLD',
+            })
+            showSnackbar({
+                msg: 'Customer Marked as Gold',
+                sev: 'success',
+            })
+            setRefresh(true)
+        } catch (error) {
+            showSnackbar({
+                msg: error?.response?.data?.developerInfo,
+                sev: 'error',
+            })
+        }
+    }, [customerId])
+
+    const onAddCustomer = useCallback(async (values) => {
+        try {
+            const payload = {
+                name: values.name?.trim().length > 0 ? values.name?.trim() : undefined,
+                companyName: values.companyName?.trim().length > 0 ? values.companyName?.trim() : undefined,
+                phoneNumber: values.phoneNumber ? values.phoneNumber : undefined,
+            }
+            const { data } = await axios.post(`${SERVER_URL}/gateway/admin-api/customers/`, payload)
+            if (data) {
+                navigate(`/customers/${data?.payload?.customerId}`)
+                showSnackbar({
+                    msg: 'Customer Added Successfully',
+                    sev: 'success',
+                })
+            }
+            setRefresh(true)
+        } catch (error) {
+            showSnackbar({
+                msg: error?.response?.data?.developerInfo,
+                sev: 'error',
+            })
+        }
+    }, [])
+
     const form = useFormik({
         initialValues: {
             name: '',
@@ -118,6 +169,7 @@ export const useAddEditCustomerDetails = () => {
             companyName: '',
             gstin: '',
             designation: 'none',
+            phoneNumber: '',
         },
         validationSchema: Yup.object({
             gstin: Yup.string().when({
@@ -152,6 +204,8 @@ export const useAddEditCustomerDetails = () => {
             disableForm,
             onBlacklist,
             onMarkVerified,
+            onAddCustomer,
+            onMarkGold,
         }),
         [
             response,
@@ -159,11 +213,12 @@ export const useAddEditCustomerDetails = () => {
             handleFormEditCancel,
             setRefresh,
             formikProps,
-            ,
             disableForm,
             form,
             onBlacklist,
             onMarkVerified,
+            onAddCustomer,
+            onMarkGold,
         ]
     )
 }

@@ -8,7 +8,7 @@ export const REWARD_PENALTIES_ROUTE = '/rewards'
 
 export const PROJECT_ROUTE = '/projects'
 export const PROJECT_BY_ID_ROUTE = '/projects/:projectId'
-export const ADD_PROJECT_ROUTE = '/projects/create'
+export const ADD_PROJECT_ROUTE = '/projects/create/:customerId'
 export const DASHBOARD_ROUTE = '/dashboard'
 export const BOOKING_ROUTE = '/bookings'
 export const BOOKING_BY_ID_ROUTE = '/bookings/:bookingId'
@@ -28,6 +28,7 @@ export const CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE = '/customers/:customerId/book
 export const ATTENDANCE_ROUTE = '/attendance'
 export const JCA_ROUTE = '/job-cards'
 export const CUSTOMER_ROUTE = '/customers'
+export const ADD_CUSTOMER_ROUTE = '/customers/create'
 export const CUSTOMER_CUSTOMER_ID_ROUTE = '/customers/:customerId'
 
 export const ORGANIZATION_ROUTE = '/organization'

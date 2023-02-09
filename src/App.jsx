@@ -13,6 +13,7 @@ import BookingById from './pages/Bookings/BookingById'
 import Bookings from './pages/Bookings/Bookings'
 import CreateBookingForm from './pages/Bookings/CreateBookingForm'
 import CreateBookings from './pages/Bookings/CreateBookings'
+import { AddCustomer } from './pages/Customer/AddCustomer'
 import { AddEditCustomerDetail } from './pages/Customer/customerDetails/AddEditCustomerDetail'
 import Dashboard from './pages/Dashboard/Dashboard'
 import JCA from './pages/JCA/jobCards'
@@ -36,8 +37,10 @@ import { BookingProvider } from './providers/BookingProvider'
 import { LoaderProvider } from './providers/LoaderProvider'
 import { SnackbarProvider } from './providers/SnackbarProvider'
 import {
+    ADD_CUSTOMER_ROUTE,
     ADD_ORDERS_ROUTE,
     ADD_PARTNER_ROUTE,
+    ADD_PROJECT_ROUTE,
     ADD_WORKER_IN_BOOKING_ROUTE,
     ADD_WORKER_ROUTE,
     ATTENDANCE_ROUTE,
@@ -126,6 +129,16 @@ function App() {
                                     element={
                                         <PrivateRoute>
                                             <Project />
+                                        </PrivateRoute>
+                                    }
+                                />
+                                <Route
+                                    path={ADD_PROJECT_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <DashboardLayout>
+                                                <CreateProject />
+                                            </DashboardLayout>
                                         </PrivateRoute>
                                     }
                                 />
@@ -341,6 +354,16 @@ function App() {
                                         </PrivateRoute>
                                     }
                                 />
+
+                                <Route
+                                    path={ADD_CUSTOMER_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <AddCustomer />
+                                        </PrivateRoute>
+                                    }
+                                />
+
                                 <Route
                                     path={CUSTOMER_CUSTOMER_ID_ROUTE}
                                     element={

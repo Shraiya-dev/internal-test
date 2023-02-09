@@ -65,7 +65,7 @@ const CreateBookingForm = () => {
             />
 
             <Box component={'form'} onSubmit={form.handleSubmit}>
-                <Grid component={Paper} p={2} container md={12} lg={7} spacing={1}>
+                <Grid component={Paper} p={2} container md={12} spacing={1}>
                     <Grid item xs={12}>
                         <Stack sx={{ mb: 2 }} direction="row" justifyContent="space-between">
                             <Typography variant="h4">Create Booking</Typography>
@@ -166,7 +166,7 @@ const CreateBookingForm = () => {
                             </Stack>
                         </Grid>
 
-                        {form.values.jobType !== 'none' && (
+                        {/* {form.values.jobType !== 'none' && (
                             <>
                                 <Grid item xs={12}>
                                     <Paper variant="outlined">
@@ -201,7 +201,7 @@ const CreateBookingForm = () => {
                                     </Paper>
                                 </Grid>
                             </>
-                        )}
+                        )} */}
 
                         {['Helper', 'Technician', 'Supervisor'].map((item) => {
                             return (

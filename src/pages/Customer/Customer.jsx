@@ -1,9 +1,10 @@
-import { Button, Grid, InputAdornment, LinearProgress, Pagination, Paper, Stack, Typography } from '@mui/material'
+import { Button, Grid, InputAdornment, LinearProgress, Link, Pagination, Paper, Stack, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import React from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { QueryField } from '../../components/queryInputs'
+import { ADD_CUSTOMER_ROUTE } from '../../routes'
 import { validateEmail } from '../../utils/optionHelpers'
 import { EditOrgCustomer } from './EditOrgCustomer'
 import { useCustomer } from './hooks/useCustomer'
@@ -11,14 +12,20 @@ import { useCustomer } from './hooks/useCustomer'
 export const Customer = () => {
     const { columns, isLoading, customers, hasMore, getCustomer, editOrgCustomerProps } = useCustomer()
     const [sp, setSp] = useSearchParams()
+    const navigate = useNavigate()
 
     return (
         <>
             <EditOrgCustomer {...editOrgCustomerProps} />
             <DashboardLayout>
-                <Typography variant="h4" fontWeight={600}>
-                    Manage Customer
-                </Typography>
+                <Grid item display="flex">
+                    <Typography variant="h4" fontWeight={600} flexGrow={1}>
+                        Manage Customer
+                    </Typography>
+                    <Button variant="contained" onClick={() => navigate(ADD_CUSTOMER_ROUTE)}>
+                        Add Customer
+                    </Button>
+                </Grid>
                 <Paper
                     elevation={0}
                     sx={{

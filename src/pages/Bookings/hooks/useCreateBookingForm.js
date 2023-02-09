@@ -26,7 +26,7 @@ export const useCreateBookingForm = () => {
                 projectId: project?.id,
                 customerId: customer?.customerId,
                 jobType: values?.jobType,
-                tags: values?.tags,
+                tags: [],
                 requirements: {
                     SUPERVISOR: {
                         count: Number(values.qtySupervisor),

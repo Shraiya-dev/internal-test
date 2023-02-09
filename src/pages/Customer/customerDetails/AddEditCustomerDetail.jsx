@@ -18,10 +18,12 @@ export const AddEditCustomerDetail = () => {
         handleFormEditCancel,
         onBlacklist,
         onMarkVerified,
+        onMarkGold,
     } = useAddEditCustomerDetails()
     const [confirmationDialogProps, setConfirmationDialogProps] = useState({
         openBlacklistConfirmDialog: false,
     })
+
     return (
         <DashboardLayout loading={refresh}>
             <ConfirmationDialog
@@ -69,6 +71,12 @@ export const AddEditCustomerDetail = () => {
                         )}
                     </Stack>
                     <Stack direction="row" spacing={1}>
+                        {console.log(customer, 'fnodsnvfmvo')}
+                        {true && (
+                            <Button variant="contained" onClick={() => onMarkGold()}>
+                                Mark as Gold
+                            </Button>
+                        )}
                         {customer?.customerVerification?.verificationStatus !== 'FULLY_VERIFIED' && (
                             <Button variant="contained" onClick={() => onMarkVerified()}>
                                 Mark as Verified
@@ -106,16 +114,20 @@ export const AddEditCustomerDetail = () => {
                 </Stack>
                 <Paper sx={{ p: 2 }}>
                     <Grid container spacing={1}>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <InputLabel>Phone Number</InputLabel>
                             <Typography>{customer?.phoneNumber ?? 'NA'}</Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <InputLabel>Status</InputLabel>
                             <Typography>{customer?.customerStatus ?? 'NA'}</Typography>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <InputLabel>Verification Status</InputLabel>
+                            <Typography>{customer?.customerVerification?.verificationStatus ?? 'NA'}</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <InputLabel>Membership Status</InputLabel>
                             <Typography>{customer?.customerVerification?.verificationStatus ?? 'NA'}</Typography>
                         </Grid>
                     </Grid>
