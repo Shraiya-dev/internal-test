@@ -281,7 +281,7 @@ const CreateBookingForm = () => {
                             )
                         })}
 
-                        <Grid item xs={4}>
+                        {/* <Grid item xs={4}>
                             <InputLabel>Shift Start Timing *</InputLabel>
                             <Select
                                 fullWidth
@@ -297,8 +297,8 @@ const CreateBookingForm = () => {
                                     ...getTimeOptions('am'),
                                 ])}
                             </Select>
-                        </Grid>
-                        <Grid item xs={4}>
+                        </Grid> */}
+                        {/* <Grid item xs={4}>
                             <InputLabel>Shift End Timing *</InputLabel>
                             <Select
                                 fullWidth
@@ -314,7 +314,7 @@ const CreateBookingForm = () => {
                                     ...getTimeOptions('pm'),
                                 ])}
                             </Select>
-                        </Grid>
+                        </Grid> */}
                         <Grid item xs={4}>
                             <InputLabel>Start Date *</InputLabel>
                             <TextField
@@ -331,7 +331,7 @@ const CreateBookingForm = () => {
                             />
                         </Grid>
 
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <FormControl>
                                 <FormLabel id="demo-row-radio-buttons-group-label">Booking Duration *</FormLabel>
                                 <RadioGroup
@@ -353,9 +353,9 @@ const CreateBookingForm = () => {
                                     })}
                                 </RadioGroup>
                             </FormControl>
-                        </Grid>
+                        </Grid> */}
 
-                        <Grid item xs={4}>
+                        {/* <Grid item xs={4}>
                             <InputLabel>Over Time Details</InputLabel>
                             <Select
                                 fullWidth
@@ -374,7 +374,7 @@ const CreateBookingForm = () => {
                                 <MenuItem value={1.5}>1.5</MenuItem>
                                 <MenuItem value={2}>2</MenuItem>
                             </Select>
-                        </Grid>
+                        </Grid> */}
                         {/* <Grid container item xs={12}>
                             <Grid item xs={12}>
                                 <InputLabel>Benefits</InputLabel>

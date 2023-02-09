@@ -54,11 +54,11 @@ export const useCreateBookingForm = () => {
                 // ].filter((item) => item !== ''),
                 startDate: values.startDate,
 
-                shiftTime: `${values.shiftStartTime}-${values.shiftEndTime}`,
+                // shiftTime: `${values.shiftStartTime}-${values.shiftEndTime}`,
                 bookingDuration: values?.durationType,
-                overTime: {
-                    rate: values.overTimeRate,
-                },
+                // overTime: {
+                //     rate: values.overTimeRate,
+                // },
                 dailyTarget: {
                     HELPER:
                         Number(values.dtHelper) !== 0 || values.pduHelper !== 'none'
@@ -117,9 +117,9 @@ export const useCreateBookingForm = () => {
             durationType: BookingDurations[0],
             state: 'none',
             city: 'none',
-            shiftTime: 'none',
-            shiftStartTime: 'none',
-            shiftEndTime: 'none',
+            // shiftTime: 'none',
+            // shiftStartTime: 'none',
+            // shiftEndTime: 'none',
             wageHelper: '',
             wageSupervisor: '',
             wageTechnician: '',
@@ -151,12 +151,12 @@ export const useCreateBookingForm = () => {
             if (values.jobType === 'none') {
                 errors.jobType = true
             }
-            if (values.shiftStartTime === 'none') {
-                errors.shiftStartTime = true
-            }
-            if (values.shiftEndTime === 'none') {
-                errors.shiftEndTime = true
-            }
+            // if (values.shiftStartTime === 'none') {
+            //     errors.shiftStartTime = true
+            // }
+            // if (values.shiftEndTime === 'none') {
+            //     errors.shiftEndTime = true
+            // }
             if (Number(values.qtyHelper) && values.wageHelper === '') {
                 errors.wageHelper = true
             }
@@ -195,9 +195,9 @@ export const useCreateBookingForm = () => {
                 if (values.pduTechnician === 'none') errors.pduTechnician = true
             }
 
-            if (values.overTimeRate === 'none') {
-                errors.overTimeRate = true
-            }
+            // if (values.overTimeRate === 'none') {
+            //     errors.overTimeRate = true
+            // }
 
             return errors
         },
