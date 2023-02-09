@@ -1,34 +1,11 @@
-import {
-    Box,
-    Button,
-    Checkbox,
-    Chip,
-    Divider,
-    FormControl,
-    FormControlLabel,
-    FormLabel,
-    Grid,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Radio,
-    RadioGroup,
-    Select,
-    Stack,
-    TextField,
-    Typography,
-} from '@mui/material'
-import { format } from 'date-fns'
+import { Box, Button, Divider, Grid, InputLabel, Paper, Select, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import ConfirmationDialog from '../../components/ConfirmationDialog'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
-import { BookingDurations, JobTypeOptions } from '../../constant/booking'
+import { JobTypeOptions } from '../../constant/booking'
 import { useSnackbar } from '../../providers/SnackbarProvider'
 import { getSelectOptions } from '../../utils/InputHelpers'
-import { tags } from '../../utils/optionHelpers'
-import { formatEnum } from '../../utils/stringHelpers'
-import { getTimeOptions } from '../../utils/timeOptions'
 import { useCreateBookingForm } from './hooks/useCreateBookingForm'
 
 const CreateBookingForm = () => {
@@ -315,7 +292,7 @@ const CreateBookingForm = () => {
                                 ])}
                             </Select>
                         </Grid> */}
-                        <Grid item xs={4}>
+                        {/* <Grid item xs={4}>
                             <InputLabel>Start Date *</InputLabel>
                             <TextField
                                 fullWidth
@@ -329,7 +306,7 @@ const CreateBookingForm = () => {
                                     form.setFieldValue(e.target.name, new Date(e.target.value))
                                 }}
                             />
-                        </Grid>
+                        </Grid> */}
 
                         {/* <Grid item xs={12}>
                             <FormControl>

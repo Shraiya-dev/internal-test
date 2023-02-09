@@ -52,7 +52,7 @@ export const useCreateBookingForm = () => {
                 //     values.weeklyKharchi ? 'WEEKLY_KHARCHI' : '',
                 //     values.medicalSupport ? 'MEDICAL_SUPPORT' : '',
                 // ].filter((item) => item !== ''),
-                startDate: values.startDate,
+                // startDate: values.startDate,
 
                 // shiftTime: `${values.shiftStartTime}-${values.shiftEndTime}`,
                 bookingDuration: values?.durationType,
