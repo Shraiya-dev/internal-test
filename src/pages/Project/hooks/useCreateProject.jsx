@@ -47,9 +47,6 @@ export const useCreateProject = () => {
             if (values.projectName === '') {
                 errors.projectName = 'Required *'
             }
-            if (values.siteAddress === '') {
-                errors.siteAddress = 'Required *'
-            }
             if (values.state === 'none') {
                 errors.state = 'Required *'
             }
@@ -63,43 +60,6 @@ export const useCreateProject = () => {
             if (values.pincode !== '' && !isPinCodeValid(values.pincode)) {
                 errors.pincode = 'Invalid format *'
             }
-            if (values.geoLocation === '') {
-                errors.geoLocation = 'Required *'
-            }
-            if (values.geoLocation !== '' && !validateRegex(regexPatterns.geoLocation, values.geoLocation)) {
-                errors.geoLocation = 'Invalid format *'
-            }
-
-            if (values.pf === '') {
-                errors.pf = 'Required *'
-            }
-            if (values.esi === '') {
-                errors.esi = 'Required *'
-            }
-
-            if (values.accommodation === '') {
-                errors.accommodation = 'Required *'
-            }
-            if (values.food === '') {
-                errors.food = 'Required *'
-            }
-            if (values.joiningBonus === '') {
-                errors.joiningBonus = 'Required *'
-            }
-            if (values.guaranteedSalary === '') {
-                errors.guaranteedSalary = 'Required *'
-            }
-            if (values.weeklyKharchi === '') {
-                errors.weeklyKharchi = 'Required *'
-            }
-            if (values.medicalSupport === '') {
-                errors.medicalSupport = 'Required *'
-            }
-
-            if (values.otf === 'none') {
-                errors.otf = 'Required *'
-            }
-
             return errors
         },
         onSubmit: async (values, fh) => {
@@ -110,9 +70,9 @@ export const useCreateProject = () => {
                 city: values.city,
                 state: values.state,
                 pincode: values.pincode,
-                overTime: {
-                    rate: values.otf,
-                },
+                // overTime: {
+                //     rate: values.otf,
+                // },
                 benefits: [
                     values.pf ? 'PF' : '',
                     values.esi ? 'INSURANCE' : '',
