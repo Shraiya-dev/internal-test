@@ -7,7 +7,7 @@ import { CUSTOMER_ROUTE } from '../../routes'
 import { useAddEditCustomerDetails } from './customerDetails/hooks/useAddEditCustomerDetails'
 
 export const AddCustomer = () => {
-    const { form, disableForm, organisation, onAddCustomer } = useAddEditCustomerDetails()
+    const { form, disableForm, organisation } = useAddEditCustomerDetails()
     const formikProps = useFormikProps(form)
     const navigate = useNavigate()
 
@@ -53,7 +53,14 @@ export const AddCustomer = () => {
                                         fullWidth
                                         label="phoneNumber"
                                         {...formikProps('phoneNumber')}
+                                        onKeyDown={(e) => {
+                                            console.log(e.key, 'ffffff')
+                                            if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
+                                                e.preventDefault()
+                                            }
+                                        }}
                                         disabled={disableForm}
+                                        type={'number'}
                                     />
                                 </Grid>
 
