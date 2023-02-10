@@ -284,13 +284,13 @@ const CreateProject = () => {
                                     </RadioGroup>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            {/* <Grid item xs={6}>
                                 <FormLabel>Over Time Factor</FormLabel>
 
                                 <Select fullWidth variant="outlined" {...formikProps('otf')}>
                                     {getSelectOptions(OverTimeFactor)}
                                 </Select>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Paper>
                     <Paper sx={{ p: 2, mb: 2 }}>

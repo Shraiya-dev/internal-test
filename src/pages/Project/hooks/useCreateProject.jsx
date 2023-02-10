@@ -53,13 +53,6 @@ export const useCreateProject = () => {
             if (values.city === 'none') {
                 errors.city = 'Required *'
             }
-
-            if (values.pincode === '') {
-                errors.pincode = 'Required *'
-            }
-            if (values.pincode !== '' && !isPinCodeValid(values.pincode)) {
-                errors.pincode = 'Invalid format *'
-            }
             return errors
         },
         onSubmit: async (values, fh) => {

@@ -460,7 +460,7 @@ const BookingForm = () => {
                                         onBlur={form.handleBlur}
                                     />
                                 </Grid>
-                                <Grid item xs={3}>
+                                {/* <Grid item xs={3}>
                                     <TextField
                                         fullWidth
                                         disabled={formDisabled || Number(form.values['qty' + item]) === 0}
@@ -473,8 +473,8 @@ const BookingForm = () => {
                                         onChange={form.handleChange}
                                         onBlur={form.handleBlur}
                                     />
-                                </Grid>
-                                <Grid item xs={3}>
+                                </Grid> */}
+                                {/* <Grid item xs={3}>
                                     <Select
                                         fullWidth
                                         disabled={formDisabled || Number(form.values['qty' + item]) === 0}
@@ -492,12 +492,12 @@ const BookingForm = () => {
                                             { label: 'kg', value: 'kg' },
                                         ])}
                                     </Select>
-                                </Grid>
+                                </Grid> */}
                             </>
                         )
                     })}
 
-                    <Grid item xs={4}>
+                    {/* <Grid item xs={4}>
                         <InputLabel>Shift Start Timing *</InputLabel>
                         <Select
                             fullWidth
@@ -588,9 +588,9 @@ const BookingForm = () => {
                             <MenuItem value={1.5}>1.5</MenuItem>
                             <MenuItem value={2}>2</MenuItem>
                         </Select>
-                    </Grid>
+                    </Grid> */}
 
-                    <Grid container item xs={12}>
+                    {/* <Grid container item xs={12}>
                         <Grid item xs={12}>
                             <InputLabel>Benefits</InputLabel>
                         </Grid>
@@ -693,7 +693,7 @@ const BookingForm = () => {
                                 onBlur={form.handleBlur}
                             />
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </Paper>
         </>

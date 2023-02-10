@@ -351,13 +351,13 @@ const AddEditProject = () => {
                                     </RadioGroup>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            {/* <Grid item xs={6}>
                                 <FormLabel>Over Time Factor</FormLabel>
 
                                 <Select fullWidth variant="outlined" disabled={disabled} {...formikProps('otf')}>
                                     {getSelectOptions(OverTimeFactor)}
                                 </Select>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Paper>
                     <Paper sx={{ px: 2, mb: 2 }}>

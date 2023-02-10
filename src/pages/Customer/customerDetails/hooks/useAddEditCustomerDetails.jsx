@@ -44,6 +44,10 @@ export const useAddEditCustomerDetails = () => {
 
     const onSubmit = useCallback(
         async (values) => {
+            if (!customerId) {
+                onAddCustomer(values)
+                return
+            }
             try {
                 const gstin = !response?.organisation
                     ? values.gstin?.trim().length > 0
@@ -139,6 +143,7 @@ export const useAddEditCustomerDetails = () => {
     }, [customerId])
 
     const onAddCustomer = useCallback(async (values) => {
+        if (values.phoneNumber === '' || values.name === '') return
         try {
             const payload = {
                 name: values.name?.trim().length > 0 ? values.name?.trim() : undefined,
@@ -176,6 +181,8 @@ export const useAddEditCustomerDetails = () => {
                 is: !!response?.organisation,
                 then: Yup.string().matches(regexPatterns.gstin, 'Invalid gstin'),
             }),
+            name: Yup.string().required(),
+            phoneNumber: Yup.string().required(),
         }),
         onSubmit: onSubmit,
     })
@@ -188,6 +195,7 @@ export const useAddEditCustomerDetails = () => {
             companyName: customer?.companyName ?? '',
             gstin: customer?.GSTIN ?? '',
             designation: customer?.designation ?? 'none',
+            phoneNumber: customer?.phoneNumber ?? '',
         })
     }, [response])
     const formikProps = useFormikProps(form)

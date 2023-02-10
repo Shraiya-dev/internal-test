@@ -221,7 +221,7 @@ const CreateBookingForm = () => {
                                             onBlur={form.handleBlur}
                                         />
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    {/* <Grid item xs={3}>
                                         <TextField
                                             fullWidth
                                             disabled={Number(form.values['qty' + item]) === 0}
@@ -234,8 +234,8 @@ const CreateBookingForm = () => {
                                             onChange={form.handleChange}
                                             onBlur={form.handleBlur}
                                         />
-                                    </Grid>
-                                    <Grid item xs={3}>
+                                    </Grid> */}
+                                    {/* <Grid item xs={3}>
                                         <Select
                                             fullWidth
                                             disabled={Number(form.values['qty' + item]) === 0}
@@ -253,7 +253,7 @@ const CreateBookingForm = () => {
                                                 { label: 'kg', value: 'kg' },
                                             ])}
                                         </Select>
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>
                             )
                         })}

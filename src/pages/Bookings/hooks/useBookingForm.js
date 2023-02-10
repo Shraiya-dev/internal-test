@@ -41,47 +41,47 @@ export const useBookingForm = () => {
                         wage: Number(values.wageTechnician),
                     },
                 },
-                benefits: [
-                    values.pf ? 'PF' : '',
-                    values.esi ? 'INSURANCE' : '',
-                    values.accomodation ? 'ACCOMODATION' : '',
-                    values.travelAllowance ? 'PAID_TRAVEL' : '',
-                    values.food ? 'FOOD' : '',
-                    values.joiningBonus ? 'JOINING_BONUS' : '',
-                    values.guaranteedSalary ? 'GUARANTEED_SALARY' : '',
-                    values.weeklyKharchi ? 'WEEKLY_KHARCHI' : '',
-                    values.medicalSupport ? 'MEDICAL_SUPPORT' : '',
-                ].filter((item) => item !== ''),
-                startDate: values.startDate,
+                // benefits: [
+                //     values.pf ? 'PF' : '',
+                //     values.esi ? 'INSURANCE' : '',
+                //     values.accomodation ? 'ACCOMODATION' : '',
+                //     values.travelAllowance ? 'PAID_TRAVEL' : '',
+                //     values.food ? 'FOOD' : '',
+                //     values.joiningBonus ? 'JOINING_BONUS' : '',
+                //     values.guaranteedSalary ? 'GUARANTEED_SALARY' : '',
+                //     values.weeklyKharchi ? 'WEEKLY_KHARCHI' : '',
+                //     values.medicalSupport ? 'MEDICAL_SUPPORT' : '',
+                // ].filter((item) => item !== ''),
+                // startDate: values.startDate,
 
-                shiftTime: `${values.shiftStartTime}-${values.shiftEndTime}`,
-                bookingDuration: values?.durationType,
-                overTime: {
-                    rate: values.overTimeRate,
-                },
-                dailyTarget: {
-                    HELPER:
-                        Number(values.dtHelper) !== 0 && values.pduHelper !== 'none'
-                            ? {
-                                  target: Number(values.dtHelper),
-                                  metric: values.pduHelper,
-                              }
-                            : undefined,
-                    TECHNICIAN:
-                        Number(values.dtTechnician) !== 0 && values.pduTechnician !== 'none'
-                            ? {
-                                  target: Number(values.dtTechnician),
-                                  metric: values.pduTechnician,
-                              }
-                            : undefined,
-                    SUPERVISOR:
-                        Number(values.dtSupervisor) !== 0 && values.pduSupervisor !== 'none'
-                            ? {
-                                  target: Number(values.dtSupervisor),
-                                  metric: values.pduSupervisor,
-                              }
-                            : undefined,
-                },
+                // shiftTime: `${values.shiftStartTime}-${values.shiftEndTime}`,
+                // bookingDuration: values?.durationType,
+                // overTime: {
+                //     rate: values.overTimeRate,
+                // },
+                // dailyTarget: {
+                //     HELPER:
+                //         Number(values.dtHelper) !== 0 && values.pduHelper !== 'none'
+                //             ? {
+                //                   target: Number(values.dtHelper),
+                //                   metric: values.pduHelper,
+                //               }
+                //             : undefined,
+                //     TECHNICIAN:
+                //         Number(values.dtTechnician) !== 0 && values.pduTechnician !== 'none'
+                //             ? {
+                //                   target: Number(values.dtTechnician),
+                //                   metric: values.pduTechnician,
+                //               }
+                //             : undefined,
+                //     SUPERVISOR:
+                //         Number(values.dtSupervisor) !== 0 && values.pduSupervisor !== 'none'
+                //             ? {
+                //                   target: Number(values.dtSupervisor),
+                //                   metric: values.pduSupervisor,
+                //               }
+                //             : undefined,
+                // },
             }
 
             try {
@@ -184,9 +184,9 @@ export const useBookingForm = () => {
                 errors.wageTechnician = true
             }
 
-            if (values.overTimeRate === 'none') {
-                errors.overTimeRate = true
-            }
+            // if (values.overTimeRate === 'none') {
+            //     errors.overTimeRate = true
+            // }
 
             return errors
         },

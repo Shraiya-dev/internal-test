@@ -47,9 +47,9 @@ export const useAddEditProject = () => {
         },
         validate: (values) => {
             const errors = {}
-            // if (values.projectName === '') {
-            //     errors.projectName = 'Required *'
-            // }
+            if (values.projectName === '') {
+                errors.projectName = 'Required *'
+            }
             // if (values.siteAddress === '') {
             //     errors.siteAddress = 'Required *'
             // }
@@ -73,33 +73,33 @@ export const useAddEditProject = () => {
             //     errors.geoLocation = 'Invalid format *'
             // }
 
-            if (values.pf === '') {
-                errors.pf = 'Required *'
-            }
-            if (values.esi === '') {
-                errors.esi = 'Required *'
-            }
-            if (values.otf === 'none') {
-                errors.otf = 'Required *'
-            }
-            if (values.accommodation === '') {
-                errors.accommodation = 'Required *'
-            }
-            if (values.food === '') {
-                errors.food = 'Required *'
-            }
-            if (values.joiningBonus === '') {
-                errors.joiningBonus = 'Required *'
-            }
-            if (values.guaranteedSalary === '') {
-                errors.guaranteedSalary = 'Required *'
-            }
-            if (values.weeklyKharchi === '') {
-                errors.weeklyKharchi = 'Required *'
-            }
-            if (values.medicalSupport === '') {
-                errors.medicalSupport = 'Required *'
-            }
+            // if (values.pf === '') {
+            //     errors.pf = 'Required *'
+            // }
+            // if (values.esi === '') {
+            //     errors.esi = 'Required *'
+            // }
+            // if (values.otf === 'none') {
+            //     errors.otf = 'Required *'
+            // }
+            // if (values.accommodation === '') {
+            //     errors.accommodation = 'Required *'
+            // }
+            // if (values.food === '') {
+            //     errors.food = 'Required *'
+            // }
+            // if (values.joiningBonus === '') {
+            //     errors.joiningBonus = 'Required *'
+            // }
+            // if (values.guaranteedSalary === '') {
+            //     errors.guaranteedSalary = 'Required *'
+            // }
+            // if (values.weeklyKharchi === '') {
+            //     errors.weeklyKharchi = 'Required *'
+            // }
+            // if (values.medicalSupport === '') {
+            //     errors.medicalSupport = 'Required *'
+            // }
             return errors
         },
         onSubmit: async (values) => {

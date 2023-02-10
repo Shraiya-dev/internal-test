@@ -170,8 +170,6 @@ export const useCreateBookingForm = () => {
             // if qtyHelper is not 0 that time wages can't be 0
             if (Number(values.qtyHelper)) {
                 if (Number(values.wageHelper) === 0) errors.wageHelper = true
-                if (Number(values.dtHelper) === 0) errors.dtHelper = true
-                if (values.pduHelper === 'none') errors.pduHelper = true
             }
 
             if (Number(values.qtySupervisor) && values.wageSupervisor === '') {
@@ -180,8 +178,6 @@ export const useCreateBookingForm = () => {
             // if qtySupervisor is not 0 that time wages can't be 0
             if (Number(values.qtySupervisor)) {
                 if (Number(values.wageSupervisor) === 0) errors.wageSupervisor = true
-                if (Number(values.dtSupervisor) === 0) errors.dtSupervisor = true
-                if (values.pduSupervisor === 'none') errors.pduSupervisor = true
             }
 
             if (Number(values.qtyTechnician) && values.wageTechnician === '') {
@@ -191,8 +187,6 @@ export const useCreateBookingForm = () => {
             // if qtySupervisor is not 0 that time wages can't be 0
             if (Number(values.qtyTechnician)) {
                 if (Number(values.wageTechnician) === 0) errors.wageTechnician = true
-                if (Number(values.dtTechnician) === 0) errors.dtTechnician = true
-                if (values.pduTechnician === 'none') errors.pduTechnician = true
             }
 
             // if (values.overTimeRate === 'none') {

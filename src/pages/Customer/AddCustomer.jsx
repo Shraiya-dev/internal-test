@@ -1,11 +1,9 @@
-import { Button, Container, Grid, Paper, Select, Stack, TextField, Typography } from '@mui/material'
+import { Button, Container, Grid, Paper, Stack, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
-import { DesignationOptions } from '../../constant/customers'
 import { useFormikProps } from '../../hooks/useFormikProps'
 import { CUSTOMER_ROUTE } from '../../routes'
-import { getSelectOptions } from '../../utils/InputHelpers'
 import { useAddEditCustomerDetails } from './customerDetails/hooks/useAddEditCustomerDetails'
 
 export const AddCustomer = () => {
@@ -39,7 +37,7 @@ export const AddCustomer = () => {
                                     <Button color="error" variant="outlined" onClick={() => navigate(CUSTOMER_ROUTE)}>
                                         Cancel
                                     </Button>
-                                    <Button variant="outlined" onClick={() => onAddCustomer(form.values)}>
+                                    <Button variant="outlined" onClick={() => form.handleSubmit()}>
                                         Submit
                                     </Button>
                                 </Stack>
