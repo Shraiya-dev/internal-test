@@ -133,10 +133,10 @@ export const AddEditCustomerDetail = () => {
                     <Grid container spacing={1} justifyContent={'space-between'}>
                         <Grid item xs={3}>
                             <InputLabel>Membership Status</InputLabel>
-                            <Typography>{customer?.customerVerification?.verificationStatus ?? 'NA'}</Typography>
+                            <Typography>{customer?.customerMembership?.type ?? 'NA'}</Typography>
                         </Grid>
-                        {true && (
-                            <Button variant="contained" onClick={() => onMarkGold()}>
+                        {!customer?.customerMembership?.type && (
+                            <Button variant="contained" onClick={onMarkGold}>
                                 Mark as Gold
                             </Button>
                         )}

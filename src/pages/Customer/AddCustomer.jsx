@@ -5,6 +5,7 @@ import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { useFormikProps } from '../../hooks/useFormikProps'
 import { CUSTOMER_ROUTE } from '../../routes'
 import { useAddEditCustomerDetails } from './customerDetails/hooks/useAddEditCustomerDetails'
+import { PhoneField } from '../../components/CustomInputs'
 
 export const AddCustomer = () => {
     const { form, disableForm, organisation } = useAddEditCustomerDetails()
@@ -49,18 +50,16 @@ export const AddCustomer = () => {
                                 </Grid>
 
                                 <Grid item xs={4}>
-                                    <TextField
+                                    <PhoneField
                                         fullWidth
                                         label="phoneNumber"
                                         {...formikProps('phoneNumber')}
                                         onKeyDown={(e) => {
-                                            console.log(e.key, 'ffffff')
                                             if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
                                                 e.preventDefault()
                                             }
                                         }}
                                         disabled={disableForm}
-                                        type={'number'}
                                     />
                                 </Grid>
 
