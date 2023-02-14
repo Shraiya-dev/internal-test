@@ -25,6 +25,8 @@ import AddWorkerDialog from '../jobCards/AddWorkerDialog'
 import { CancelJobCardConfirmationDialog } from './CancelJobCardCOnfirmationDialoag'
 import EmploymentCompleteDialog from './EmploymentCompleteDialog'
 import { useJobCards } from './hooks/useJobCards'
+import UpdateHiringStatusDialog from '../../components/UpdateHiringStatusDialog'
+import { capitalize } from '../../utils/stringHelpers'
 
 const JobCards = () => {
     const { booking, project, stats } = useBooking()
@@ -43,6 +45,7 @@ const JobCards = () => {
         hasMore,
         jobCards,
         reload,
+        updateWorkerHiringStatus,
     } = useJobCards()
 
     const [addHeroModalProps, setAddHeroModalProps] = useState({ open: false })
@@ -68,12 +71,23 @@ const JobCards = () => {
     })
     const [confirmationDialogProps, setConfirmationDialogProps] = useState({})
 
+    const [updateWorkerHiringStatusDialogProps, setUpdateWorkerHiringStatusProps] = useState({
+        open: false,
+        cancel: () => {},
+        status: 'none',
+        confirm: (status) => {},
+    })
     const closeDialog = useCallback(() => {
         setConfirmDialogProps({})
+        setUpdateWorkerHiringStatusProps({
+            open: false,
+            cancel: () => {},
+            status: 'none',
+            confirm: (status) => {},
+        })
         setCancelJobCardConfirmationDialogProps({ open: false })
     }, [])
     const [sp, setSp] = useSearchParams()
-
     const columns = useMemo(
         () => [
             {
@@ -103,6 +117,14 @@ const JobCards = () => {
                 sortable: true,
                 width: 250,
                 valueGetter: (params) => params?.row?.jobCard?.availability,
+            },
+            {
+                field: 'hiringStatus',
+                headerName: 'Hiring Status',
+                sortable: true,
+                width: 250,
+                valueGetter: (params) =>
+                    capitalize((params?.row?.jobCard?.status?.code ?? '')?.toLowerCase()?.split('_')?.join(' ')),
             },
             {
                 field: 'wagePerDay',
@@ -143,7 +165,24 @@ const JobCards = () => {
                 renderCell: ({ row: workerCard }) => (
                     <>
                         {allowedTabs && !bulkSelectionOn && (
-                            <Box>
+                            <Stack direction={'row'} gap={1}>
+                                {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.cancel && (
+                                    <Button
+                                        variant="outlined"
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            setUpdateWorkerHiringStatusProps({
+                                                cancel: closeDialog,
+                                                confirm: (status) => updateWorkerHiringStatus(workerCard, status),
+
+                                                status: workerCard?.jobCard?.status?.code,
+                                                open: true,
+                                            })
+                                        }}
+                                    >
+                                        Update Hiring Status
+                                    </Button>
+                                )}
                                 {allowedTabs[sp.get('jobCardStates')]?.jobCardActions?.cancel && (
                                     <Button
                                         variant="outlined"
@@ -259,7 +298,7 @@ const JobCards = () => {
                                         <Button variant="outlined">Manage Employee</Button>
                                     </Link>
                                 )}
-                            </Box>
+                            </Stack>
                         )}
                     </>
                 ),
@@ -301,6 +340,7 @@ const JobCards = () => {
     }, [stats, sp, booking])
     return (
         <>
+            <UpdateHiringStatusDialog {...updateWorkerHiringStatusDialogProps} />
             <ConfirmationDialog {...confirmDialogProps} />
             <EmploymentCompleteDialog {...employmentCompleteDialogProps} />
             <ConfirmationDialog {...confirmationDialogProps} />

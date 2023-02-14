@@ -12,7 +12,7 @@ import { CTAMapByBookingType } from '../../utils/ctaHelpers'
 import { formatEnum } from '../../utils/stringHelpers'
 import JobCards from '../jobCards/JobCards'
 import BookingForm from './BookingForm'
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 const BookingById = () => {
     const {
@@ -36,7 +36,10 @@ const BookingById = () => {
         cancel: () => {},
         confirm: () => {},
     })
-    const allowedActions = useMemo(() => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions, [booking])
+    const allowedActions = useMemo(
+        () => CTAMapByBookingType[booking?.bookingType || 'FPH'][booking?.status]?.actions,
+        [booking]
+    )
     const [cancelBookingConfirmationDialogProps, setCancelBookingConfirmationDialogProps] = useState({
         open: false,
         cancel: () => {},
@@ -80,7 +83,10 @@ const BookingById = () => {
                                     {formatEnum(booking?.jobType)}
                                     <Chip
                                         sx={(theme) => ({
-                                            backgroundColor: booking?.bookingType === 'LIMITED_DISCOVERY' ? theme.palette.grey[500] : theme.palette.primary.light,
+                                            backgroundColor:
+                                                booking?.bookingType === 'LIMITED_DISCOVERY'
+                                                    ? theme.palette.grey[500]
+                                                    : theme.palette.primary.light,
                                             color: theme.palette.primary.contrastText,
                                             ml: 2,
                                         })}
@@ -112,8 +118,13 @@ const BookingById = () => {
                                 </Typography>
                                 <Typography variant="caption" fontWeight={400}>
                                     ID: {booking?._id}
-                                    <CopyToClipboard text={booking?._id} onCopy={() => showSnackbar({ msg: 'Copied!', sev: 'success', autoHideDuration: '500' })}>
-                                        <CopyAll fontSize='small'/>
+                                    <CopyToClipboard
+                                        text={booking?._id}
+                                        onCopy={() =>
+                                            showSnackbar({ msg: 'Copied!', sev: 'success', autoHideDuration: '500' })
+                                        }
+                                    >
+                                        <CopyAll fontSize="small" />
                                     </CopyToClipboard>
                                 </Typography>
                             </Stack>

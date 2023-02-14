@@ -16,36 +16,6 @@ export const useJobCards = () => {
     const { showSnackbar } = useSnackbar()
     const { showLoader } = useLoader()
     const [response, setResponse] = useState({ jobCards: [], hasMore: false })
-    // const fetchJobCardsBasedOnStatus = useCallback(async () => {
-    //     if (!selectedTab) return
-    //     try {
-    //         const { status, data } = await axios.get(
-    //             `${SERVER_URL}/gateway/admin-api/bookings/${booking._id}/job-card/status/${selectedTab}?pageNumber=0&pageSize=1000`
-    //         )
-    //         setSkillTypeSummary(data.payload.skillTypeSummary)
-    //         setBookingSummary(data.payload.overallSummary.bookingSummary)
-    //         setReload(false)
-    //     } catch (error) {
-    //         const res = error.response
-    //         if (res?.status === 400) {
-    //             showSnackbar({
-    //                 msg: res?.data.messageToUser,
-    //                 sev: 'error',
-    //             })
-    //         } else {
-    //             showSnackbar({
-    //                 msg: 'Invalid BookingId or status',
-    //                 sev: 'error',
-    //             })
-    //         }
-    //         setSkillTypeSummary({})
-    //     }
-    // }, [booking, selectedTab])
-
-    // useEffect(() => {
-    //     if (!reload) return
-    //     fetchJobCardsBasedOnStatus()
-    // }, [reload])
 
     const fetchJobCards = useCallback(
         async (searchParams) => {
@@ -258,19 +228,29 @@ export const useJobCards = () => {
         }
         showLoader(false)
     }, [])
-
-    // const handelTabChange = useCallback(
-    //     (e, state) => {
-    //         const nsp = new URLSearchParams(sp)
-    //         nsp.set('tab', state)
-    //         setSp(nsp,{replace:true})
-    //     },
-    //     [sp]
-    // )
-
-    // useEffect(() => {
-    //     fetchJobCardsBasedOnStatus()
-    // }, [selectedTab])
+    const updateWorkerHiringStatus = useCallback(async (workerCard, status) => {
+        showLoader(true)
+        try {
+            await axios.post(
+                `${SERVER_URL}/gateway/admin-api/job-cards/${workerCard?.jobCard?.jobCardId}/job-card-status`,
+                {
+                    code: status,
+                    details: 'Updated by Admin',
+                }
+            )
+            setReload(true)
+            showSnackbar({
+                msg: `Worker Marked as ${status}`,
+                sev: 'success',
+            })
+        } catch (error) {
+            showSnackbar({
+                msg: error.response.data.developerInfo,
+                sev: 'error',
+            })
+        }
+        showLoader(false)
+    }, [])
 
     return useMemo(() => {
         return {
@@ -289,6 +269,7 @@ export const useJobCards = () => {
             bulkCancelWorkerJobCard,
             markDRCDoneForJobCard,
             markPDRCDoneForJobCard,
+            updateWorkerHiringStatus,
         }
     }, [
         response,
@@ -305,5 +286,6 @@ export const useJobCards = () => {
         markJobCardAsAccepted,
         markDRCDoneForJobCard,
         markPDRCDoneForJobCard,
+        updateWorkerHiringStatus,
     ])
 }

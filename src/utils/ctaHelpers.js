@@ -29,6 +29,7 @@ const LimitedDiscoveryCTAMap = {
                 addWorkerAsApplied: true,
                 jobCardActions: {
                     cancel: true,
+                    hiringStatus: true,
                 },
             },
             CANCELLED: {
@@ -49,6 +50,7 @@ const LimitedDiscoveryCTAMap = {
             WORKER_APPLIED: {
                 jobCardActions: {
                     cancel: true,
+                    hiringStatus: true,
                 },
             },
             CANCELLED: {
