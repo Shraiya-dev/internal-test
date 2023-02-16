@@ -135,8 +135,8 @@ export const AddEditCustomerDetail = () => {
                             <InputLabel>Membership Status</InputLabel>
                             <Typography>{customer?.customerMembership?.type ?? 'NA'}</Typography>
                         </Grid>
-                        {!customer?.customerMembership?.type && (
-                            <Button variant="contained" onClick={onMarkGold}>
+                        {customer?.customerMembership?.type !== 'GOLD' && (
+                            <Button variant="contained" onClick={() => onMarkGold()}>
                                 Mark as Gold
                             </Button>
                         )}
