@@ -1,8 +1,8 @@
 .channel-preview__container {
   height: 56px;
   margin-bottom: 8px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 4px;
+  margin-right: 4px;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
@@ -52,10 +52,10 @@
 .channel-preview__content-name {
   font-family: Helvetica Neue, sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 13px;
   color: #000000;
   margin: 0;
-  max-width: 158px;
+  max-width: 190px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -74,11 +74,11 @@
 
 .channel-preview__content-message {
   font-family: Helvetica Neue, sans-serif;
-  font-size: 13px;
-  line-height: 16px;
+  font-size: 10px;
+  line-height: 0px;
   margin: 0;
   color: #858688;
-  height: 16px;
+  height: 18px;
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;

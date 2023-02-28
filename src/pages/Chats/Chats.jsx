@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { StreamChat } from 'stream-chat';
+import { envs } from '../../env'
 import {
     Chat,
     Channel,
