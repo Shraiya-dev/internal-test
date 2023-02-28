@@ -30,6 +30,7 @@ import {
     CUSTOMER_ROUTE,
     ORGANIZATION_ROUTE,
     ORDERS_INFO_ROUTE,
+    CHATS,
 } from '../../routes'
 
 const drawerWidth = 250
@@ -84,6 +85,11 @@ const DrawerList = [
         label: 'Orders',
         icon: <Face />,
         link: ORDERS_INFO_ROUTE,
+    },
+    {
+        label: 'Chats',
+        icon: <Face />,
+        link: CHATS,
     },
 ].sort((left, right) => {
     if (left.label < right.label) {

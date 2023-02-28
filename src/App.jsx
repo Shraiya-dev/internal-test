@@ -48,6 +48,7 @@ import {
     BOOKING_BOOKINGID_ROUTE,
     BOOKING_BY_ID_ROUTE,
     BOOKING_ROUTE,
+    CHATS,
     CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE,
     CUSTOMER_CUSTOMER_ID_ROUTE,
     CUSTOMER_ROUTE,
@@ -65,6 +66,7 @@ import {
     WORKER_INFO_BY_ID_ROUTE,
     WORKER_INFO_ROUTE,
 } from './routes'
+import { Chats } from './pages/Chats/Chats'
 
 const lightTheme = createTheme({
     palette: {
@@ -380,7 +382,14 @@ function App() {
                                         </PrivateRoute>
                                     }
                                 />
-
+                                <Route
+                                    path={CHATS}
+                                    element={
+                                        <PrivateRoute>
+                                            <Chats />
+                                        </PrivateRoute>
+                                    }
+                                />
                                 <Route path="/login" element={<Login />} />
                             </Routes>
                             <ToastContainer style={{ width: '600px', maxWidth: '100%' }} />
