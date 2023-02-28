@@ -35,7 +35,7 @@ chatClient.connectUser(
 
 const filters = { type: 'messaging', members: { $in: ['hr_manager_chat_user'] } };
 const sort = { last_message_at: -1 };
-const options = { state: true, watch: true, presence: true, limit: 8 };
+const options = { state: true, watch: true, presence: true, limit: 15 };
 export const GiphyContext = React.createContext({});
 
 export const Chats = () => {
