@@ -1,15 +1,3 @@
-:root {
-  --app-height: 100%;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  background: #212326;
-}
-
 body::-webkit-scrollbar {
   background: transparent;
 }
@@ -96,6 +84,18 @@ body::-webkit-scrollbar-thumb {
 
 .str-chat__message--system {
   padding: 20px;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-child-channel-list {
+  flex: 0;
+}  
+
+.flex-child-channel {
+  flex: 1;
 }
 
 /* Mobile View */

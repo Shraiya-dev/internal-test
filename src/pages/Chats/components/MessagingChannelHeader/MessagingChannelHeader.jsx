@@ -1,11 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, useChannelStateContext, useChatContext } from 'stream-chat-react';
-
 import './MessagingChannelHeader.css';
-
 import { TypingIndicator } from '../TypingIndicator/TypingIndicator';
-
-import { ChannelInfoIcon, ChannelSaveIcon, getCleanImage, HamburgerIcon } from '../../assets';
+import { getCleanImage, HamburgerIcon } from '../../assets';
 
 const getAvatarGroup = (members) => {
   if (members.length === 1) {
@@ -67,42 +64,6 @@ const getAvatarGroup = (members) => {
       </div>
     );
   }
-
-  if (members.length >= 4) {
-    return (
-      <div className='messaging__channel-header__avatars four'>
-        <span>
-          <Avatar
-            image={getCleanImage(members[members.length - 1])}
-            name={members[0].user?.id}
-            shape='square'
-            size={20}
-          />
-          <Avatar
-            image={getCleanImage(members[members.length - 2])}
-            name={members[1].user?.id}
-            shape='square'
-            size={20}
-          />
-        </span>
-        <span>
-          <Avatar
-            image={getCleanImage(members[members.length - 3])}
-            name={members[2].user?.id}
-            shape='square'
-            size={20}
-          />
-          <Avatar
-            image={getCleanImage(members[members.length - 4])}
-            name={members[3].user?.id}
-            shape='square'
-            size={20}
-          />
-        </span>
-      </div>
-    );
-  }
-
   return null;
 };
 
@@ -142,7 +103,7 @@ const MessagingChannelHeader = (props) => {
   useEffect(() => {
     if (!channelName) {
       setTitle(
-        members.map((member) => member.user?.name || member.user?.id || 'Unnamed User').join(', '),
+        members.map((member) => (member.user?.name + ' (' +member.user?.userType+ ')' +' (' +member.user?.phoneNumber + ')')).join(', '),
       );
     }
   }, [channelName, members]);
@@ -180,8 +141,6 @@ const MessagingChannelHeader = (props) => {
       )}
       <div className='messaging__channel-header__right'>
         <TypingIndicator />
-        {channelName !== 'HR Manager Chat' &&
-          (!isEditing ? <ChannelInfoIcon {...{ isEditing, setIsEditing }} /> : <ChannelSaveIcon />)}
       </div>
     </div>
   );

@@ -20,8 +20,8 @@ import {
 import 'stream-chat-react/dist/css/v2/index.css';
 import '../../layout.css';
 
-const chatClient = new StreamChat('8wnqfzdepkhs');
-const userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiaHJfbWFuYWdlcl9jaGF0X3VzZXIifQ.bNj-e51-daiXPKrBUOa4Nz-9g7brAc9XmbayHzFqAF4';
+const chatClient = new StreamChat(envs.CHAT_API_KEY);
+const userToken = envs.CHAT_USER_TOKEN;
 
 chatClient.connectUser(
   {
@@ -59,7 +59,8 @@ export const Chats = () => {
   return (
     <DashboardLayout>
     <Chat client={chatClient} theme={`messaging ${theme}`}>
-      <div id='mobile-channel-list'>
+      <div class="flex-container">
+      <div class="flex-child-channel-list">
         <ChannelList
           filters={filters}
           sort={sort}
@@ -70,7 +71,7 @@ export const Chats = () => {
           Preview={(props) => <MessagingChannelPreview {...props} {...{ setIsCreating }} />}
         />
       </div>
-      <div>
+      <div class="flex-child-channel">
         <Channel
           Input={MessagingInput}
           maxNumberOfFiles={10}
@@ -85,6 +86,7 @@ export const Chats = () => {
             <ChannelInner theme={theme} toggleMobile={()=>{}} />
           </GiphyContext.Provider>
         </Channel>
+      </div>
       </div>
     </Chat>
     </DashboardLayout>
