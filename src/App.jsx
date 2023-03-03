@@ -53,6 +53,7 @@ import {
     CUSTOMER_CUSTOMER_ID_ROUTE,
     CUSTOMER_ROUTE,
     DASHBOARD_ROUTE,
+    EDIT_ORDERS_ROUTE,
     JCA_ROUTE,
     JOBCARDS_FOR_BOOKING_ROUTE,
     ORDERS_INFO_ROUTE,
@@ -196,7 +197,14 @@ function App() {
                                         </PrivateRoute>
                                     }
                                 />
-
+                                <Route
+                                    path={EDIT_ORDERS_ROUTE}
+                                    element={
+                                        <PrivateRoute>
+                                            <AddEditOrders />
+                                        </PrivateRoute>
+                                    }
+                                />
                                 <Route
                                     path={WORKER_INFO_ROUTE}
                                     element={

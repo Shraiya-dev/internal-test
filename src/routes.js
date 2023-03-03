@@ -19,6 +19,7 @@ export const PARTNER_DETAIL_VIEW = '/partners/:partnerId'
 
 export const ORDERS_INFO_ROUTE = '/orders'
 export const ADD_ORDERS_ROUTE = '/orders/create'
+export const EDIT_ORDERS_ROUTE = '/orders/edit/:orderId'
 
 export const WORKER_INFO_ROUTE = '/workers'
 export const ADD_WORKER_ROUTE = '/workers/create'
@@ -37,4 +38,3 @@ export const ORGANISATION_ORGANISATION_ID_CUSTOMER_CUSTOMER_ID_PROJECT_CREATE =
     '/organisation/:organisationId/customer/:customerId/project/create'
 
 export const CHATS = '/chats'
-

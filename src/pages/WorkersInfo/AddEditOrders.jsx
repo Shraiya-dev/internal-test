@@ -1,13 +1,12 @@
 import { CurrencyRupee } from '@mui/icons-material'
 import {
-    Box,
     Button,
     Container,
     FormControl,
     FormControlLabel,
     Grid,
     InputAdornment,
-    MenuItem,
+    LinearProgress,
     Paper,
     Radio,
     RadioGroup,
@@ -16,15 +15,15 @@ import {
     TextField,
     Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
-import { PopAlert } from '../../components/Snackbar'
 import { CityOptions } from '../../constant/city'
 import { StatesOptions } from '../../constant/state'
 import { useFormikProps } from '../../hooks/useFormikProps'
 import { getSelectOptions } from '../../utils/InputHelpers'
-import { genderOptions } from '../workers/helper'
 import { useAddEditOrders } from './hooks/useAddEditOrders'
+import { useParams } from 'react-router-dom'
+import { LoadingButton } from '@mui/lab'
 
 export const orderTypeOptions = [
     { value: 'BAR_BENDING', label: 'Bar Bending' },
@@ -49,12 +48,14 @@ export const orderTypeOptions = [
 ]
 
 export const AddEditOrders = () => {
-    const { form, isError } = useAddEditOrders()
+    const { form, isError, disableForm, setDisableForm, orderDetail } = useAddEditOrders()
     const formikProps = useFormikProps(form)
+    const { orderId } = useParams()
 
     return (
         <>
             <DashboardLayout>
+                {orderId && !orderDetail && <LinearProgress />}
                 <Stack alignItems="stretch" margin="0 auto" maxWidth={1000}>
                     <Paper sx={{ p: 2, m: 2 }}>
                         <Container
@@ -69,18 +70,38 @@ export const AddEditOrders = () => {
                             <Stack width={'100%'} direction="row" justifyContent="space-between" alignItems="center">
                                 <Typography variant="h3">Order Information</Typography>
                                 <Stack direction="row" spacing={1}>
-                                    <Button color="error" variant="outlined" onClick={() => form.resetForm()}>
-                                        Reset
-                                    </Button>
-                                    <Button variant="outlined" onClick={() => form.handleSubmit()}>
-                                        Submit
-                                    </Button>
+                                    {disableForm ? (
+                                        <Button variant="outlined" onClick={() => setDisableForm(false)}>
+                                            Edit
+                                        </Button>
+                                    ) : (
+                                        <>
+                                            <Button
+                                                color="error"
+                                                variant="outlined"
+                                                onClick={() => {
+                                                    setDisableForm(true)
+                                                    form.resetForm()
+                                                }}
+                                            >
+                                                cancel
+                                            </Button>
+                                            <LoadingButton
+                                                loading={form.isSubmitting}
+                                                variant="outlined"
+                                                onClick={() => form.handleSubmit()}
+                                            >
+                                                Submit
+                                            </LoadingButton>
+                                        </>
+                                    )}
                                 </Stack>
                             </Stack>
 
                             <Grid container spacing={2} mt={2}>
                                 <Grid item xs={6}>
                                     <TextField
+                                        disabled={disableForm}
                                         fullWidth
                                         label="Reference Id"
                                         {...formikProps('referenceId')}
@@ -97,6 +118,7 @@ export const AddEditOrders = () => {
                                 <Grid item xs={6}>
                                     <TextField
                                         fullWidth
+                                        disabled={disableForm}
                                         label="Start Date Label"
                                         {...formikProps('startDateLabel')}
                                         onChange={(e) => {
@@ -113,6 +135,7 @@ export const AddEditOrders = () => {
                                 <Grid item xs={6}>
                                     <Select
                                         fullWidth
+                                        disabled={disableForm}
                                         variant="outlined"
                                         {...formikProps('state')}
                                         onChange={(e) => {
@@ -128,7 +151,7 @@ export const AddEditOrders = () => {
                                     <Select
                                         fullWidth
                                         variant="outlined"
-                                        disabled={form.values.state === 'none'}
+                                        disabled={disableForm || form.values.state === 'none'}
                                         {...formikProps('city')}
                                         onChange={(e) => {
                                             form.setFieldValue('city', e.target.value)
@@ -143,6 +166,7 @@ export const AddEditOrders = () => {
                                 <Grid item xs={6}>
                                     <TextField
                                         fullWidth
+                                        disabled={disableForm}
                                         label="Material Specs"
                                         {...formikProps('materialSpecs')}
                                         onChange={(e) => {
@@ -159,6 +183,7 @@ export const AddEditOrders = () => {
                                 <Grid item xs={6}>
                                     <TextField
                                         fullWidth
+                                        disabled={disableForm}
                                         label="Job Details"
                                         {...formikProps('jobDetails')}
                                         onChange={(e) => {
@@ -175,6 +200,7 @@ export const AddEditOrders = () => {
                                 <Grid item xs={6}>
                                     <Select
                                         fullWidth
+                                        disabled={disableForm}
                                         variant="outlined"
                                         {...formikProps('orderType')}
                                         onChange={(e) => {
@@ -189,6 +215,7 @@ export const AddEditOrders = () => {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TextField
+                                        disabled={disableForm}
                                         InputProps={{
                                             startAdornment: (
                                                 <InputAdornment position="start">
@@ -212,7 +239,7 @@ export const AddEditOrders = () => {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <h3>isActive</h3>
-                                    <FormControl fullWidth>
+                                    <FormControl disabled={disableForm} fullWidth>
                                         <RadioGroup {...formikProps('isActive')}>
                                             <Grid container spacing={2}>
                                                 {[
