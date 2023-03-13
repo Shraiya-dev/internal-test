@@ -71,6 +71,9 @@ export const AddEditCustomerDetail = () => {
                         )}
                     </Stack>
                     <Stack direction="row" spacing={1}>
+                        <Link to={`/orders?customerId=${customer?.customerId}`}>
+                            <Button variant="outlined">View Orders </Button>
+                        </Link>
                         <Link to={`/projects/create/${customer?.customerId}`}>
                             <Button variant="outlined">Create Project </Button>
                         </Link>

@@ -5,7 +5,28 @@ import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { ADD_ORDERS_ROUTE } from '../../routes'
 import { DataGrid } from '@mui/x-data-grid'
 import { useOrders } from './hooks/useOrders'
-
+import { QueryField, QueryMultiSelect, QueryReset, QuerySelect } from '../../components/queryInputs'
+import { orderTypeOptions } from '../WorkersInfo/AddEditOrders'
+import { StatesOptions } from '../../constant/state'
+import { CityOptions } from '../../constant/city'
+const orderStatusOptions = [
+    {
+        label: 'Select Order Status',
+        value: 'none',
+    },
+    {
+        label: 'Pending',
+        value: 'PENDING',
+    },
+    {
+        label: 'Approved',
+        value: 'APPROVED',
+    },
+    {
+        label: 'Archived',
+        value: 'ARCHIVED',
+    },
+]
 export const Orders = () => {
     const [sp, setSp] = useSearchParams()
     const { getOrders, hasMore, isLoading, orders } = useOrders()
@@ -18,6 +39,18 @@ export const Orders = () => {
                 <Link to={`/orders/edit/${params?.id}`}>
                     <Typography color="primary.main" sx={{ textDecoration: 'underline' }}>
                         {params?.row.orderId || 'N/A'}
+                    </Typography>
+                </Link>
+            ),
+        },
+        {
+            field: 'parentCustomerId',
+            headerName: 'userId',
+            width: 250,
+            renderCell: (params) => (
+                <Link to={`/customers/${params?.row?.parentCustomerId}`}>
+                    <Typography color="primary.main" sx={{ textDecoration: 'underline' }}>
+                        {params?.row.parentCustomerId || 'N/A'}
                     </Typography>
                 </Link>
             ),
@@ -90,6 +123,50 @@ export const Orders = () => {
                     </Button>
                 </Link>
             </Stack>
+            <Paper variant="outlined">
+                <Stack p={2} direction="row" spacing={2} alignItems={'stretch'}>
+                    <QueryField label={'Customer Id'} trim name={'customerId'} />
+
+                    <QueryMultiSelect sx={{ width: 200 }} name="orderStatus" options={orderStatusOptions} />
+                    <QueryMultiSelect
+                        sx={{ width: 200 }}
+                        name="orderType"
+                        options={[{ label: 'Select order type', value: 'none' }, ...orderTypeOptions]}
+                    />
+                    <QuerySelect
+                        multiple={false}
+                        sx={{ width: 200 }}
+                        name="isCreatedByUser"
+                        options={[
+                            {
+                                label: 'Select User Type',
+                                value: 'none',
+                            },
+                            {
+                                label: 'user',
+                                value: true,
+                            },
+                            {
+                                label: 'Admin',
+                                value: false,
+                            },
+                        ]}
+                    />
+                    <QuerySelect
+                        sx={{ width: 200 }}
+                        name="state"
+                        options={[{ label: 'Select state', value: 'none' }, ...StatesOptions]}
+                    />
+                    <QuerySelect
+                        disabled={sp.get('state') === 'none'}
+                        sx={{ width: 200 }}
+                        name="city"
+                        options={[{ label: 'Select city', value: 'none' }, ...CityOptions[sp.get('state') ?? 'none']]}
+                    />
+
+                    <QueryReset> Clear Filters</QueryReset>
+                </Stack>
+            </Paper>
             <Paper sx={{ mt: 2, height: '74vh', width: '100%', p: 2 }}>
                 <DataGrid
                     disableColumnFilter
@@ -100,7 +177,7 @@ export const Orders = () => {
                     pageSize={100}
                     rowsPerPageOptions={[5]}
                     getRowId={(row) => row.orderId}
-                    rowCount={100}
+                    rowCount={1000}
                     paginationMode="server"
                     loading={isLoading}
                     components={{

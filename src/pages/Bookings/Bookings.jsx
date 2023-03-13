@@ -1,22 +1,10 @@
 import { Search } from '@mui/icons-material'
-import {
-    Box,
-    Button,
-    Grid,
-    InputAdornment,
-    LinearProgress,
-    Pagination,
-    Paper,
-    Stack,
-    TextField,
-    Typography,
-} from '@mui/material'
+import { Box, Button, Grid, InputAdornment, LinearProgress, Pagination, Paper, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
-import { QueryField, QueryMultiSelect, QueryReset, QuerySelect } from '../../components/queryInputs'
+import { QueryField, QueryMultiSelect, QueryReset } from '../../components/queryInputs'
 import { BookingStates, BookingTypeOptions, JobTypeOptions } from '../../constant/booking'
-import { getSelectOptions } from '../../utils/InputHelpers'
 import { StatusCard } from '../CustomerBookings/components/StatusCard'
 import BookingCard from './BookingCard'
 import { useBookings } from './hooks/useBooking'

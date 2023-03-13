@@ -29,10 +29,15 @@ export const QueryField = ({ name, validation, trim = true, ...rest }) => {
     )
 }
 
-export const QuerySelect = ({ name, validation, children, ...rest }) => {
+export const QuerySelect = ({ name, validation, options, ...rest }) => {
     const [sp, setSp] = useSearchParams()
     return (
         <Select
+            MenuProps={{
+                sx: {
+                    maxHeight: 800,
+                },
+            }}
             value={sp.get(name) ?? 'none'}
             onChange={(e) => {
                 const nsp = new URLSearchParams(sp)
@@ -53,7 +58,11 @@ export const QuerySelect = ({ name, validation, children, ...rest }) => {
             }}
             {...rest}
         >
-            {children}
+            {options.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                    <ListItemText primary={item.label} />
+                </MenuItem>
+            ))}
         </Select>
     )
 }
@@ -63,6 +72,11 @@ export const QueryMultiSelect = ({ name, validation, options = [], ...rest }) =>
     const filterArr = sp.get(name)
     return (
         <Select
+            MenuProps={{
+                sx: {
+                    maxHeight: 800,
+                },
+            }}
             renderValue={(selected) =>
                 selected
                     .map((item) => {
