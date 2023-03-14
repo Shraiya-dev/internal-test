@@ -124,8 +124,8 @@ export const Orders = () => {
                 </Link>
             </Stack>
             <Paper variant="outlined">
-                <Stack p={2} direction="row" spacing={2} alignItems={'stretch'}>
-                    <QueryField label={'Customer Id'} trim name={'customerId'} />
+                <Stack p={2} direction="row" flexWrap={'wrap'} gap={2} alignItems={'stretch'}>
+                    <QueryField label={'Customer Id'} placeholder="Customer Id" trim name={'customerId'} />
 
                     <QueryMultiSelect sx={{ width: 200 }} name="orderStatus" options={orderStatusOptions} />
                     <QueryMultiSelect
@@ -186,7 +186,7 @@ export const Orders = () => {
                         Pagination: () => (
                             <>
                                 <Stack direction="row" alignItems="center">
-                                    Orders: {0}
+                                    Orders: {orders.length}
                                     <Pagination
                                         page={sp.get('pageNumber') ? Number(sp.get('pageNumber')) : 1}
                                         hideNextButton={!hasMore}
