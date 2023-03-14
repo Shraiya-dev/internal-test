@@ -24,6 +24,7 @@ import { getSelectOptions } from '../../utils/InputHelpers'
 import { useAddEditOrders } from './hooks/useAddEditOrders'
 import { useParams } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
+import { orderStatusOptions } from '../OrdersInfo/hooks/useOrders'
 
 export const orderTypeOptions = [
     { value: 'BAR_BENDING', label: 'Bar Bending' },
@@ -71,9 +72,11 @@ export const AddEditOrders = () => {
                                 <Typography variant="h3">Order Information</Typography>
                                 <Stack direction="row" spacing={1}>
                                     {disableForm ? (
-                                        <Button variant="outlined" onClick={() => setDisableForm(false)}>
-                                            Edit
-                                        </Button>
+                                        <>
+                                            <Button variant="outlined" onClick={() => setDisableForm(false)}>
+                                                Edit
+                                            </Button>
+                                        </>
                                     ) : (
                                         <>
                                             <Button
@@ -99,6 +102,16 @@ export const AddEditOrders = () => {
                             </Stack>
 
                             <Grid container spacing={2} mt={2}>
+                                <Grid item xs={6}>
+                                    <Select
+                                        fullWidth
+                                        disabled={disableForm}
+                                        variant="outlined"
+                                        {...formikProps('orderStatus')}
+                                    >
+                                        {getSelectOptions(orderStatusOptions)}
+                                    </Select>
+                                </Grid>
                                 <Grid item xs={6}>
                                     <TextField
                                         disabled={disableForm}
@@ -237,7 +250,7 @@ export const AddEditOrders = () => {
                                         error={isError('orderValue')}
                                     />
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12}>
                                     <h3>isActive</h3>
                                     <FormControl disabled={disableForm} fullWidth>
                                         <RadioGroup {...formikProps('isActive')}>

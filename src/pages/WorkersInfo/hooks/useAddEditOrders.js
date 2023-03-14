@@ -29,6 +29,7 @@ export const useAddEditOrders = () => {
             jobDetails: '',
             orderValue: '',
             isActive: true,
+            orderStatus: 'PENDING',
         },
         validate: (values) => {
             const errors = {}
@@ -53,28 +54,28 @@ export const useAddEditOrders = () => {
             }
             return errors
         },
-        onSubmit: async () => {
+        onSubmit: async (values) => {
             const payload = {
-                referenceId: form.values.referenceId,
-                city: form.values.city,
-                state: form.values.state,
-                materialSpecs: form.values.materialSpecs,
-                startDateLabel: form.values.startDateLabel,
-                orderType: form.values.orderType,
-                jobDetails: form.values.jobDetails,
-                orderValue: form.values.orderValue,
-                isActive: form.values.isActive,
+                referenceId: values.referenceId,
+                city: values.city,
+                state: values.state,
+                materialSpecs: values.materialSpecs,
+                startDateLabel: values.startDateLabel,
+                orderType: values.orderType,
+                jobDetails: values.jobDetails,
+                orderValue: values.orderValue,
+                isActive: values.isActive,
+                orderStatus: values.orderStatus,
             }
             if (orderId) {
                 await editOrder(payload)
-                rerrun
+                return
             }
             await addOrder(payload)
         },
     })
 
     useEffect(() => {
-        console.log({ orderDetail })
         if (!orderDetail) return
         form.setValues({
             city: orderDetail?.city,
@@ -86,10 +87,12 @@ export const useAddEditOrders = () => {
             orderValue: orderDetail?.orderValue,
             referenceId: orderDetail?.referenceId,
             startDateLabel: orderDetail?.startDateLabel,
+            orderStatus: orderDetail?.orderStatus ?? 'PENDING',
         })
     }, [orderDetail, disableForm])
     const editOrder = useCallback(async (payload) => {
         try {
+            debugger
             const { status, data } = await axios.put(
                 `${BACKEND_URL}/gateway/admin-api/contractor-orders/${orderId}/update`,
                 payload
@@ -101,7 +104,6 @@ export const useAddEditOrders = () => {
             })
             getOrders()
         } catch (error) {
-            console.log(error)
             showSnackbar({
                 msg: error?.response?.data?.developerInfo,
                 sev: 'error',
@@ -118,6 +120,8 @@ export const useAddEditOrders = () => {
             })
             navigate(ORDERS_INFO_ROUTE)
         } catch (error) {
+            console.log(error)
+
             showSnackbar({
                 msg: error?.response?.data?.developerInfo,
                 sev: 'error',
@@ -132,5 +136,5 @@ export const useAddEditOrders = () => {
         [form]
     )
 
-    return { form, isError, disableForm, setDisableForm, orderDetail }
+    return { form, isError, disableForm, setDisableForm, orderDetail, orders }
 }

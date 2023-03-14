@@ -4,7 +4,24 @@ import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SERVER_URL } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
-
+export const orderStatusOptions = [
+    {
+        label: 'Select Order Status',
+        value: 'none',
+    },
+    {
+        label: 'Pending',
+        value: 'PENDING',
+    },
+    {
+        label: 'Approved',
+        value: 'APPROVED',
+    },
+    {
+        label: 'Archived',
+        value: 'ARCHIVED',
+    },
+]
 export const useOrders = () => {
     const [orders, setOrders] = useState([])
     const [hasMore, setHasMore] = useState([])
@@ -14,7 +31,6 @@ export const useOrders = () => {
 
     const getOrders = useCallback(
         debounce(async (searchParams) => {
-            if (searchParams.get('customerPhone') && searchParams.get('customerPhone').length !== 10) return
             setIsLoading(true)
             try {
                 const sp = new URLSearchParams(searchParams)
@@ -41,6 +57,11 @@ export const useOrders = () => {
         []
     )
     useEffect(() => {
+        if (searchParams.get('customerId') && searchParams.get('isCreatedByUser') !== 'true') {
+            const nsp = new URLSearchParams(searchParams)
+            nsp.set('isCreatedByUser', 'true')
+            setSearchParams(nsp)
+        }
         getOrders(searchParams)
     }, [searchParams])
     return useMemo(

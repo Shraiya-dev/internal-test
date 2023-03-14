@@ -1,32 +1,15 @@
-import { Box, Button, LinearProgress, Pagination, Paper, Stack, Typography } from '@mui/material'
-import React from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
-import DashboardLayout from '../../components/Layouts/DashboardLayout'
-import { ADD_ORDERS_ROUTE } from '../../routes'
+import { Button, LinearProgress, Pagination, Paper, Stack, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import { useOrders } from './hooks/useOrders'
+import React from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { QueryField, QueryMultiSelect, QueryReset, QuerySelect } from '../../components/queryInputs'
-import { orderTypeOptions } from '../WorkersInfo/AddEditOrders'
-import { StatesOptions } from '../../constant/state'
 import { CityOptions } from '../../constant/city'
-const orderStatusOptions = [
-    {
-        label: 'Select Order Status',
-        value: 'none',
-    },
-    {
-        label: 'Pending',
-        value: 'PENDING',
-    },
-    {
-        label: 'Approved',
-        value: 'APPROVED',
-    },
-    {
-        label: 'Archived',
-        value: 'ARCHIVED',
-    },
-]
+import { StatesOptions } from '../../constant/state'
+import { ADD_ORDERS_ROUTE } from '../../routes'
+import { orderTypeOptions } from '../WorkersInfo/AddEditOrders'
+import { orderStatusOptions, useOrders } from './hooks/useOrders'
+
 export const Orders = () => {
     const [sp, setSp] = useSearchParams()
     const { getOrders, hasMore, isLoading, orders } = useOrders()
@@ -62,21 +45,27 @@ export const Orders = () => {
             editable: true,
         },
         {
+            field: 'orderStatus',
+            headerName: 'Status',
+            width: 250,
+            editable: true,
+        },
+        {
             field: 'startDateLabel',
             headerName: 'Start Date Label',
             width: 250,
-        },
-        {
-            field: 'city',
-            headerName: 'city',
-            width: 150,
-            editable: true,
         },
         {
             field: 'state',
             headerName: 'State',
             sortable: true,
             width: 150,
+        },
+        {
+            field: 'city',
+            headerName: 'city',
+            width: 150,
+            editable: true,
         },
         {
             field: 'isActive',
