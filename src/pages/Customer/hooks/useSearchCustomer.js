@@ -29,7 +29,7 @@ export const useSearchCustomer = () => {
                 }
             } catch (error) {
                 showSnackbar({
-                    msg: 'failed to fetch worker',
+                    msg: 'failed to fetch customer',
                 })
             }
         },
