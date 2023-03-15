@@ -1,23 +1,29 @@
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getBackendUrl } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
 import { ORDERS_INFO_ROUTE } from '../../../routes'
 import { checkError } from '../../../utils/formikValidate'
-import { useOrders } from '../../OrdersInfo/hooks/useOrders'
 
 const BACKEND_URL = getBackendUrl()
 
 export const useAddEditOrders = () => {
     const { showSnackbar } = useSnackbar()
     const { orderId } = useParams()
-    const { orders, getOrders } = useOrders()
+    const [orderDetail, setOrderDetail] = useState()
+    const getOrderById = useCallback(async () => {
+        const { data } = await axios.get(`${BACKEND_URL}/gateway/admin-api/contractor-orders/${orderId}`)
+        setOrderDetail(data?.payload)
+    })
     const [disableForm, setDisableForm] = useState(orderId)
+    useEffect(() => {
+        if (!orderId) return
+        getOrderById()
+    }, [orderId])
 
     const navigate = useNavigate()
-    const orderDetail = useMemo(() => orders.find((item) => item.orderId === orderId), [orders])
     const form = useFormik({
         initialValues: {
             referenceId: '',
@@ -92,7 +98,6 @@ export const useAddEditOrders = () => {
     }, [orderDetail, disableForm])
     const editOrder = useCallback(async (payload) => {
         try {
-            debugger
             const { status, data } = await axios.put(
                 `${BACKEND_URL}/gateway/admin-api/contractor-orders/${orderId}/update`,
                 payload
@@ -102,7 +107,8 @@ export const useAddEditOrders = () => {
                 msg: 'Updated Order successfully!',
                 sev: 'success',
             })
-            getOrders()
+            getOrderById()
+            setDisableForm(true)
         } catch (error) {
             showSnackbar({
                 msg: error?.response?.data?.developerInfo,
@@ -136,5 +142,5 @@ export const useAddEditOrders = () => {
         [form]
     )
 
-    return { form, isError, disableForm, setDisableForm, orderDetail, orders }
+    return { form, isError, disableForm, setDisableForm, orderDetail }
 }
