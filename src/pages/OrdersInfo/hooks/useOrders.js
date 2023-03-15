@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SERVER_URL } from '../../../api'
 import { useSnackbar } from '../../../providers/SnackbarProvider'
+import { useSearchCustomer } from '../../Customer/hooks/useSearchCustomer'
 export const orderStatusOptions = [
     {
         label: 'Select Order Status',
@@ -22,15 +23,33 @@ export const orderStatusOptions = [
         value: 'ARCHIVED',
     },
 ]
+
 export const useOrders = () => {
     const [orders, setOrders] = useState([])
     const [hasMore, setHasMore] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
     const { showSnackbar } = useSnackbar()
+    const { form: customerSearchForm, result, resultNotFound } = useSearchCustomer()
+    useEffect(() => {
+        if (!result?.customer?.customerId) return
+        const nsp = new URLSearchParams(searchParams)
+        nsp.set('customerId', result?.customer?.customerId)
+        setSearchParams(nsp)
+    }, [result])
 
     const getOrders = useCallback(
-        debounce(async (searchParams) => {
+        debounce(async (searchParams, customerSearchForm) => {
+            customerSearchForm.setFieldValue('customerPhone', searchParams.get('customerNumber') ?? '')
+            if (searchParams.get('customerNumber') && searchParams.get('customerNumber').length === 10) {
+                customerSearchForm.handleSubmit()
+            }
+            if (searchParams.get('customerNumber') && searchParams.get('customerNumber').length < 10) {
+                return
+            }
+            if (searchParams.get('customerNumber') && !searchParams.get('customerId')) {
+                return
+            }
             setIsLoading(true)
             try {
                 const sp = new URLSearchParams(searchParams)
@@ -62,7 +81,7 @@ export const useOrders = () => {
             nsp.set('isCreatedByUser', 'true')
             setSearchParams(nsp)
         }
-        getOrders(searchParams)
+        getOrders(searchParams, customerSearchForm)
     }, [searchParams])
     return useMemo(
         () => ({
@@ -70,7 +89,8 @@ export const useOrders = () => {
             hasMore,
             isLoading,
             getOrders,
+            customerSearchForm,
         }),
-        [orders, hasMore, isLoading, getOrders]
+        [orders, hasMore, isLoading, getOrders, customerSearchForm]
     )
 }

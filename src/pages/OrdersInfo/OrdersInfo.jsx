@@ -1,4 +1,4 @@
-import { Button, LinearProgress, Pagination, Paper, Stack, Typography } from '@mui/material'
+import { Button, InputAdornment, LinearProgress, Pagination, Paper, Stack, TextField, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import React from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -12,7 +12,8 @@ import { orderStatusOptions, useOrders } from './hooks/useOrders'
 
 export const Orders = () => {
     const [sp, setSp] = useSearchParams()
-    const { getOrders, hasMore, isLoading, orders } = useOrders()
+    const { hasMore, isLoading, orders, customerSearchForm } = useOrders()
+
     const columns = [
         {
             field: 'orderId',
@@ -114,7 +115,18 @@ export const Orders = () => {
             </Stack>
             <Paper variant="outlined">
                 <Stack p={2} direction="row" flexWrap={'wrap'} gap={2} alignItems={'stretch'}>
-                    <QueryField label={'Customer Id'} placeholder="Customer Id" trim name={'customerId'} />
+                    <QueryField
+                        label={'Customer Number'}
+                        validation={(val) => val.length <= 10 && !isNaN(Number(val))}
+                        sx={{ width: 200 }}
+                        error={sp.get('customerNumber') && sp.get('customerNumber').length < 10}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">+91</InputAdornment>,
+                        }}
+                        placeholder="Number"
+                        trim
+                        name={'customerNumber'}
+                    />
 
                     <QueryMultiSelect sx={{ width: 200 }} name="orderStatus" options={orderStatusOptions} />
                     <QueryMultiSelect
