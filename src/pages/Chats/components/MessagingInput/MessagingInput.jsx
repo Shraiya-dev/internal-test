@@ -1,18 +1,23 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { ImageDropzone } from 'react-file-utils'
 import {
+    AttachmentActions,
+    AttachmentActionsContainer,
     AttachmentPreviewList,
     ChatAutoComplete,
     EmojiPicker,
-    UploadsPreview,
+    MessageInput,
     useChannelStateContext,
     useMessageInputContext,
+    useMessageInputState,
 } from 'stream-chat-react'
 
 import { GiphyContext } from '../../Chats'
 import { EmojiIcon, LightningBoltSmall, SendIcon } from '../../assets'
 
+import { IconButton, Stack } from '@mui/material'
 import './MessagingInput.css'
+import { EmojiEmotionsOutlined, Send } from '@mui/icons-material'
 
 const GiphyIcon = () => (
     <div className="giphy-icon__wrapper">
@@ -26,7 +31,6 @@ const MessagingInput = () => {
     const { acceptedFiles, maxNumberOfFiles, multipleUploads } = useChannelStateContext()
 
     const messageInput = useMessageInputContext()
-
     const onChange = useCallback(
         (event) => {
             const { value } = event.target
@@ -47,9 +51,8 @@ const MessagingInput = () => {
     )
 
     return (
-        <div className="str-chat__messaging-input">
+        <Stack p={2} sx={{ borderTop: '1px solid #adb5bd' }}>
             <ImageDropzone
-                id="helo"
                 accept={acceptedFiles}
                 handleFiles={messageInput.uploadNewFiles}
                 multiple={multipleUploads}
@@ -58,34 +61,26 @@ const MessagingInput = () => {
                 }
             >
                 <AttachmentPreviewList />
-                <label htmlFor="helo">kkkkkkkkkkkkkkkkkkkkkkkkkkkkk</label>
-                <div className="messaging-input__container">
-                    <div
-                        className="messaging-input__button emoji-button"
-                        role="button"
-                        aria-roledescription="button"
+
+                <Stack gap={2} direction={'row'} alignItems={'center'}>
+                    <IconButton
+                        color="primary"
                         onClick={messageInput.openEmojiPicker}
                         ref={messageInput.emojiPickerRef}
                     >
-                        <EmojiIcon />
-                    </div>
-                    <div className="messaging-input__input-wrapper">
+                        <EmojiEmotionsOutlined />
+                    </IconButton>
+                    <Stack direction={'row'} flex={1} alignItems={'center'}>
                         {giphyState && !messageInput.numberOfUploads && <GiphyIcon />}
-
-                        <ChatAutoComplete onChange={onChange} rows={1} placeholder="Send a message" />
-                    </div>
-                    <div
-                        className="messaging-input__button"
-                        role="button"
-                        aria-roledescription="button"
-                        onClick={messageInput.handleSubmit}
-                    >
-                        <SendIcon />
-                    </div>
-                </div>
+                        <ChatAutoComplete rows={2} onChange={onChange} placeholder="Send a message" />
+                    </Stack>
+                    <IconButton color="primary" aria-roledescription="button" onClick={messageInput.handleSubmit}>
+                        <Send />
+                    </IconButton>
+                </Stack>
             </ImageDropzone>
             <EmojiPicker />
-        </div>
+        </Stack>
     )
 }
 

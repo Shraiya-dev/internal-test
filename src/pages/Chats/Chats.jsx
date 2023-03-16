@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import DashboardLayout from '../../components/Layouts/DashboardLayout'
+import React, { useEffect, useState } from 'react'
 import { StreamChat } from 'stream-chat'
+import { Channel, ChannelList, Chat } from 'stream-chat-react'
+import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { envs } from '../../env'
-import { Chat, Channel, ChannelList } from 'stream-chat-react'
 
 import {
     CreateChannel,
@@ -14,9 +14,10 @@ import {
 
 import { ChannelInner } from './components/ChannelInner/ChannelInner'
 
+import { EmojiEmotions } from '@mui/icons-material'
+import { Stack } from '@mui/material'
 import 'stream-chat-react/dist/css/v2/index.css'
 import '../../layout.css'
-import { Stack } from '@mui/material'
 
 const chatClient = new StreamChat(envs.CHAT_API_KEY)
 const userToken = envs.CHAT_USER_TOKEN
@@ -69,11 +70,12 @@ export const Chats = () => {
                             Preview={(props) => <MessagingChannelPreview {...props} {...{ setIsCreating }} />}
                         />
                     </Stack>
+
                     <Stack flex={1}>
                         <Channel
                             Input={MessagingInput}
                             maxNumberOfFiles={10}
-                            Message={CustomMessage}
+                            Message={(p) => <CustomMessage {...p} />}
                             multipleUploads={true}
                             TypingIndicator={() => null}
                         >
