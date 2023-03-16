@@ -187,47 +187,10 @@ const DashboardLayout = ({ children, loading = false }) => {
                             key={index}
                             to={item.link == ATTENDANCE_ROUTE ? `${item.link}?${sp.toString()}` : item.link}
                         >
-                            {/* <ListItemIcon>{item.icon}</ListItemIcon> */}
                             {item.label}
                         </ListItem>
                     ))}
                 </List>
-                {/* <List style={{ margin: 'auto 0 0' }}>
-						<ListItem
-							button
-							sx={(theme) => ({
-								p: 2,
-							})}
-							onClick={handelLogout}>
-							<ListItemIcon>
-								<ExitToApp />
-							</ListItemIcon> 
-							<ListItemText primary={'Logout'} />
-						</ListItem>
-					</List>
-					 <Tabs
-						orientation="vertical"
-						variant="scrollable"
-						aria-label="Vertical tabs example"
-						sx={{ borderRight: 1, borderColor: 'divider' }}>
-						{DrawerList.map((item, index) => {
-							return (
-								<Tab
-									label={item.label}
-									onClick={() => {
-										if (isUserLoggedIn) {
-											return logout()
-										}
-										navigate('/login', {
-											state: {
-												from: pathname,
-											},
-										})
-									}}
-								/>
-							)
-						})}
-					</Tabs> */}
             </Drawer>
             <main
                 style={{
@@ -245,24 +208,6 @@ const DashboardLayout = ({ children, loading = false }) => {
                         pb: 0,
                     }}
                 >
-                    {/* <Button
-						onClick={() => {
-							navigate(-1)
-						}}
-						sx={{
-							fontSize: '16px',
-							p: 0,
-							color: '#616161',
-
-							justifyContent: 'flex-start',
-						}}>
-						<KeyboardBackspace
-							sx={{
-								fontSize: 24,
-							}}
-						/>
-						Back
-					</Button> */}
                     {children}
                 </Box>
             </main>
