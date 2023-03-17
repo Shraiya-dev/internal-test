@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { StreamChat } from 'stream-chat'
 import { Channel, ChannelList, Chat } from 'stream-chat-react'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
@@ -52,13 +52,22 @@ export const Chats = () => {
     }, [])
 
     const giphyContextValue = { giphyState, setGiphyState }
+    const [activeChannels, setActiveChannels] = useState([])
+    const getChannels = async () => {
+        const c = await chatClient.queryChannels(filters, sort, options)
+        console.log({ c })
+        return c
+    }
+    useEffect(() => {
+        if (!chatClient) return
+        getChannels()
+    }, [])
 
     if (!chatClient) return null
-
     return (
         <DashboardLayout>
             <Chat client={chatClient} theme={`messaging ${theme}`}>
-                <Stack direction={'row'} maxHeight={'calc(100vh - 120px)'}>
+                <Stack direction={'row'} alignItems={'stretch'} height={'calc(100vh - 120px)'}>
                     <Stack>
                         <ChannelList
                             filters={filters}
