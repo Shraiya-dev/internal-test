@@ -51,7 +51,7 @@ const MessagingInput = () => {
     )
 
     return (
-        <Stack p={2} sx={{ borderTop: '1px solid #adb5bd' }}>
+        <Stack p={2} sx={{ borderTop: '1px solid #adb5bd', position: 'relative' }}>
             <ImageDropzone
                 accept={acceptedFiles}
                 handleFiles={messageInput.uploadNewFiles}
@@ -78,8 +78,8 @@ const MessagingInput = () => {
                         <Send />
                     </IconButton>
                 </Stack>
+                <EmojiPicker />
             </ImageDropzone>
-            <EmojiPicker />
         </Stack>
     )
 }

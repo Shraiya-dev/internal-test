@@ -43,12 +43,6 @@
     margin-bottom: 1rem;
 }
 
-/* .rfu-image-previewer {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-    padding-top: 0;
-} */
 .messaging__channel-header {
     padding: 1rem;
     display: flex;
@@ -72,107 +66,6 @@
     background-color: #dee2e6;
     width: 100%;
 }
-/* .rfu-thumbnail__wrapper {
-    position: relative;
-    border-radius: 1rem;
-    border: 1px solid #000;
-    overflow: hidden;
-}
-.rfu-thumbnail__overlay {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-}
-.rfu-thumbnail__overlay button {
-    background-color: #0000004a;
-    border: none;
-    border-radius: 50%;
-    width: 48px;
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.rfu-thumbnail__image {
-    width: 100%;
-    height: 100%;
-}
-.rfu-image-upload-button {
-    position: relative;
-    width: 100px;
-    aspect-ratio: 1;
-    border-radius: 1rem;
-    border: 1px solid #000;
-}
-.rfu-image-input {
-    width: 100px;
-    aspect-ratio: 1;
-    cursor: pointer;
-}
-.rfu-thumbnail-placeholder {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    background-color: #0000004a;
-    border: none;
-    border-radius: 50%;
-    width: 48px;
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.rfu-thumbnail-placeholder > svg {
-    filter: brightness(0.5);
-} */
-/* .str-chat-channel.messaging .str-chat__main-panel {
-    padding: 0 !important;
-    min-width: 250px;
-}
-
-.messaging.str-chat .str-chat__list .str-chat__reverse-infinite-scroll {
-    padding-top: 0;
-}
-
-.messaging.str-chat.dark .str-chat__list {
-    padding: 0 30px 0;
-    background: #282a2d;
-}
-
-.str-chat-channel.messaging .str-chat__main-panel {
-    padding: 30px 30px 0 0px;
-}
-
-.str-chat-channel.messaging .str-chat__main-panel:not(:last-child) {
-    padding: 20px 0 0 0px;
-}
-
-.str-chat-channel.messaging .str-chat__main-panel:not(:last-child) .messaging__channel-header {
-    border-radius: 10px 0px 0px 0px;
-}
-
-.str-chat__message-simple-status {
-    display: none;
-}
-
-.messaging.str-chat.dark .str-chat__message--system__date {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.messaging.str-chat.dark .str-chat__message--system__text p {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.messaging.str-chat.dark .str-chat__message--system__line {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.str-chat__message--system {
-    padding: 20px;
-} */
-
 /* Mobile View */
 @media screen and (max-width: 640px) {
     /*
