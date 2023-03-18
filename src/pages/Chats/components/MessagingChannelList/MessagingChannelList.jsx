@@ -1,59 +1,63 @@
-import React, { useEffect } from 'react';
-import { Avatar, useChatContext } from 'stream-chat-react';
+import React, { useEffect } from 'react'
+import { Avatar, useChatContext } from 'stream-chat-react'
 
-import './MessagingChannelList.css';
-import { SkeletonLoader } from './SkeletonLoader';
+import './MessagingChannelList.css'
+import { SkeletonLoader } from './SkeletonLoader'
 
 const MessagingChannelList = ({ children, error = false, loading, onCreateChannel }) => {
-  const { client, setActiveChannel } = useChatContext();
-  const { id, image , name = 'No Name' } = client.user || {};
+    const { client, setActiveChannel } = useChatContext()
+    const { id, image, name = 'No Name' } = client.user || {}
 
-  useEffect(() => {
-    const getDemoChannel = async (client) => {
-      const channel = client.channel('messaging', 'first', { name: 'Hr Manager' });
-      await channel.watch();
-      await channel.addMembers([client.user.id]);
-      setActiveChannel(channel);
-    };
+    useEffect(() => {
+        const getDemoChannel = async (client) => {
+            const channel = client.channel('messaging', 'first', { name: 'Hr Manager' })
+            await channel.watch()
+            await channel.addMembers([client.user.id])
+            setActiveChannel(channel)
+        }
 
-    if (!loading && !children?.props?.children?.length) {
-      getDemoChannel(client);
+        if (!loading && !children?.props?.children?.length) {
+            getDemoChannel(client)
+        }
+    }, [loading]) // eslint-disable-line
+
+    const ListHeaderWrapper = ({ children }) => {
+        return (
+            <div className="messaging__channel-list">
+                <div className="messaging__channel-list__header">
+                    <Avatar
+                        image={image ?? 'https://storage.googleapis.com/ph-assets/ic_hr_manager.png'}
+                        name={name}
+                        size={40}
+                    />
+                    <div className="messaging__channel-list__header__name">{name || id}</div>
+                </div>
+                {children}
+            </div>
+        )
     }
-  }, [loading]); // eslint-disable-line
 
-  const ListHeaderWrapper = ({ children }) => {
-    return (
-      <div className='messaging__channel-list'>
-        <div className='messaging__channel-list__header'>
-          <Avatar image={image??'https://storage.googleapis.com/ph-assets/ic_hr_manager.png'} name={name} size={40} />
-          <div className='messaging__channel-list__header__name'>{name || id}</div>
-        </div>
-        {children}
-      </div>
-    );
-  };
+    if (error) {
+        return (
+            <ListHeaderWrapper>
+                <div className="messaging__channel-list__message">
+                    Error loading conversations, please try again momentarily.
+                </div>
+            </ListHeaderWrapper>
+        )
+    }
 
-  if (error) {
-    return (
-      <ListHeaderWrapper>
-        <div className='messaging__channel-list__message'>
-          Error loading conversations, please try again momentarily.
-        </div>
-      </ListHeaderWrapper>
-    );
-  }
+    if (loading) {
+        return (
+            <ListHeaderWrapper>
+                <div className="messaging__channel-list__message">
+                    <SkeletonLoader />
+                </div>
+            </ListHeaderWrapper>
+        )
+    }
 
-  if (loading) {
-    return (
-      <ListHeaderWrapper>
-        <div className='messaging__channel-list__message'>
-          <SkeletonLoader />
-        </div>
-      </ListHeaderWrapper>
-    );
-  }
+    return <ListHeaderWrapper>{children}</ListHeaderWrapper>
+}
 
-  return <ListHeaderWrapper>{children}</ListHeaderWrapper>;
-};
-
-export default React.memo(MessagingChannelList);
+export default React.memo(MessagingChannelList)

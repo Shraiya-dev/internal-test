@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { StreamChat } from 'stream-chat'
 import { Channel, ChannelList, Chat } from 'stream-chat-react'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
@@ -15,9 +15,10 @@ import {
 import { ChannelInner } from './components/ChannelInner/ChannelInner'
 
 import { EmojiEmotions } from '@mui/icons-material'
-import { Stack } from '@mui/material'
+import { Stack, TextField, alpha, debounce, styled } from '@mui/material'
 import 'stream-chat-react/dist/css/v2/index.css'
 import '../../layout.css'
+import { SearchUser } from '../../components/SearchFields'
 
 const chatClient = new StreamChat(envs.CHAT_API_KEY)
 const userToken = envs.CHAT_USER_TOKEN
@@ -30,17 +31,16 @@ chatClient.connectUser(
     },
     userToken
 )
-
-const filters = { type: 'messaging', members: { $in: ['hr_manager_chat_user'] } }
+const initFilters = { type: 'messaging', members: { $in: ['hr_manager_chat_user'] } }
 const sort = { last_message_at: -1 }
 const options = { state: true, watch: true, presence: true, limit: 15 }
 export const GiphyContext = React.createContext({})
 
 export const Chats = () => {
+    const [filters, setFilters] = useState(initFilters)
     const [giphyState, setGiphyState] = useState(false)
     const [isCreating, setIsCreating] = useState(false)
     const [theme, setTheme] = useState('light')
-
     useEffect(() => {
         const setAppHeight = () => {
             const doc = document.documentElement
@@ -64,15 +64,34 @@ export const Chats = () => {
     }, [])
 
     if (!chatClient) return null
+    const searchUserWithPhoneNumber = useCallback(async (phoneNumber) => {
+        const { users } = await chatClient.queryUsers(
+            { phoneNumber: { $in: ['+91' + phoneNumber.replace('+91', '')] } },
+            { last_active: -1 },
+            { presence: true }
+        )
+        setFilters((p) => ({ ...p, members: { $in: [users?.[0]?.id] } }))
+    }, [])
+    const clearFilter = useCallback(() => {
+        setFilters(initFilters)
+    })
+
     return (
         <DashboardLayout>
             <Chat client={chatClient} theme={`messaging ${theme}`}>
                 <Stack direction={'row'} alignItems={'stretch'} height={'calc(100vh - 120px)'}>
                     <Stack>
                         <ChannelList
+                            showChannelSearch
+                            ChannelSearch={({}) => (
+                                <SearchUser onSearch={searchUserWithPhoneNumber} clearFilter={clearFilter} />
+                            )}
                             filters={filters}
-                            sort={sort}
-                            options={options}
+                            sort={{
+                                last_message_at: -1,
+                                has_unread: -1,
+                            }}
+                            options={{ user_id: 'hr_manager_chat_user' }}
                             List={(props) => (
                                 <MessagingChannelList {...props} onCreateChannel={() => setIsCreating(!isCreating)} />
                             )}
@@ -101,3 +120,18 @@ export const Chats = () => {
         </DashboardLayout>
     )
 }
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+    },
+}))
