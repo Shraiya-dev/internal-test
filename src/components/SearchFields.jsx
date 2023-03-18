@@ -7,6 +7,7 @@ export const SearchUser = ({ onSearch, clearFilter }) => {
     return (
         <Stack
             component="form"
+            sx={{ maxWidth: '330px' }}
             onSubmit={(e) => {
                 e.preventDefault()
                 onSearch(value)
