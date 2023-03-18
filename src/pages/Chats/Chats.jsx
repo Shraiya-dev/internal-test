@@ -15,7 +15,7 @@ import {
 import { ChannelInner } from './components/ChannelInner/ChannelInner'
 
 import { EmojiEmotions } from '@mui/icons-material'
-import { Stack, TextField, alpha, debounce, styled } from '@mui/material'
+import { Stack, Switch, TextField, alpha, debounce, styled } from '@mui/material'
 import 'stream-chat-react/dist/css/v2/index.css'
 import '../../layout.css'
 import { SearchUser } from '../../components/SearchFields'
@@ -32,12 +32,14 @@ chatClient.connectUser(
     userToken
 )
 const initFilters = { type: 'messaging', members: { $in: ['hr_manager_chat_user'] } }
-const sort = { last_message_at: -1 }
+const initSort = { last_message_at: -1 }
 const options = { state: true, watch: true, presence: true, limit: 15 }
 export const GiphyContext = React.createContext({})
 
 export const Chats = () => {
     const [filters, setFilters] = useState(initFilters)
+    const [sort, setSort] = useState(initSort)
+
     const [giphyState, setGiphyState] = useState(false)
     const [isCreating, setIsCreating] = useState(false)
     const [theme, setTheme] = useState('light')
@@ -52,16 +54,6 @@ export const Chats = () => {
     }, [])
 
     const giphyContextValue = { giphyState, setGiphyState }
-    const [activeChannels, setActiveChannels] = useState([])
-    const getChannels = async () => {
-        const c = await chatClient.queryChannels(filters, sort, options)
-        console.log({ c })
-        return c
-    }
-    useEffect(() => {
-        if (!chatClient) return
-        getChannels()
-    }, [])
 
     if (!chatClient) return null
     const searchUserWithPhoneNumber = useCallback(async (phoneNumber) => {
@@ -75,7 +67,16 @@ export const Chats = () => {
     const clearFilter = useCallback(() => {
         setFilters(initFilters)
     })
-
+    const [check, setCheck] = useState(false)
+    const handelSortToggle = useCallback((value) => {
+        if (value) {
+            setSort({
+                unread_count: -1,
+            })
+        } else {
+            setSort(initSort)
+        }
+    }, [])
     return (
         <DashboardLayout>
             <Chat client={chatClient} theme={`messaging ${theme}`}>
@@ -83,19 +84,30 @@ export const Chats = () => {
                     <Stack>
                         <ChannelList
                             showChannelSearch
-                            ChannelSearch={({}) => (
-                                <SearchUser onSearch={searchUserWithPhoneNumber} clearFilter={clearFilter} />
+                            ChannelSearch={() => (
+                                <>
+                                    {/* <Switch
+                                        value={check}
+                                        onChange={(_, check) => {
+                                            setCheck(check)
+                                            handelSortToggle(check)
+                                        }}
+                                    /> */}
+                                    <SearchUser onSearch={searchUserWithPhoneNumber} clearFilter={clearFilter} />
+                                </>
                             )}
                             filters={filters}
-                            sort={{
-                                last_message_at: -1,
-                                has_unread: -1,
-                            }}
+                            setActiveChannelOnMount
+                            sort={sort}
                             options={{ user_id: 'hr_manager_chat_user' }}
                             List={(props) => (
-                                <MessagingChannelList {...props} onCreateChannel={() => setIsCreating(!isCreating)} />
+                                <MessagingChannelList
+                                    {...props}
+                                    handelSortToggle={handelSortToggle}
+                                    onCreateChannel={() => setIsCreating(!isCreating)}
+                                />
                             )}
-                            Preview={(props) => <MessagingChannelPreview {...props} {...{ setIsCreating }} />}
+                            Preview={(props) => <MessagingChannelPreview {...props} setIsCreating={setIsCreating} />}
                         />
                     </Stack>
 
