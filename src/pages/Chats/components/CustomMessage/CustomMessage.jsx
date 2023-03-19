@@ -1,14 +1,15 @@
-import React from 'react';
-import { MessageSimple } from 'stream-chat-react';
+import React from 'react'
+import { MessageSimple, useMessageContext } from 'stream-chat-react'
 
-import './CustomMessage.css';
+import './CustomMessage.css'
 
 const CustomMessage = (props) => {
-  return (
-    <>
-      <MessageSimple {...props} />
-    </>
-  );
-};
+    const {} = useMessageContext()
+    return (
+        <>
+            <MessageSimple {...props} />
+        </>
+    )
+}
 
-export default CustomMessage;
+export default CustomMessage

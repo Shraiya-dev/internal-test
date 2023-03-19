@@ -19,6 +19,7 @@ import { Stack, Switch, TextField, alpha, debounce, styled } from '@mui/material
 import 'stream-chat-react/dist/css/v2/index.css'
 import '../../layout.css'
 import { SearchUser } from '../../components/SearchFields'
+import { useSearchParams } from 'react-router-dom'
 
 const chatClient = new StreamChat(envs.CHAT_API_KEY)
 const userToken = envs.CHAT_USER_TOKEN
@@ -57,55 +58,45 @@ export const Chats = () => {
 
     if (!chatClient) return null
     const searchUserWithPhoneNumber = useCallback(async (phoneNumber) => {
+        if (!phoneNumber) {
+            setFilters(initFilters)
+        }
         const { users } = await chatClient.queryUsers(
             { phoneNumber: { $in: ['+91' + phoneNumber.replace('+91', '')] } },
             { last_active: -1 },
             { presence: true }
         )
-        setFilters((p) => ({ ...p, members: { $in: [users?.[0]?.id] } }))
+        setFilters((p) => ({ ...p, members: { $in: [users?.[0]?.id || 'hr_manager_chat_user'] } }))
     }, [])
-    const clearFilter = useCallback(() => {
-        setFilters(initFilters)
-    })
-    const [check, setCheck] = useState(false)
-    const handelSortToggle = useCallback((value) => {
-        if (value) {
+    const [sp, setSp] = useSearchParams()
+    useEffect(() => {
+        if ((sp.get('number') ?? '').length === 10 || (sp.get('number') ?? '') === '') {
+            searchUserWithPhoneNumber(sp.get('number'))
+        }
+    }, [sp.get('number')])
+    useEffect(() => {
+        if (sp.get('unreadOnly')) {
             setSort({
-                unread_count: -1,
+                has_unread: -1,
             })
         } else {
-            setSort(initSort)
+            setSort({
+                last_message_at: -1,
+            })
         }
-    }, [])
+    }, [sp.get('unreadOnly')])
     return (
         <DashboardLayout>
             <Chat client={chatClient} theme={`messaging ${theme}`}>
                 <Stack direction={'row'} alignItems={'stretch'} height={'calc(100vh - 120px)'}>
                     <Stack>
+                        <SearchUser />
                         <ChannelList
-                            showChannelSearch
-                            ChannelSearch={() => (
-                                <>
-                                    {/* <Switch
-                                        value={check}
-                                        onChange={(_, check) => {
-                                            setCheck(check)
-                                            handelSortToggle(check)
-                                        }}
-                                    /> */}
-                                    <SearchUser onSearch={searchUserWithPhoneNumber} clearFilter={clearFilter} />
-                                </>
-                            )}
                             filters={filters}
-                            setActiveChannelOnMount
                             sort={sort}
-                            options={{ user_id: 'hr_manager_chat_user' }}
+                            options={options}
                             List={(props) => (
-                                <MessagingChannelList
-                                    {...props}
-                                    handelSortToggle={handelSortToggle}
-                                    onCreateChannel={() => setIsCreating(!isCreating)}
-                                />
+                                <MessagingChannelList {...props} onCreateChannel={() => setIsCreating(!isCreating)} />
                             )}
                             Preview={(props) => <MessagingChannelPreview {...props} setIsCreating={setIsCreating} />}
                         />
