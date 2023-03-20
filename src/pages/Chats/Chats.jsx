@@ -58,20 +58,25 @@ export const Chats = () => {
 
     if (!chatClient) return null
     const searchUserWithPhoneNumber = useCallback(async (phoneNumber) => {
-        if (!phoneNumber) {
+        if (phoneNumber.length === 0) {
             setFilters(initFilters)
+            return
         }
         const { users } = await chatClient.queryUsers(
-            { phoneNumber: { $in: ['+91' + phoneNumber.replace('+91', '')] } },
+            { phoneNumber: { $in: phoneNumber.map((item) => '+91' + item.replace('+91')) } },
             { last_active: -1 },
             { presence: true }
         )
-        setFilters((p) => ({ ...p, members: { $in: [users?.[0]?.id || 'hr_manager_chat_user'] } }))
+        setFilters((p) => ({
+            ...p,
+            members: { $in: users.length > 0 ? users.map((item) => item?.id) : ['hr_manager_chat_user'] },
+        }))
     }, [])
     const [sp, setSp] = useSearchParams()
     useEffect(() => {
-        if ((sp.get('number') ?? '').length === 10 || (sp.get('number') ?? '') === '') {
-            searchUserWithPhoneNumber(sp.get('number'))
+        const phoneNumbers = (sp.get('number') ?? '').split(',').filter((item) => item)
+        if (phoneNumbers.length === 0 || phoneNumbers.every((item) => item.length === 10)) {
+            searchUserWithPhoneNumber(phoneNumbers)
         }
     }, [sp.get('number')])
     useEffect(() => {
