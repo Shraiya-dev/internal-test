@@ -10,13 +10,28 @@ export const SearchUser = () => {
     const { id, image, name = 'No Name' } = client.user || {}
     return (
         <Stack gap={1} pb={1}>
-            <Stack direction="row" alignItems={'center'} gap={1}>
+            <Stack p={1} direction="row" alignItems={'center'} gap={1}>
                 <Avatar
                     image={image ?? 'https://storage.googleapis.com/ph-assets/ic_hr_manager.png'}
                     name={name}
                     size={40}
                 />
-                <div>{name || id}</div>
+                <Stack flex={1}>{name || id}</Stack>
+                <IconButton
+                    color="primary"
+                    onClick={() => {
+                        if (sp.get('unreadOnly')) {
+                            sp.delete('unreadOnly')
+                        } else {
+                            sp.set('unreadOnly', true)
+                        }
+                        setSp(new URLSearchParams(sp), {
+                            replace: true,
+                        })
+                    }}
+                >
+                    {sp.get('unreadOnly') ? <FilterListOff /> : <FilterList />}
+                </IconButton>
             </Stack>
             <TextField
                 ref={ref}
@@ -33,11 +48,11 @@ export const SearchUser = () => {
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="start">
-                            {sp.get('number') && (
+                            {sp.get('customer') && (
                                 <IconButton
                                     color="primary"
                                     onClick={() => {
-                                        sp.delete('number')
+                                        sp.delete('customer')
                                         setSp(new URLSearchParams(sp), {
                                             replace: true,
                                         })
@@ -46,36 +61,65 @@ export const SearchUser = () => {
                                     <HighlightOffRounded />
                                 </IconButton>
                             )}
-                            <IconButton
-                                color="primary"
-                                onClick={() => {
-                                    if (sp.get('unreadOnly')) {
-                                        sp.delete('unreadOnly')
-                                    } else {
-                                        sp.set('unreadOnly', true)
-                                    }
-                                    setSp(new URLSearchParams(sp), {
-                                        replace: true,
-                                    })
-                                }}
-                            >
-                                {sp.get('unreadOnly') ? <FilterListOff /> : <FilterList />}
-                            </IconButton>
                         </InputAdornment>
                     ),
                     startAdornment: <InputAdornment position="start">+91</InputAdornment>,
                 }}
                 variant="standard"
                 color="primary"
-                value={sp.get('number') ?? ''}
+                value={sp.get('customer') ?? ''}
                 onChange={(e) => {
-                    sp.set('number', e.target.value)
+                    sp.set('customer', e.target.value)
                     setSp(new URLSearchParams(sp), {
                         replace: true,
                     })
                 }}
-                placeholder="Search Number"
+                placeholder="Search Customer"
             />
+            <TextField
+                ref={ref}
+                sx={{
+                    backgroundColor: '#fff',
+                    maxWidth: '330px',
+                    border: 'none',
+                    px: 0.5,
+                    borderRadius: 8,
+                    input: {
+                        padding: 0.5,
+                    },
+                }}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="start">
+                            {sp.get('worker') && (
+                                <IconButton
+                                    color="primary"
+                                    onClick={() => {
+                                        sp.delete('worker')
+                                        setSp(new URLSearchParams(sp), {
+                                            replace: true,
+                                        })
+                                    }}
+                                >
+                                    <HighlightOffRounded />
+                                </IconButton>
+                            )}
+                        </InputAdornment>
+                    ),
+                    startAdornment: <InputAdornment position="start">+91</InputAdornment>,
+                }}
+                variant="standard"
+                color="primary"
+                value={sp.get('worker') ?? ''}
+                onChange={(e) => {
+                    sp.set('worker', e.target.value)
+                    setSp(new URLSearchParams(sp), {
+                        replace: true,
+                    })
+                }}
+                placeholder="Search worker"
+            />
+
             {/* <Search>
                 <SearchIconWrapper>+91</SearchIconWrapper>
                 <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />

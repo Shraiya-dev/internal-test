@@ -85,15 +85,17 @@ export const Chats = () => {
     }, [])
     const [sp, setSp] = useSearchParams()
     useEffect(() => {
-        const phoneNumbers = (sp.get('number') ?? '').split(',').filter((item) => item)
+        const phoneNumbers = ((sp.get('customer') ?? '') + ',' + (sp.get('worker') ?? ''))
+            .split(',')
+            .filter((item) => item)
         if (phoneNumbers.length === 0 || phoneNumbers.every((item) => item.length === 10)) {
             searchUserWithPhoneNumber(phoneNumbers)
         }
-    }, [sp.get('number')])
+    }, [sp.get('customer'), sp.get('worker')])
     useEffect(() => {
         if (sp.get('unreadOnly')) {
             setSort({
-                has_unread: -1,
+                unread_count: -1,
             })
         } else {
             setSort({
