@@ -171,27 +171,19 @@ const EmployeeDashboard = () => {
                             />
                         </Grid>
                         <Grid item>
-                            <QuerySelect sx={{ width: 200 }} name="hiringChannel">
-                                {getSelectOptions(HiringChannels)}
-                            </QuerySelect>
+                            <QuerySelect options={HiringChannels} sx={{ width: 200 }} name="hiringChannel" />
                         </Grid>
 
                         <Grid item>
-                            <QuerySelect sx={{ width: 200 }} name="jobType">
-                                {getSelectOptions(JobTypeOptions)}
-                            </QuerySelect>
+                            <QuerySelect options={JobTypeOptions} sx={{ width: 200 }} name="jobType" />
                         </Grid>
 
                         <Grid item>
-                            <QuerySelect sx={{ width: 200 }} name="skillType">
-                                {getSelectOptions(SkillTypes)}
-                            </QuerySelect>
+                            <QuerySelect options={SkillTypes} sx={{ width: 200 }} name="skillType" />
                         </Grid>
 
                         <Grid item>
-                            <QuerySelect sx={{ width: 200 }} name="employeeStatus">
-                                {getSelectOptions(EmployeeStatusOption)}
-                            </QuerySelect>
+                            <QuerySelect options={EmployeeStatusOption} sx={{ width: 200 }} name="employeeStatus" />
                         </Grid>
 
                         <Grid display="flex" item>
