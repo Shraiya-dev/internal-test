@@ -3,6 +3,7 @@ import {
     AppBar,
     Box,
     Button,
+    Dialog,
     Drawer,
     IconButton,
     LinearProgress,
@@ -10,6 +11,8 @@ import {
     ListItem,
     Menu,
     MenuItem,
+    Stack,
+    TextField,
     Toolbar,
     Typography,
 } from '@mui/material'
@@ -18,6 +21,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import projectHeroLogo from '../../assets/brand-logo.svg'
 import { VITE_PUBLIC_APP_ENV } from '../../env'
+import * as Yup from 'yup'
 import { useAuth } from '../../providers/AuthProvider'
 import {
     ADD_PARTNER_ROUTE,
@@ -32,6 +36,11 @@ import {
     ORDERS_INFO_ROUTE,
     CHATS,
 } from '../../routes'
+import axios from 'axios'
+import { useFormik } from 'formik'
+import { useFormikProps } from '../../hooks/useFormikProps'
+import { useSnackbar } from '../../providers/SnackbarProvider'
+import { getBackendUrl } from '../../api'
 
 const drawerWidth = 250
 
@@ -100,6 +109,7 @@ const DrawerList = [
     }
     return 0
 })
+export const SERVER_URL = getBackendUrl()
 
 const DashboardLayout = ({ children, loading = false }) => {
     const navigate = useNavigate()
@@ -128,9 +138,76 @@ const DashboardLayout = ({ children, loading = false }) => {
             },
         })
     }, [isUserLoggedIn, pathname])
+    const [addAdminModal, setAddAdminModal] = useState(false)
+    const { showSnackbar } = useSnackbar()
+    const form = useFormik({
+        initialValues: {
+            userName: '',
+            phoneNumber: '',
+        },
+        onReset: () => {
+            setAddAdminModal(false)
+        },
+        validationSchema: Yup.object({
+            userName: Yup.string().required('Name is required'),
+            phoneNumber: Yup.string().required('Phone number is required').min(10, 'Enter a valid phone number'),
+        }),
+        onSubmit: async (values, fh) => {
+            try {
+                const { data } = await axios.post(`${SERVER_URL}/admin/ops-admin`, {
+                    userName: values.userName,
+                    phoneNumber: values.phoneNumber,
+                })
+                if (data.success) {
+                    showSnackbar({
+                        sev: 'success',
+                        msg: 'Successfully Created New Ops Admin',
+                    })
+                    fh.resetForm()
+                } else {
+                    showSnackbar({
+                        sev: 'error',
+                        msg: data?.error,
+                    })
+                }
+            } catch (error) {
+                showSnackbar({
+                    sev: 'error',
+                    msg: error?.response?.data?.developerInfo,
+                })
+            }
+        },
+    })
 
+    const formikProps = useFormikProps(form)
     return (
         <>
+            <Dialog open={addAdminModal}>
+                <Stack p={2} gap={2}>
+                    <Typography variant="h5" textAlign={'center'}>
+                        Add New Ops Admin
+                    </Typography>
+                    <TextField label="User Name" {...formikProps('userName')} />
+                    <TextField
+                        label="Phone Number"
+                        {...formikProps('phoneNumber')}
+                        onChange={(e) => {
+                            if (e.target.value.length <= 10) {
+                                formikProps('phoneNumber').onChange(e)
+                            }
+                        }}
+                    />
+
+                    <Stack direction={'row'} gap={1}>
+                        <Button fullWidth variant="outlined" color="error" onClick={form.handleReset}>
+                            Cancel
+                        </Button>
+                        <Button fullWidth variant="contained" onClick={form.handleSubmit}>
+                            Submit
+                        </Button>
+                    </Stack>
+                </Stack>
+            </Dialog>
             <AppBar
                 position="fixed"
                 color="primary"
@@ -158,10 +235,19 @@ const DashboardLayout = ({ children, loading = false }) => {
                     </IconButton>
                     <Menu anchorEl={menuBtnRef.current} open={menuOpen} onClose={handleClose}>
                         <MenuItem onClick={handleClose}>{user.phoneNumber}</MenuItem>
+                        <MenuItem
+                            onClick={() => {
+                                setAddAdminModal(true)
+                            }}
+                        >
+                            Add New Ops Admin
+                        </MenuItem>
+
                         <MenuItem onClick={handelLogout}>Logout</MenuItem>
                     </Menu>
                 </Toolbar>
             </AppBar>
+
             <Drawer
                 variant="permanent"
                 PaperProps={{
