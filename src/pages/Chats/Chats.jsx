@@ -69,7 +69,18 @@ export const Chats = () => {
         )
         setFilters((p) => ({
             ...p,
-            members: { $in: users.length > 0 ? users.map((item) => item?.id) : ['hr_manager_chat_user'] },
+            $and:
+                users.length > 0
+                    ? users.map((item) => ({
+                          members: {
+                              $in: [item?.id],
+                          },
+                      }))
+                    : {
+                          members: {
+                              $in: ['hr_manager_chat_user'],
+                          },
+                      },
         }))
     }, [])
     const [sp, setSp] = useSearchParams()
