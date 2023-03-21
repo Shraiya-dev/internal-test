@@ -1,5 +1,15 @@
 import { FilterList, FilterListOff, HighlightOffRounded } from '@mui/icons-material'
-import { IconButton, InputAdornment, InputBase, Stack, TextField, alpha, styled } from '@mui/material'
+import {
+    IconButton,
+    InputAdornment,
+    InputBase,
+    Stack,
+    TextField,
+    ToggleButton,
+    ToggleButtonGroup,
+    alpha,
+    styled,
+} from '@mui/material'
 import { useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Avatar, useChatContext } from 'stream-chat-react'
@@ -16,10 +26,12 @@ export const SearchUser = () => {
                     name={name}
                     size={40}
                 />
-                <Stack flex={1}>{name || id}</Stack>
-                <IconButton
+                <Stack flex={1}>{'HR' || id}</Stack>
+                <ToggleButtonGroup
                     color="primary"
-                    onClick={() => {
+                    value={sp.get('unreadOnly') || 'time'}
+                    size="small"
+                    onChange={() => {
                         if (sp.get('unreadOnly')) {
                             sp.delete('unreadOnly')
                         } else {
@@ -29,12 +41,19 @@ export const SearchUser = () => {
                             replace: true,
                         })
                     }}
+                    exclusive
                 >
-                    {sp.get('unreadOnly') ? <FilterListOff /> : <FilterList />}
-                </IconButton>
+                    <ToggleButton value="time" aria-label="justified">
+                        Time
+                    </ToggleButton>
+                    <ToggleButton value="true" aria-label="left aligned">
+                        Unread
+                    </ToggleButton>
+                </ToggleButtonGroup>
             </Stack>
             <TextField
                 ref={ref}
+                type="tel"
                 sx={{
                     backgroundColor: '#fff',
                     maxWidth: '330px',
@@ -69,6 +88,8 @@ export const SearchUser = () => {
                 color="primary"
                 value={sp.get('customer') ?? ''}
                 onChange={(e) => {
+                    if (e.target.value.length > 10) return
+
                     sp.set('customer', e.target.value)
                     setSp(new URLSearchParams(sp), {
                         replace: true,
@@ -78,6 +99,7 @@ export const SearchUser = () => {
             />
             <TextField
                 ref={ref}
+                type="tel"
                 sx={{
                     backgroundColor: '#fff',
                     maxWidth: '330px',
@@ -112,6 +134,7 @@ export const SearchUser = () => {
                 color="primary"
                 value={sp.get('worker') ?? ''}
                 onChange={(e) => {
+                    if (e.target.value.length > 10) return
                     sp.set('worker', e.target.value)
                     setSp(new URLSearchParams(sp), {
                         replace: true,

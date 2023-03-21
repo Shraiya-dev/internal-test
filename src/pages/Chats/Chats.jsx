@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { StreamChat } from 'stream-chat'
-import { Channel, ChannelList, Chat } from 'stream-chat-react'
+import { Channel, ChannelList, Chat, useChannelVisibleListener, useChatContext } from 'stream-chat-react'
 import DashboardLayout from '../../components/Layouts/DashboardLayout'
 import { envs } from '../../env'
 
@@ -15,7 +15,7 @@ import {
 import { ChannelInner } from './components/ChannelInner/ChannelInner'
 
 import { EmojiEmotions } from '@mui/icons-material'
-import { Stack, Switch, TextField, alpha, debounce, styled } from '@mui/material'
+import { Stack, Switch, TextField, Typography, alpha, debounce, styled } from '@mui/material'
 import 'stream-chat-react/dist/css/v2/index.css'
 import '../../layout.css'
 import { SearchUser } from '../../components/SearchFields'

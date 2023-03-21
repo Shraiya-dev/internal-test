@@ -4,6 +4,7 @@ import { getCleanImage } from '../../assets'
 
 import './MessagingChannelPreview.css'
 import { Badge, Stack } from '@mui/material'
+import { format, isSameDay } from 'date-fns'
 
 const getAvatarGroup = (members) => {
     if (members.length === 1) {
@@ -76,27 +77,12 @@ const getAvatarGroup = (members) => {
 }
 
 const getTimeStamp = (channel) => {
-    let lastHours = channel.state.last_message_at?.getHours()
-    let lastMinutes = channel.state.last_message_at?.getMinutes()
-    let half = 'AM'
-
-    if (lastHours === undefined || lastMinutes === undefined) {
-        return ''
+    const lastMessageDate = channel.state.last_message_at
+    if (isSameDay(new Date(lastMessageDate), new Date())) {
+        return format(new Date(lastMessageDate, 'HH:MM a'))
+    } else {
+        return format(new Date(lastMessageDate), 'dd/mm/yy')
     }
-
-    if (lastHours > 12) {
-        lastHours = lastHours - 12
-        half = 'PM'
-    }
-
-    if (lastHours === 0) lastHours = 12
-    if (lastHours === 12) half = 'PM'
-
-    if (lastMinutes.toString().length === 1) {
-        lastMinutes = `0${lastMinutes}`
-    }
-
-    return `${lastHours}:${lastMinutes} ${half}`
 }
 
 const getChannelName = (members) => {

@@ -1,56 +1,17 @@
 export const JobTypeOptions = [
-    {
-        label: 'Gypsum',
-        value: 'GYPSUM',
-    },
-    {
-        label: 'Painter',
-        value: 'PAINTER',
-    },
-    {
-        label: 'Carpenter',
-        value: 'CARPENTER',
-    },
-    {
-        label: 'Electrical',
-        value: 'ELECTRICAL',
-    },
-    {
-        label: 'Mason',
-        value: 'MASON',
-    },
-    {
-        label: 'Bar Bender',
-        value: 'BAR_BENDER',
-    },
-    {
-        label: 'Shuttering Carpenter',
-        value: 'SHUTTERING_CARPENTER',
-    },
-    {
-        label: 'Welder Fitter',
-        value: 'WELDER_FITTER',
-    },
-    {
-        label: 'General Helper',
-        value: 'GENERAL_HELPER',
-    },
-    {
-        label: 'Hvac',
-        value: 'HVAC',
-    },
-    {
-        label: 'Plumbing',
-        value: 'PLUMBING',
-    },
-    {
-        label: 'Aluminium Fabricator',
-        value: 'ALUMINIUM_FABRICATOR',
-    },
-    {
-        label: 'Stone Tile Marble Layer',
-        value: 'STONE_TILE_MARBLE_LAYER',
-    },
+    { label: 'Gypsum', value: 'GYPSUM' },
+    { label: 'Painter', value: 'PAINTER' },
+    { label: 'Carpenter', value: 'CARPENTER' },
+    { label: 'Electrical', value: 'ELECTRICAL' },
+    { label: 'Mason', value: 'MASON' },
+    { label: 'Bar Bender', value: 'BAR_BENDER' },
+    { label: 'Shuttering Carpenter', value: 'SHUTTERING_CARPENTER' },
+    { label: 'Welder Fitter', value: 'WELDER_FITTER' },
+    { label: 'General Helper', value: 'GENERAL_HELPER' },
+    { label: 'Hvac', value: 'HVAC' },
+    { label: 'Plumbing', value: 'PLUMBING' },
+    { label: 'Aluminium Fabricator', value: 'ALUMINIUM_FABRICATOR' },
+    { label: 'Stone Tile Marble Layer', value: 'STONE_TILE_MARBLE_LAYER' },
 ]
 
 export const tags = {
