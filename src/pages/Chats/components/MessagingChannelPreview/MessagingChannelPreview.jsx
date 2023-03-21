@@ -82,7 +82,7 @@ const getTimeStamp = (channel) => {
     if (isSameDay(new Date(lastMessageDate), new Date())) {
         return format(new Date(lastMessageDate), 'HH:MM a')
     } else {
-        return format(new Date(lastMessageDate), 'dd/mm/yy')
+        return format(new Date(lastMessageDate), 'dd/MM/yy')
     }
 }
 
