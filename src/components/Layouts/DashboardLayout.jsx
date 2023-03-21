@@ -156,7 +156,7 @@ const DashboardLayout = ({ children, loading = false }) => {
             try {
                 const { data } = await axios.post(`${SERVER_URL}/admin/ops-admin`, {
                     userName: values.userName,
-                    phoneNumber: values.phoneNumber,
+                    phoneNumber: '+91' + values.phoneNumber,
                 })
                 if (data.success) {
                     showSnackbar({
