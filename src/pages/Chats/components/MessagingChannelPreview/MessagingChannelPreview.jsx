@@ -77,12 +77,12 @@ const getAvatarGroup = (members) => {
 }
 
 const getTimeStamp = (channel) => {
-    const lastMessageDate = channel.state.last_message_at
+    const lastMessageDate = new Date(channel.state.last_message_at)
     if (!lastMessageDate) return ''
-    if (isSameDay(new Date(lastMessageDate), new Date())) {
-        return format(new Date(lastMessageDate), 'HH:MM a')
+    if (isSameDay(lastMessageDate, new Date())) {
+        return format(lastMessageDate, 'hh:mm a')
     } else {
-        return format(new Date(lastMessageDate), 'dd/MM/yy')
+        return format(lastMessageDate, 'dd/MM/yy')
     }
 }
 
