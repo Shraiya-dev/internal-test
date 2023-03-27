@@ -17,7 +17,8 @@ import { EmojiIcon, LightningBoltSmall, SendIcon } from '../../assets'
 
 import { IconButton, Stack } from '@mui/material'
 import './MessagingInput.css'
-import { EmojiEmotionsOutlined, Send } from '@mui/icons-material'
+import { EmojiEmotionsOutlined, Group, Send } from '@mui/icons-material'
+import { analytics } from '../../../../hooks/analytics'
 
 const GiphyIcon = () => (
     <div className="giphy-icon__wrapper">
@@ -27,6 +28,7 @@ const GiphyIcon = () => (
 )
 
 const MessagingInput = () => {
+    const { channel } = useChannelStateContext()
     const { giphyState, setGiphyState } = useContext(GiphyContext)
     const { acceptedFiles, maxNumberOfFiles, multipleUploads } = useChannelStateContext()
 
@@ -49,6 +51,23 @@ const MessagingInput = () => {
         },
         [giphyState, messageInput.numberOfUploads, messageInput.text] // eslint-disable-line
     )
+    const sendAnalytics = async () => {
+        try {
+            const users = (await channel.queryMembers({})).members
+                .filter((user) => !user.is_moderator)
+                .sort((a, b) => a.userType < b.userType)
+            analytics.track('ChatMessageSend Pressed', {
+                members: users.map((item) => ({
+                    id: item.user?.id,
+                    name: item.user?.name,
+                    userType: item.user?.userType,
+                })),
+                groupType: users.map((item) => item.user?.userType).join('_'),
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <Stack p={2} sx={{ borderTop: '1px solid #adb5bd', position: 'relative' }}>
@@ -72,9 +91,24 @@ const MessagingInput = () => {
                     </IconButton>
                     <Stack direction={'row'} flex={1} alignItems={'center'}>
                         {giphyState && !messageInput.numberOfUploads && <GiphyIcon />}
-                        <ChatAutoComplete rows={2} onChange={onChange} placeholder="Send a message" />
+                        <ChatAutoComplete
+                            rows={2}
+                            onChange={onChange}
+                            handleSubmit={async (e) => {
+                                sendAnalytics()
+                                messageInput.handleSubmit(e)
+                            }}
+                            placeholder="Send a message"
+                        />
                     </Stack>
-                    <IconButton color="primary" aria-roledescription="button" onClick={messageInput.handleSubmit}>
+                    <IconButton
+                        color="primary"
+                        aria-roledescription="button"
+                        onClick={async (e) => {
+                            sendAnalytics()
+                            messageInput.handleSubmit(e)
+                        }}
+                    >
                         <Send />
                     </IconButton>
                 </Stack>

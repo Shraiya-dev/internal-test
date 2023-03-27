@@ -5,6 +5,7 @@ import { getCleanImage } from '../../assets'
 import './MessagingChannelPreview.css'
 import { Badge, Stack } from '@mui/material'
 import { format, isSameDay } from 'date-fns'
+import { analytics } from '../../../../hooks/analytics'
 
 const getAvatarGroup = (members) => {
     if (members.length === 1) {
@@ -101,7 +102,23 @@ const MessagingChannelPreview = (props) => {
     const { channel: activeChannel, client } = useContext(ChatContext)
 
     const members = Object.values(channel.state.members).filter(({ user }) => user.id !== client.userID)
-
+    const sendAnalytics = async () => {
+        try {
+            const users = (await channel.queryMembers({})).members
+                .filter((user) => !user.is_moderator)
+                .sort((a, b) => a.userType < b.userType)
+            analytics.track('Conversation Pressed', {
+                members: users.map((item) => ({
+                    id: item.user?.id,
+                    name: item.user?.name,
+                    userType: item.user?.userType,
+                })),
+                groupType: users.map((item) => item.user?.userType).join('_'),
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <Stack
             direction={'row'}
@@ -109,6 +126,7 @@ const MessagingChannelPreview = (props) => {
                 channel?.id === activeChannel?.id ? 'channel-preview__container selected' : 'channel-preview__container'
             }
             onClick={() => {
+                sendAnalytics()
                 setIsCreating(false)
                 setActiveChannel(channel)
             }}

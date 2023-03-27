@@ -13,6 +13,7 @@ import BookingById from './pages/Bookings/BookingById'
 import Bookings from './pages/Bookings/Bookings'
 import CreateBookingForm from './pages/Bookings/CreateBookingForm'
 import CreateBookings from './pages/Bookings/CreateBookings'
+import { Chats } from './pages/Chats/Chats'
 import { AddCustomer } from './pages/Customer/AddCustomer'
 import { AddEditCustomerDetail } from './pages/Customer/customerDetails/AddEditCustomerDetail'
 import Dashboard from './pages/Dashboard/Dashboard'
@@ -22,7 +23,6 @@ import { Orders } from './pages/OrdersInfo/OrdersInfo'
 import { Organisation } from './pages/Organization/Organization'
 import { AddEditPartner } from './pages/Partner/EditPartner'
 import Partner from './pages/Partner/Partner'
-import AddEditProject from './pages/Project/AddEditProject'
 import CreateProject from './pages/Project/createProject'
 import Project from './pages/Project/Project'
 import ProjectById from './pages/Project/ProjectById'
@@ -44,10 +44,10 @@ import {
     ADD_WORKER_IN_BOOKING_ROUTE,
     ADD_WORKER_ROUTE,
     ATTENDANCE_ROUTE,
-    BOOKINGS_ATTENDANCE_ROUTE,
     BOOKING_BOOKINGID_ROUTE,
     BOOKING_BY_ID_ROUTE,
     BOOKING_ROUTE,
+    BOOKINGS_ATTENDANCE_ROUTE,
     CHATS,
     CUSTOMER_CUSTOMER_ID_BOOKINGS_CREATE,
     CUSTOMER_CUSTOMER_ID_ROUTE,
@@ -67,7 +67,6 @@ import {
     WORKER_INFO_BY_ID_ROUTE,
     WORKER_INFO_ROUTE,
 } from './routes'
-import { Chats } from './pages/Chats/Chats'
 
 const lightTheme = createTheme({
     palette: {
