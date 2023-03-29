@@ -150,7 +150,7 @@ export const Orders = () => {
                         label={'Order Id'}
                         validation={(val) => val.length <= 12}
                         sx={{ width: 200 }}
-                        error={sp.get('orderId') && sp.get('orderId').length < 10}
+                        error={sp.get('orderId') && sp.get('orderId').length < 12}
                         placeholder="Id"
                         trim
                         name={'orderId'}
