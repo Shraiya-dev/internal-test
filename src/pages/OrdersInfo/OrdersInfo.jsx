@@ -1,4 +1,14 @@
-import { Button, InputAdornment, LinearProgress, Pagination, Paper, Stack, TextField, Typography } from '@mui/material'
+import {
+    Button,
+    InputAdornment,
+    LinearProgress,
+    Pagination,
+    Paper,
+    Stack,
+    TextField,
+    Tooltip,
+    Typography,
+} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import React from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -83,7 +93,16 @@ export const Orders = () => {
                 </Stack>
             ),
         },
-
+        {
+            field: 'jobDetails',
+            headerName: 'Order Details',
+            width: 250,
+            renderCell: (params) => (
+                <Tooltip title={params.row.jobDetails} placement="left">
+                    <Stack>{params.row.jobDetails}</Stack>
+                </Tooltip>
+            ),
+        },
         // {
         //     field: 'addBooking',
         //     headerName: 'AddBooking',
@@ -127,7 +146,15 @@ export const Orders = () => {
                         trim
                         name={'customerNumber'}
                     />
-
+                    <QueryField
+                        label={'Order Id'}
+                        validation={(val) => val.length <= 12}
+                        sx={{ width: 200 }}
+                        error={sp.get('orderId') && sp.get('orderId').length < 10}
+                        placeholder="Id"
+                        trim
+                        name={'orderId'}
+                    />
                     <QueryMultiSelect sx={{ width: 200 }} name="orderStatus" options={orderStatusOptions} />
                     <QueryMultiSelect
                         sx={{ width: 200 }}
