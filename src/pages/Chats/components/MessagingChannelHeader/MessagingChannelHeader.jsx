@@ -120,7 +120,7 @@ const MessagingChannelHeader = (props) => {
             {getAvatarGroup(members)}
             {!isEditing ? (
                 <Stack>
-                    <Typography variant="button" fontWeight={'700'}>
+                    <Typography variant="body2" textTransform={'capitalize'} fontWeight={'700'}>
                         {channelName || title}
                     </Typography>
                     {channel?.data?.custom?.metadata?.bookingId && (
