@@ -50,6 +50,9 @@ export const useOrders = () => {
             if (searchParams.get('customerNumber') && !searchParams.get('customerId')) {
                 return
             }
+            if (searchParams.get('orderId') && searchParams.get('orderId').length < 12) {
+                return
+            }
             setIsLoading(true)
             try {
                 const sp = new URLSearchParams(searchParams)
