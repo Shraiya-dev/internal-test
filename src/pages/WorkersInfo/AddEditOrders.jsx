@@ -251,9 +251,12 @@ export const AddEditOrders = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <h3>isActive</h3>
+                                    <h3>Material Required</h3>
                                     <FormControl disabled={disableForm} fullWidth>
-                                        <RadioGroup {...formikProps('isActive')}>
+                                        <RadioGroup
+                                            {...formikProps('isMaterialsRequired')}
+                                            onChange={(e, v) => form.setFieldValue('isMaterialsRequired', v === 'true')}
+                                        >
                                             <Grid container spacing={2}>
                                                 {[
                                                     { label: 'True', value: true },
@@ -262,9 +265,6 @@ export const AddEditOrders = () => {
                                                     return (
                                                         <Grid key={x.value} item>
                                                             <FormControlLabel
-                                                                checked={
-                                                                    String(form.values.isActive) === String(x.value)
-                                                                }
                                                                 value={x.value}
                                                                 control={<Radio />}
                                                                 label={x.label}

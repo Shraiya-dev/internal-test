@@ -35,6 +35,7 @@ export const useAddEditOrders = () => {
             orderValue: '',
             isActive: true,
             orderStatus: 'PENDING',
+            isMaterialsRequired: false,
         },
         validate: (values) => {
             const errors = {}
@@ -71,6 +72,7 @@ export const useAddEditOrders = () => {
                 orderValue: values.orderValue,
                 isActive: values.isActive,
                 orderStatus: values.orderStatus,
+                isMaterialsRequired: values?.isMaterialsRequired,
             }
             if (orderId) {
                 await editOrder(payload)
@@ -86,6 +88,7 @@ export const useAddEditOrders = () => {
             city: orderDetail?.city,
             state: orderDetail?.state,
             isActive: orderDetail?.isActive,
+            isMaterialsRequired: orderDetail?.isMaterialsRequired,
             jobDetails: orderDetail?.jobDetails,
             materialSpecs: orderDetail?.materialSpecs,
             orderType: orderDetail?.orderType,
