@@ -123,25 +123,33 @@ export const useAddEditCustomerDetails = () => {
         }
     }, [customerId])
 
-    const onMarkGold = useCallback(async () => {
-        try {
-            await axios.post(`${SERVER_URL}/gateway/admin-api/customers/add-members`, {
-                customerIds: [customerId],
-                membershipType: 'GOLD',
-            })
-            showSnackbar({
-                msg: 'Customer Marked as Gold',
-                sev: 'success',
-            })
-            setRefresh(true)
-        } catch (error) {
-            showSnackbar({
-                msg: error?.response?.data?.developerInfo,
-                sev: 'error',
-            })
-        }
-    }, [customerId])
-
+    const goldMembershipForm = useFormik({
+        initialValues: {
+            amount: '',
+        },
+        validationSchema: Yup.object({
+            amount: Yup.number().required('required').min(1),
+        }),
+        onSubmit: async (values) => {
+            try {
+                await axios.post(`${SERVER_URL}/gateway/admin-api/customers/add-members`, {
+                    customerIds: [customerId],
+                    membershipType: 'GOLD',
+                    amountOfMembership: values.amount,
+                })
+                showSnackbar({
+                    msg: 'Customer Marked as Gold',
+                    sev: 'success',
+                })
+                setRefresh(true)
+            } catch (error) {
+                showSnackbar({
+                    msg: error?.response?.data?.developerInfo,
+                    sev: 'error',
+                })
+            }
+        },
+    })
     const onAddCustomer = useCallback(async (values) => {
         if (values.phoneNumber === '' || values.name === '') return
         try {
@@ -213,7 +221,7 @@ export const useAddEditCustomerDetails = () => {
             onBlacklist,
             onMarkVerified,
             onAddCustomer,
-            onMarkGold,
+            goldMembershipForm,
         }),
         [
             response,
@@ -226,7 +234,7 @@ export const useAddEditCustomerDetails = () => {
             onBlacklist,
             onMarkVerified,
             onAddCustomer,
-            onMarkGold,
+            goldMembershipForm,
         ]
     )
 }

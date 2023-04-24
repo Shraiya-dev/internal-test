@@ -7,6 +7,7 @@ import { DesignationOptions } from '../../../constant/customers'
 import { Link } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import ConfirmationDialog from '../../../components/ConfirmationDialog'
+import { useFormikProps } from '../../../hooks/useFormikProps'
 export const AddEditCustomerDetail = () => {
     const {
         customer,
@@ -18,11 +19,12 @@ export const AddEditCustomerDetail = () => {
         handleFormEditCancel,
         onBlacklist,
         onMarkVerified,
-        onMarkGold,
+        goldMembershipForm,
     } = useAddEditCustomerDetails()
     const [confirmationDialogProps, setConfirmationDialogProps] = useState({
         openBlacklistConfirmDialog: false,
     })
+    const goldMembershipFormikProps = useFormikProps(goldMembershipForm)
 
     return (
         <DashboardLayout loading={refresh}>
@@ -139,9 +141,16 @@ export const AddEditCustomerDetail = () => {
                             <Typography>{customer?.customerMembership?.type ?? 'NA'}</Typography>
                         </Grid>
                         {customer?.customerMembership?.type !== 'GOLD' && (
-                            <Button variant="contained" onClick={() => onMarkGold()}>
-                                Mark as Gold
-                            </Button>
+                            <>
+                                <TextField
+                                    label="Add Enter amount"
+                                    placeholder="amount"
+                                    {...goldMembershipFormikProps('amount')}
+                                />
+                                <Button variant="contained" onClick={goldMembershipForm.handleSubmit}>
+                                    Mark as Gold
+                                </Button>
+                            </>
                         )}
                     </Grid>
                 </Paper>
