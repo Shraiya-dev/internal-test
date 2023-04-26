@@ -123,12 +123,12 @@ const MessagingChannelHeader = (props) => {
                     <Typography variant="body2" textTransform={'capitalize'} fontWeight={'700'}>
                         {channelName || title}
                     </Typography>
-                    {channel?.data?.custom?.metadata?.bookingId && (
+                    {channel?.data?.metadata?.bookingId && (
                         <Typography variant="body2" component={'span'}>
                             Booking Id:
-                            <Link to={`/bookings/${channel?.data?.custom?.metadata?.bookingId}`}>
+                            <Link to={`/bookings/${channel?.data?.metadata?.bookingId}`}>
                                 <Typography ml={1} component={'span'} variant="body2" color={'info.main'}>
-                                    {channel?.data?.custom?.metadata?.bookingId}
+                                    {channel?.data?.metadata?.bookingId}
                                 </Typography>
                             </Link>
                         </Typography>
