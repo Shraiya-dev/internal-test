@@ -111,7 +111,7 @@ const MessagingChannelHeader = (props) => {
             />
         </form>
     )
-
+    const bookingId = channel?.data?.metadata?.bookingId ?? channel?.data?.custom?.metadata?.bookingId
     return (
         <Stack direction={'row'} gap={1} p={2}>
             <div id="mobile-nav-icon" className={`${props.theme}`} onClick={() => props.toggleMobile()}>
@@ -123,12 +123,12 @@ const MessagingChannelHeader = (props) => {
                     <Typography variant="body2" textTransform={'capitalize'} fontWeight={'700'}>
                         {channelName || title}
                     </Typography>
-                    {channel?.data?.metadata?.bookingId && (
+                    {bookingId && (
                         <Typography variant="body2" component={'span'}>
                             Booking Id:
-                            <Link to={`/bookings/${channel?.data?.metadata?.bookingId}`}>
+                            <Link to={`/bookings/${bookingId}`}>
                                 <Typography ml={1} component={'span'} variant="body2" color={'info.main'}>
-                                    {channel?.data?.metadata?.bookingId}
+                                    {bookingId}
                                 </Typography>
                             </Link>
                         </Typography>
