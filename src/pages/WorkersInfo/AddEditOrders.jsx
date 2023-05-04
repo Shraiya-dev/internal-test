@@ -48,6 +48,19 @@ export const orderTypeOptions = [
     { value: 'OTHERS', label: 'Others' },
 ]
 
+export const startDateOptions = [
+    { value: 'IMMEDIATELY', label: 'Immediately' },
+    { value: 'WITHIN_15_DAYS', label: 'Within 15 Days' },
+    { value: 'WITHIN_30_DAYS', label: 'Within 30 Days' },
+    { value: 'MORE_THAN_30_DAYS', label: 'More than 30 Days' },
+]
+export const orderTagOption = [
+    {
+        value: 'INSTANT',
+        label: 'Instant',
+    },
+]
+
 export const AddEditOrders = () => {
     const { form, isError, disableForm, setDisableForm, orderDetail } = useAddEditOrders()
     const formikProps = useFormikProps(form)
@@ -113,36 +126,20 @@ export const AddEditOrders = () => {
                                     </Select>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TextField
-                                        disabled={disableForm}
-                                        fullWidth
-                                        label="Reference Id"
-                                        {...formikProps('referenceId')}
-                                        onChange={(e) => {
-                                            if (e.target.value.trim().length > 0) {
-                                                form.setFieldValue('referenceId', e.target.value)
-                                            } else {
-                                                form.setFieldValue('referenceId', e.target.value.trim())
-                                            }
-                                        }}
-                                        error={isError('referenceId')}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
+                                    <Select
                                         fullWidth
                                         disabled={disableForm}
-                                        label="Start Date Label"
+                                        variant="outlined"
                                         {...formikProps('startDateLabel')}
                                         onChange={(e) => {
-                                            if (e.target.value.trim().length > 0) {
-                                                form.setFieldValue('startDateLabel', e.target.value)
-                                            } else {
-                                                form.setFieldValue('startDateLabel', e.target.value.trim())
-                                            }
+                                            form.setFieldValue('startDateLabel', e.target.value)
                                         }}
-                                        error={isError('startDateLabel')}
-                                    />
+                                    >
+                                        {getSelectOptions([
+                                            { label: 'Select startDate', value: 'none' },
+                                            ...startDateOptions,
+                                        ])}
+                                    </Select>
                                 </Grid>
 
                                 <Grid item xs={6}>
@@ -223,6 +220,22 @@ export const AddEditOrders = () => {
                                         {getSelectOptions([
                                             { label: 'Select order type', value: 'none' },
                                             ...orderTypeOptions,
+                                        ])}
+                                    </Select>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Select
+                                        fullWidth
+                                        disabled={disableForm}
+                                        variant="outlined"
+                                        {...formikProps('orderTag')}
+                                        onChange={(e) => {
+                                            form.setFieldValue('orderTag', e.target.value)
+                                        }}
+                                    >
+                                        {getSelectOptions([
+                                            { label: 'Select order tag', value: 'none' },
+                                            ...orderTagOption,
                                         ])}
                                     </Select>
                                 </Grid>

@@ -31,6 +31,7 @@ export const useAddEditOrders = () => {
             materialSpecs: '',
             startDateLabel: '',
             orderType: 'none',
+            orderTag: 'none',
             jobDetails: '',
             orderValue: '',
             isActive: true,
@@ -72,6 +73,7 @@ export const useAddEditOrders = () => {
                 orderValue: values.orderValue,
                 isActive: values.isActive,
                 orderStatus: values.orderStatus,
+                orderTag: values.orderTag === 'none' ? undefined : values.orderTag,
                 isMaterialsRequired: values?.isMaterialsRequired,
             }
             if (orderId) {
@@ -96,6 +98,7 @@ export const useAddEditOrders = () => {
             referenceId: orderDetail?.referenceId,
             startDateLabel: orderDetail?.startDateLabel,
             orderStatus: orderDetail?.orderStatus ?? 'PENDING',
+            orderTag: orderDetail?.orderTag ?? 'none',
         })
     }, [orderDetail, disableForm])
     const editOrder = useCallback(async (payload) => {
