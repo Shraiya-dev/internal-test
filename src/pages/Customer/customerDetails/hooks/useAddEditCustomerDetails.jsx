@@ -122,25 +122,47 @@ export const useAddEditCustomerDetails = () => {
             })
         }
     }, [customerId])
-
+   
     const goldMembershipForm = useFormik({
         initialValues: {
-            amount: '',
+            amount: null,
+            membershipType: 'none',
+            freeTrial: false,
+            validity: null
         },
         validationSchema: Yup.object({
-            amount: Yup.number().required('required').min(1),
+            amount: Yup.number().min(1),
+            membershipType: Yup.string().required('required').notOneOf(['none'], 'required'),
+            freeTrial: Yup.boolean().required('required'),
+            validity: Yup.number(),
         }),
         onSubmit: async (values) => {
             try {
-                await axios.post(`${SERVER_URL}/gateway/admin-api/customers/add-members`, {
+                const response = await axios.post(`${SERVER_URL}/gateway/admin-api/customers/add-members`, {
                     customerIds: [customerId],
-                    membershipType: 'GOLD',
+                    membershipType: values.membershipType,
                     amountOfMembership: values.amount,
+                    isFreeTrial: values.freeTrial,
+                    validity: values.validity,
                 })
-                showSnackbar({
-                    msg: 'Customer Marked as Gold',
-                    sev: 'success',
-                })
+
+                if ( response?.data?.payload?.successCount === 0 ) {
+                    showSnackbar({
+                        msg: response?.data?.payload?.failedCustomers[0]?.message,
+                        sev: 'error',
+                    })
+                    
+                }
+
+                else
+
+                {
+                    showSnackbar({
+                        msg: 'Customer Marked as Member',
+                        sev: 'success',
+                    })
+                }
+
                 setRefresh(true)
             } catch (error) {
                 showSnackbar({
@@ -205,6 +227,14 @@ export const useAddEditCustomerDetails = () => {
             designation: customer?.designation ?? 'none',
             phoneNumber: customer?.phoneNumber ?? '',
         })
+
+
+        goldMembershipForm.setValues({
+            membershipType: (response?.customer?.membershipType) ?? 'none',
+            freeTrial: (response?.customer?.customerMembership?.isFreeTrial) ?? 'none',
+        })
+
+
     }, [response])
     const formikProps = useFormikProps(form)
 

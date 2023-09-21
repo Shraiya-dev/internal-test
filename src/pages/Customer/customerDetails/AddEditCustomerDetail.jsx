@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Grid, InputLabel, Chip, Paper, Select, Stack, TextField, Typography } from '@mui/material'
+import { Button, Grid, InputLabel, Chip, Paper, Select, Stack, TextField, Typography, MenuItem } from '@mui/material'
 import DashboardLayout from '../../../components/Layouts/DashboardLayout'
 import { getSelectOptions } from '../../../utils/InputHelpers'
 import { useAddEditCustomerDetails } from './hooks/useAddEditCustomerDetails'
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import ConfirmationDialog from '../../../components/ConfirmationDialog'
 import { useFormikProps } from '../../../hooks/useFormikProps'
+import { MembershipTypes, BooleanTypes } from '../helper'
 export const AddEditCustomerDetail = () => {
     const {
         customer,
@@ -136,11 +137,45 @@ export const AddEditCustomerDetail = () => {
                 </Paper>
                 <Paper sx={{ p: 2 }}>
                     <Grid container spacing={1} justifyContent={'space-between'}>
-                        <Grid item xs={3}>
+                        {/* <Grid item xs={3}>
                             <InputLabel>Membership Status</InputLabel>
                             <Typography>{customer?.customerMembership?.type ?? 'NA'}</Typography>
+                        </Grid> */}
+                        <Grid item xs={3}>
+                            <Select fullWidth {...goldMembershipFormikProps('membershipType')} >
+                                <MenuItem value="none">Select Membership Type </MenuItem>
+                                {getSelectOptions(MembershipTypes)}
+                            </Select>
                         </Grid>
-                        {customer?.customerMembership?.type !== 'GOLD' && (
+                        <Grid item xs={3}>
+                            <Select fullWidth {...goldMembershipFormikProps('freeTrial')} >
+                                <MenuItem value="none"> isFree Trial? </MenuItem>
+                                {getSelectOptions(BooleanTypes)}
+                            </Select>
+                        </Grid>
+                        <Grid item xs={3}>
+                        <TextField
+                        fullWidth
+                                    label="Add Enter amount"
+                                    placeholder="amount"
+                                    {...goldMembershipFormikProps('amount')}
+                                />
+                        </Grid>
+                        <Grid item xs={3}>
+                        <TextField
+                        fullWidth
+                                    label="Add validity in days"
+                                    placeholder="validity"
+                                    {...goldMembershipFormikProps('validity')}
+                                />
+                        </Grid>
+                        <Grid item xs={4}>
+                        <Button variant="contained" onClick={goldMembershipForm.handleSubmit}>
+                                    Mark as Member
+                        </Button>
+                        </Grid>
+                       
+                        {/* {(
                             <>
                                 <TextField
                                     label="Add Enter amount"
@@ -148,10 +183,10 @@ export const AddEditCustomerDetail = () => {
                                     {...goldMembershipFormikProps('amount')}
                                 />
                                 <Button variant="contained" onClick={goldMembershipForm.handleSubmit}>
-                                    Mark as Gold
+                                    Mark as Member
                                 </Button>
                             </>
-                        )}
+                        )} */}
                     </Grid>
                 </Paper>
                 <Paper sx={{ p: 2 }}>
