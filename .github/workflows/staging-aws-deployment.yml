@@ -3,7 +3,7 @@ name: Build and Push To ECR Staging
 on:
   push:
     branches:
-      - staging
+      - main
 
 env:
   AWS_DEFAULT_REGION: ap-south-2
