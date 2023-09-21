@@ -46,7 +46,7 @@ jobs:
            REPOSITORY: in-project-hero-ecr-repo-staging/ph-stage-admin
            IMAGE_TAG: ph-stage-admin
            
-        run: |
+        run: |-
             docker build --build-arg VITE_PUBLIC_APP_ENV="$VITE_PUBLIC_APP_ENV" -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
             docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
