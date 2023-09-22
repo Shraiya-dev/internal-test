@@ -48,7 +48,7 @@ jobs:
            IMAGE_TAG: ph-stage-admin
            
         run: |-
-            docker build --build-arg VITE_PUBLIC_APP_ENV="$VITE_PUBLIC_APP_ENV" -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+            docker build --build-arg VITE_PUBLIC_APP_ENV=$VITE_PUBLIC_APP_ENV -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
             docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: Configure kubectl
