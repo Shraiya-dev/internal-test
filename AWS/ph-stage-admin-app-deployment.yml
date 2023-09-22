@@ -24,7 +24,7 @@ spec:
         app: ph-stage-admin-app
     spec:
       containers:
-      - image: 393010183048.dkr.ecr.ap-south-2.amazonaws.com/in-project-hero-ecr-repo-staging:ph-stage-admin
+      - image: 393010183048.dkr.ecr.ap-south-2.amazonaws.com/in-project-hero-ecr-repo-staging/ph-stage-admin:ph-stage-admin
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
