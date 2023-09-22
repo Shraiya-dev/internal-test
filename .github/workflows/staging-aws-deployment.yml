@@ -25,7 +25,7 @@ jobs:
       - name: Set branch environments
         run: |-
           echo $VITE_PUBLIC_APP_ENV
-          echo "VITE_PUBLIC_APP_ENV=$VITE_PUBLIC_APP_ENV" 
+          echo VITE_PUBLIC_APP_ENV=${{env.VITE_PUBLIC_APP_ENV}}" >> "$GITHUB_ENV"
 
       - name: Checkout
         uses: actions/checkout@v3
@@ -49,8 +49,7 @@ jobs:
            VITE_PUBLIC_APP_ENV: STAGE
            
         run: |-
-            echo $VITE_PUBLIC_APP_ENV
-            docker build --build-arg VITE_PUBLIC_APP_ENV=$VITE_PUBLIC_APP_ENV -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+            docker build --build-arg  VITE_PUBLIC_APP_ENV="$VITE_PUBLIC_APP_ENV" -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
             docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: Configure kubectl
@@ -75,4 +74,3 @@ jobs:
           kubectl rollout restart deployment/$DEPLOYMENT_NAME
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
-
