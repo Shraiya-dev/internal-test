@@ -46,6 +46,7 @@ jobs:
            REGISTRY: ${{ steps.login-ecr.outputs.registry }}
            REPOSITORY: in-project-hero-ecr-repo-staging/ph-stage-admin
            IMAGE_TAG: ph-stage-admin
+           VITE_PUBLIC_APP_ENV: STAGE
            
         run: |-
             echo $VITE_PUBLIC_APP_ENV
