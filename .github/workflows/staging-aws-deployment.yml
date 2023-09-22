@@ -24,7 +24,8 @@ jobs:
 
       - name: Set branch environments
         run: |-
-          echo "VITE_PUBLIC_APP_ENV=$VITE_PUBLIC_APP_ENV" >> $GITHUB_ENV
+          echo $VITE_PUBLIC_APP_ENV
+          echo "VITE_PUBLIC_APP_ENV=$VITE_PUBLIC_APP_ENV" 
 
       - name: Checkout
         uses: actions/checkout@v3
