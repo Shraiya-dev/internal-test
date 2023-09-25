@@ -7,8 +7,6 @@ on:
 
 env:
   EKS_CLUSTER_NAME: IN-Project-Hero-App-EKSCluster-Staging
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   DEPLOYMENT_NAME: ph-stage-admin-app
   VITE_PUBLIC_APP_ENV: STAGE
 
@@ -30,8 +28,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: $AWS_ACCESS_KEY_ID
-          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-2
 
       - name: Login to Amazon ECR
