@@ -1,17 +1,19 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: ph-stage-admin-app
-  name: ph-stage-admin-app
+    app: ph-prod-admin-app
+  name: ph-prod-admin-app
   namespace: default
+
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: ph-stage-admin-app
+      app: ph-prod-admin-app
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -21,10 +23,10 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        app: ph-stage-admin-app
+        app: ph-prod-admin-app
     spec:
       containers:
-      - image: 393010183048.dkr.ecr.ap-south-2.amazonaws.com/in-project-hero-ecr-repo-staging/ph-stage-admin:ph-stage-admin
+      - image: 393010183048.dkr.ecr.ap-south-1.amazonaws.com/in-project-hero-ecr-repo-prod/ph-admin-prod:ph-prod-admin
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
@@ -40,16 +42,24 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
-        readinessProbe:
-          failureThreshold: 1
-          httpGet:
-            path: /
-            port: 5000
-            scheme: HTTP
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 2
-        resources: {}
+        # readinessProbe:
+        #   failureThreshold: 1
+        #   httpGet:
+        #     path: /
+        #     port: 5000
+        #     scheme: HTTP
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   timeoutSeconds: 2
+        resources:
+          limits:
+            cpu: 500m
+            ephemeral-storage: 900Mi
+            memory: 900Mi
+          requests:
+            cpu: 250m
+            ephemeral-storage: 500Mi
+            memory: 500Mi
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
